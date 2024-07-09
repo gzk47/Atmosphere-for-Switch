@@ -23,7 +23,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        ref: main
+        ref: Tesla
 
     - name: Initialization environment
       env:
@@ -37,7 +37,7 @@ jobs:
         echo "tag_name=$(date +%Y%m%d)" >> $GITHUB_ENV
         chmod +x $SCRIPT_SH
         ./$SCRIPT_SH
-        zip -rq SwitchSD.zip SwitchSD
+        zip -rq SwitchSD-Tesla.zip SwitchSD-Tesla
 
     - name: Read description.txt
       id: description
@@ -54,7 +54,7 @@ jobs:
         commit: main
         token: ${{ secrets.GITHUB_TOKEN }}
         body: "${{ steps.description.outputs.content }}"
-        artifacts: "SwitchSD.zip"
+        artifacts: "SwitchSD-Tesla.zip"
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.2
