@@ -9,16 +9,16 @@ set -e
 # -------------------------------------------
 
 ### Create a new folder for storing files
-if [ -d SwitchSD ]; then
-  rm -rf SwitchSD
+if [ -d SwitchSD-Pure ]; then
+  rm -rf SwitchSD-Pure
 fi
 if [ -e description.txt ]; then
   rm -rf description.txt
 fi
-mkdir -p ./SwitchSD
-mkdir -p ./SwitchSD/atmosphere/hosts
-mkdir -p ./SwitchSD/bootloader/ini
-cd SwitchSD
+mkdir -p ./SwitchSD-Pure
+mkdir -p ./SwitchSD-Pure/atmosphere/hosts
+mkdir -p ./SwitchSD-Pure/bootloader/ini
+cd SwitchSD-Pure
 
 # -------------------------------------------
 
@@ -545,7 +545,7 @@ else
 fi
 
 ### Write more.ini in /bootloader/ini/
-#mkdir -p ./SwitchSD/bootloader/ini
+#mkdir -p ./SwitchSD-Pure/bootloader/ini
 cat > ./bootloader/ini/more.ini << ENDOFFILE
 [SXOS]
 payload=bootloader/payloads/sxos.bin
@@ -763,4 +763,4 @@ fi
 # -------------------------------------------
 
 echo ""
-echo "\033[32mYour SwitchSD card is prepared!\033[0m"
+echo "\033[32mYour SwitchSD-Pure card is prepared!\033[0m"
