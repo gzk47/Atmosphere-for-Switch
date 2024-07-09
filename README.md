@@ -36,7 +36,7 @@
 
   - 补丁
     - [x] 主题破解 `theme-patches` [From Here](https://github.com/exelix11/theme-patches)
-  - Tesla
+  - Tesla（纯净版 无特斯拉插件）
     - [x] 加载器 `nx-ovlloader` [From Here](https://www.tekqart.com/thread-222735-1-1.html)
     - [x] 初始菜单 `Tesla-Menu` [From Here](https://www.tekqart.com/thread-222735-1-1.html)
   - Ovl插件（纯净版 无特斯拉插件）
