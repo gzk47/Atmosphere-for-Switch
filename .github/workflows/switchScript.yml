@@ -48,7 +48,7 @@ jobs:
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        name: 心悦大气层中文整合包 v${{ env.DATE }} 
+        name: 【纯净版】心悦大气层中文整合包 v${{ env.DATE }} 
         allowUpdates: true
         tag: ${{ env.tag_name }}
         commit: Pure
@@ -59,7 +59,7 @@ jobs:
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.2
       with:
-        keep_latest: 7
+        keep_latest: 0
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
