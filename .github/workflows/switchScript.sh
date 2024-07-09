@@ -9,17 +9,17 @@ set -e
 # -------------------------------------------
 
 ### Create a new folder for storing files
-if [ -d SwitchSD ]; then
-  rm -rf SwitchSD
+if [ -d SwitchSD-Tesla ]; then
+  rm -rf SwitchSD-Tesla
 fi
 if [ -e description.txt ]; then
   rm -rf description.txt
 fi
-mkdir -p ./SwitchSD
-mkdir -p ./SwitchSD/atmosphere/config
-mkdir -p ./SwitchSD/atmosphere/hosts
-mkdir -p ./SwitchSD/bootloader/ini
-cd SwitchSD
+mkdir -p ./SwitchSD-Tesla
+mkdir -p ./SwitchSD-Tesla/atmosphere/config
+mkdir -p ./SwitchSD-Tesla/atmosphere/hosts
+mkdir -p ./SwitchSD-Tesla/bootloader/ini
+cd SwitchSD-Tesla
 
 # -------------------------------------------
 
@@ -817,7 +817,7 @@ else
 fi
 
 ### Write more.ini in /bootloader/ini/
-#mkdir -p ./SwitchSD/bootloader/ini
+#mkdir -p ./SwitchSD-Tesla/bootloader/ini
 cat > ./bootloader/ini/more.ini << ENDOFFILE
 [SXOS]
 payload=bootloader/payloads/sxos.bin
@@ -1053,4 +1053,4 @@ fi
 # -------------------------------------------
 
 echo ""
-echo "\033[32mYour SwitchSD card is prepared!\033[0m"
+echo "\033[32mYour SwitchSD-Tesla card is prepared!\033[0m"
