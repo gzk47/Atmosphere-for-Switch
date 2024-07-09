@@ -34,7 +34,7 @@ jobs:
     - name: "Build & Release"
       run: |
         echo "DATE=$(date "+%Y%m%d %H:%M:%S")" >> $GITHUB_ENV
-        echo "tag_name=$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "tag_name=Pure$(date +%Y%m%d)" >> $GITHUB_ENV
         chmod +x $SCRIPT_SH
         ./$SCRIPT_SH
         zip -rq SwitchSD-Pure.zip SwitchSD-Pure
