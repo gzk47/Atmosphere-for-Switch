@@ -91,22 +91,22 @@ fi
 ###
   
 ### Fetch sys-patch from https://github.com/impeeza/sys-patch/releases/latest
-curl -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
-  | jq '.tag_name' \
-  | xargs -I {} echo sys-patch {} >> ../description.txt
-curl -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-patch[^"]*.zip"' \
-  | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o sys-patch-zip.zip
-if [ $? -ne 0 ]; then
-    echo "sys-patch download\033[31m failed\033[0m."
-else
-    echo "sys-patch download\033[32m success\033[0m."
-    unzip -oq sys-patch-zip.zip
-    unzip -oq sys-patch.zip
-    rm sys-patch-zip.zip
-    rm sys-patch.zip
-fi
+#curl -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
+#  | jq '.tag_name' \
+#  | xargs -I {} echo sys-patch {} >> ../description.txt
+#curl -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
+#  | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-patch[^"]*.zip"' \
+#  | sed 's/"//g' \
+#  | xargs -I {} curl -sL {} -o sys-patch-zip.zip
+#if [ $? -ne 0 ]; then
+#    echo "sys-patch download\033[31m failed\033[0m."
+#else
+#    echo "sys-patch download\033[32m success\033[0m."
+#    unzip -oq sys-patch-zip.zip
+#    unzip -oq sys-patch.zip
+#    rm sys-patch-zip.zip
+#    rm sys-patch.zip
+#fi
 
 ### Fetch lastest theme-patches from https://github.com/exelix11/theme-patches
 git clone https://github.com/exelix11/theme-patches
@@ -516,7 +516,7 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
-特斯拉中文版插件：
+特斯拉中文版插件：（纯净版 没有特斯拉插件）
  
 ENDOFFILE
 ###
@@ -804,11 +804,6 @@ stock=1
 icon=bootloader/res/switch.bmp
 id=ofw-sys
 {机身正版系统}
-
-[CFW-AUTO]
-payload=bootloader/payloads/fusee.bin
-icon=bootloader/res/auto.bmp
-{大气层-自动识别}
 ENDOFFILE
 if [ $? -ne 0 ]; then
     echo "Writing hekate_ipl.ini in ./bootloader/ directory\033[31m failed\033[0m."
@@ -819,6 +814,11 @@ fi
 ### Write more.ini in /bootloader/ini/
 #mkdir -p ./SwitchSD-Tesla/bootloader/ini
 cat > ./bootloader/ini/more.ini << ENDOFFILE
+[CFW-AUTO]
+payload=bootloader/payloads/fusee.bin
+icon=bootloader/res/auto.bmp
+{大气层-自动识别}
+
 [SXOS]
 payload=bootloader/payloads/sxos.bin
 icon=bootloader/res/sxos.bmp
