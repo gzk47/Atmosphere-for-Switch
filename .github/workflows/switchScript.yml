@@ -34,7 +34,7 @@ jobs:
     - name: "Build & Release"
       run: |
         echo "DATE=$(date "+%Y%m%d %H:%M:%S")" >> $GITHUB_ENV
-        echo "tag_name=Pure$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "tag_name=$(date +%Y%m%d)" >> $GITHUB_ENV
         chmod +x $SCRIPT_SH
         ./$SCRIPT_SH
         zip -rq SwitchSD-Pure.zip SwitchSD-Pure
@@ -48,7 +48,7 @@ jobs:
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        name: 【纯净版】心悦大气层中文整合包 v${{ env.DATE }} 
+        name: 【纯净版+特斯拉版】心悦大气层中文整合包 v${{ env.DATE }} 
         allowUpdates: true
         tag: ${{ env.tag_name }}
         commit: Pure
