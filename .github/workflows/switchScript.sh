@@ -90,9 +90,9 @@ fi
 ###
 
 ### Fetch sys-patch from https://github.com/impeeza/sys-patch/releases/latest
-curl -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
-  | jq '.tag_name' \
-  | xargs -I {} echo sys-patch {} >> ../description.txt
+#curl -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
+#  | jq '.tag_name' \
+#  | xargs -I {} echo sys-patch {} >> ../description.txt
 #curl -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
 #  | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-patch[^"]*.zip"' \
 #  | sed 's/"//g' \
@@ -515,7 +515,7 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
-特斯拉中文版插件：（纯净版没有特斯拉插件）
+特斯拉中文版插件：（纯净版 没有特斯拉插件）
  
 ENDOFFILE
 ###
