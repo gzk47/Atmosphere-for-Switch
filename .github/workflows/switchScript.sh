@@ -532,11 +532,6 @@ stock=1
 icon=bootloader/res/switch.bmp
 id=ofw-sys
 {机身正版系统}
-
-[CFW-AUTO]
-payload=bootloader/payloads/fusee.bin
-icon=bootloader/res/auto.bmp
-{大气层-自动识别}
 ENDOFFILE
 if [ $? -ne 0 ]; then
     echo "Writing hekate_ipl.ini in ./bootloader/ directory\033[31m failed\033[0m."
@@ -547,6 +542,11 @@ fi
 ### Write more.ini in /bootloader/ini/
 #mkdir -p ./SwitchSD-Pure/bootloader/ini
 cat > ./bootloader/ini/more.ini << ENDOFFILE
+[CFW-AUTO]
+payload=bootloader/payloads/fusee.bin
+icon=bootloader/res/auto.bmp
+{大气层-自动识别}
+
 [SXOS]
 payload=bootloader/payloads/sxos.bin
 icon=bootloader/res/sxos.bmp
