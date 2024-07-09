@@ -88,7 +88,36 @@ fi
 #sigpatches
 #ENDOFFILE
 ###
-  
+
+### Fetch sys-patch from https://github.com/impeeza/sys-patch/releases/latest
+curl -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
+  | jq '.tag_name' \
+  | xargs -I {} echo sys-patch {} >> ../description.txt
+#curl -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
+#  | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-patch[^"]*.zip"' \
+#  | sed 's/"//g' \
+#  | xargs -I {} curl -sL {} -o sys-patch-zip.zip
+#if [ $? -ne 0 ]; then
+#    echo "sys-patch download\033[31m failed\033[0m."
+#else
+#    echo "sys-patch download\033[32m success\033[0m."
+#    unzip -oq sys-patch-zip.zip
+#    unzip -oq sys-patch.zip
+#    rm sys-patch-zip.zip
+#    rm sys-patch.zip
+#fi
+
+### Fetch lastest theme-patches from https://github.com/exelix11/theme-patches
+#git clone https://github.com/exelix11/theme-patches
+#if [ $? -ne 0 ]; then
+#    echo "theme-patches download\033[31m failed\033[0m."
+#else
+#    echo "theme-patches download\033[32m success\033[0m."
+#    mkdir themes
+#    mv -f theme-patches/systemPatches ./themes/
+#    rm -rf theme-patches
+#fi
+ 
 # -------------------------------------------
 
 ###
@@ -481,6 +510,68 @@ fi
 
 # -------------------------------------------
 
+###
+cat >> ../description.txt << ENDOFFILE
+ 
+------------------------------
+ 
+特斯拉中文版插件：（纯净版没有特斯拉插件）
+ 
+ENDOFFILE
+###
+
+###
+cat >> ../description.txt << ENDOFFILE
+
+nx-ovlloader
+Tesla-Menu
+ovl-sysmodules
+StatusMonitor
+EdiZon
+ReverseNX-RT
+sys-clk
+emuiibo
+ldn_mitm
+QuickNTP
+SysDVR
+Fizeau
+Zing
+sys-tune
+
+ENDOFFILE
+###
+
+### Fetch MissionControl from https://github.com//ndeadly/MissionControl/releases/latest
+curl -sL https://api.github.com/repos/ndeadly/MissionControl/releases/latest \
+  | jq '.tag_name' \
+  | xargs -I {} echo MissionControl {} >> ../description.txt
+#curl -sL https://api.github.com/repos/ndeadly/MissionControl/releases/latest \
+#  | grep -oP '"browser_download_url": "\Khttps://[^"]*MissionControl[^"]*.zip"' \
+#  | sed 's/"//g' \
+#  | xargs -I {} curl -sL {} -o MissionControl.zip
+#if [ $? -ne 0 ]; then
+#    echo "MissionControl download\033[31m failed\033[0m."
+#else
+#    echo "MissionControl download\033[32m success\033[0m."
+#    unzip -oq MissionControl.zip
+#    rm MissionControl.zip
+#fi
+
+## Fetch lastest sys-con from https://github.com/o0Zz/sys-con/releases/latest
+curl -sL https://api.github.com/repos/o0Zz/sys-con/releases/latest \
+  | jq '.name' \
+  | xargs -I {} echo {} >> ../description.txt
+#curl -sL https://api.github.com/repos/o0Zz/sys-con/releases/latest \
+#  | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-con[^"]*.zip"' \
+#  | sed 's/"//g' \
+#  | xargs -I {} curl -sL {} -o sys-con.zip
+#if [ $? -ne 0 ]; then
+#    echo "sys-con download\033[31m failed\033[0m."
+#else
+#    echo "sys-con download\033[32m success\033[0m."
+#    unzip -oq sys-con.zip
+#    rm sys-con.zip
+#fi
 
 # -------------------------------------------
 
