@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - Pure
     paths:
       - '#README.md'
       - '#switchScript.sh'
@@ -23,7 +23,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        ref: main
+        ref: Pure
 
     - name: Initialization environment
       env:
@@ -37,7 +37,7 @@ jobs:
         echo "tag_name=$(date +%Y%m%d)" >> $GITHUB_ENV
         chmod +x $SCRIPT_SH
         ./$SCRIPT_SH
-        zip -rq SwitchSD.zip SwitchSD
+        zip -rq SwitchSD-Pure.zip SwitchSD-Pure
 
     - name: Read description.txt
       id: description
@@ -51,10 +51,10 @@ jobs:
         name: 心悦大气层中文整合包 v${{ env.DATE }} 
         allowUpdates: true
         tag: ${{ env.tag_name }}
-        commit: main
+        commit: Pure
         token: ${{ secrets.GITHUB_TOKEN }}
         body: "${{ steps.description.outputs.content }}"
-        artifacts: "SwitchSD.zip"
+        artifacts: "SwitchSD-Pure.zip"
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.2
