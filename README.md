@@ -36,7 +36,7 @@
 
   - 补丁
     - [x] 主题破解 `theme-patches` [From Here](https://github.com/exelix11/theme-patches)
-  - Tesla
+  - Tesla（纯净版 无特斯拉插件）
     - [x] 加载器 `nx-ovlloader` [From Here](https://www.tekqart.com/thread-222735-1-1.html)
     - [x] 初始菜单 `Tesla-Menu` [From Here](https://www.tekqart.com/thread-222735-1-1.html)
   - Ovl插件（纯净版 无特斯拉插件）
@@ -52,7 +52,7 @@
     - [x] 金手指工具 `Zing` [From Here](https://www.tekqart.com/thread-222735-1-1.html)
     - [x] 后台音乐 `sys-tune` [From Here](https://www.tekqart.com/thread-370954-1-1.html)
     - [x] 系统补丁 `sys-patch` [From Here](https://github.com/impeeza/sys-patch/releases/latest)
-  - 其他
+  - 其他（纯净版 无特斯拉插件）
     - [x] 蓝牙手柄插件 `MissionControl` [From Here](https://github.com/ndeadly/MissionControl/releases/latest)
     - [x] 有线手柄插件 `sys-con` [From Here](https://github.com/o0Zz/sys-con/releases/latest)
 
