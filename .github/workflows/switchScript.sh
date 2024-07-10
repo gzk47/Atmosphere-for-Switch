@@ -1037,7 +1037,7 @@ if [ $? -ne 0 ]; then
     echo "readme download\033[31m failed\033[0m."
 else
     echo "readme download\033[32m success\033[0m."
-        mv readme.txt readme_v$(date +%Y%m%d).txt
+#        mv readme.txt readme_v$(date +%Y%m%d).txt
 
 fi
 
@@ -1052,6 +1052,16 @@ else
     rm gzk.zip
 fi
 
+### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
+curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest \
+  | jq '.tag_name' \
+  AMS_veison=$(| xargs -I {} echo AMS {}) 
+### Fetch latest switch firmware from https://github.com/THZoria/NX_Firmware/releases
+curl -sL https://api.github.com/repos/THZoria/NX_Firmware//releases/latest \
+  | jq '.tag_name' \
+  SWITCH_veison=$(| xargs -I {} echo SWITCH {}) 
+mv readme.txt 【Pure】$SWITCH_veison_$AMS_veison_v$(date +%Y%m%d).txt
+  
 # -------------------------------------------
 
 echo ""
