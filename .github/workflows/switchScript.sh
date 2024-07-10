@@ -838,7 +838,12 @@ if [ $? -ne 0 ]; then
     echo "readme download\033[31m failed\033[0m."
 else
     echo "readme download\033[32m success\033[0m."
-    mv readme.txt readme_v$(date +%Y%m%d).txt
+    AMS_version=$(curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest | jq -r '.tag_name')
+    echo $AMS_version
+    SWITCH_version=$(curl -sL https://api.github.com/repos/THZoria/NX_Firmware//releases/latest | jq -r '.tag_name')
+    echo $SWITCH_version
+    mv readme.txt 【Pure】$SWITCH_version_$AMS_version_v$(date +%Y%m%d).txt
+#    mv readme.txt readme_v$(date +%Y%m%d).txt
 
 fi
 
@@ -853,14 +858,6 @@ else
     rm gzk.zip
 fi
 
-### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
-AMS_version=$(curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest | jq -r '.tag_name')
-echo $AMS_version
-### Fetch latest switch firmware from https://github.com/THZoria/NX_Firmware/releases
-SWITCH_version=$(curl -sL https://api.github.com/repos/THZoria/NX_Firmware//releases/latest | jq -r '.tag_name')
-echo $SWITCH_version
-mv readme.txt 【Pure】$SWITCH_version_$AMS_version_v$(date +%Y%m%d).txt
-  
 # -------------------------------------------
 
 echo ""
