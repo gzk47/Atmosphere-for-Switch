@@ -838,7 +838,7 @@ if [ $? -ne 0 ]; then
     echo "readme download\033[31m failed\033[0m."
 else
     echo "readme download\033[32m success\033[0m."
-    mv readme.txt readme_v$(date +%Y%m%d).txt
+    mv readme.txt 【Pure】readme_v$(date +%Y%m%d).txt
 
 fi
 
