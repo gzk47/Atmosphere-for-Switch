@@ -3,9 +3,6 @@ name: switchScript
 on:
   workflow_dispatch:
   
-  issue_comment:
-    types: [ created ]
-  
   push:
     branches:
       - Pure
@@ -22,7 +19,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: contains(github.event.comment.body, '/Pure')
     steps:
     - name: Checkout
       uses: actions/checkout@v4
