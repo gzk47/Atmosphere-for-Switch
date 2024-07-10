@@ -1060,7 +1060,7 @@ curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest \
 curl -sL https://api.github.com/repos/THZoria/NX_Firmware//releases/latest \
   | jq '.tag_name' \
   SWITCH_veison=$(| xargs -I {} echo SWITCH {}) 
-mv readme.txt 【Pure】$SWITCH_veison_$AMS_veison_v$(date +%Y%m%d).txt
+mv readme.txt 【Tesla】$SWITCH_veison_$AMS_veison_v$(date +%Y%m%d).txt
   
 # -------------------------------------------
 
