@@ -854,14 +854,12 @@ else
 fi
 
 ### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
-curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest \
-  | jq '.tag_name' \
-  AMS_veison=$(| xargs -I {} echo AMS {}) 
+AMS_version=$(curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest | jq -r '.tag_name')
+echo $AMS_version
 ### Fetch latest switch firmware from https://github.com/THZoria/NX_Firmware/releases
-curl -sL https://api.github.com/repos/THZoria/NX_Firmware//releases/latest \
-  | jq '.tag_name' \
-  SWITCH_veison=$(| xargs -I {} echo SWITCH {}) 
-mv readme.txt 【Pure】$SWITCH_veison_$AMS_veison_v$(date +%Y%m%d).txt
+SWITCH_version=$(curl -sL https://api.github.com/repos/THZoria/NX_Firmware//releases/latest | jq -r '.tag_name')
+echo $SWITCH_version
+mv readme.txt 【Pure】$SWITCH_version_$AMS_version_v$(date +%Y%m%d).txt
   
 # -------------------------------------------
 
