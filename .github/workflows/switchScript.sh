@@ -839,8 +839,10 @@ if [ $? -ne 0 ]; then
 else
     echo "readme download\033[32m success\033[0m."
     AMSversion=$(curl -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest | jq -r '.tag_name')
+    AMSfull="AMS$AMSversion"
     SWITCHversion=$(curl -sL https://api.github.com/repos/THZoria/NX_Firmware//releases/latest | jq -r '.tag_name')
-    mv readme.txt 【Pure】SWITCH$SWITCHversion_AMS$AMSversion_v$(date +%Y%m%d).txt
+    SWITCHfull="SWITCH$SWITCHversion"
+    mv readme.txt 【Pure】$SWITCHfull_$AMSfull_v$(date +%Y%m%d).txt
 #    mv readme.txt readme_v$(date +%Y%m%d).txt
 
 fi
