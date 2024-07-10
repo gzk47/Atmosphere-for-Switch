@@ -9,6 +9,7 @@ on:
     paths:
       - '#README.md'
       - '#switchScript.sh'
+      
   schedule:
     - cron: 0 5 * * *
 
