@@ -795,7 +795,7 @@ else
     unzip -oq lang.zip -d lang
     mkdir -p ./switch/.overlays/lang/sys-clk
     mv lang/* ./switch/.overlays/lang/sys-clk
-    rm lang.zip
+    rm -rf lang.zip lang
 fi
 
 ### Fetch latest sys-clk中文 from https://github.com/ppkantorski/sys-clk/releases/latest
