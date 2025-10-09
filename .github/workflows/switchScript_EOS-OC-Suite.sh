@@ -778,6 +778,40 @@ else
     mkdir -p ./switch/.packages
     mv "OC Toolkit" ./switch/.packages/"OC Toolkit"
 fi
+
+### Fetch latest sys-clk中文 from https://github.com/ppkantorski/sys-clk/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ppkantorski/sys-clk/releases/latest
+cat latest.json \
+  | jq '.name' \
+#  | xargs -I {} echo {} >> ../description.txt
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*lang[^"]*.zip' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o lang.zip
+if [ $? -ne 0 ]; then
+    echo "lang download\033[31m failed\033[0m."
+else
+    echo "lang download\033[32m success\033[0m."
+    unzip -oq lang.zip -d lang
+    mv lang ./switch/.overlays/lang/sys-clk
+    rm lang.zip
+fi
+
+### Fetch latest sys-clk中文 from https://github.com/ppkantorski/sys-clk/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ppkantorski/sys-clk/releases/latest
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-clk-overlay.ovl"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o sys-clk-overlay.ovl
+if [ $? -ne 0 ]; then
+    echo "sys-clk-overlay download\033[31m failed\033[0m."
+else
+    echo "sys-clk-overlay download\033[32m success\033[0m."
+
+    mv sys-clk-overlay.ovl  ./switch/.overlays/sys-clk.ovl
+fi
+
+
 # -------------------------------------------
 
 ### Delete unneeded files
