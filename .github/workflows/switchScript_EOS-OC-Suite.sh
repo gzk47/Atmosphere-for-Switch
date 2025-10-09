@@ -240,7 +240,7 @@ cat latest.json \
   | xargs -I {} echo hb-appstore {} >> ../description.txt
 
 ### Fetch lastest ReverseNX-Tool from https://github.com/masagrator/ReverseNX-Tool/releases
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/masagrator/ReverseNX-Tool/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ReverseNX-Tool/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo ReverseNX-Tool {} >> ../description.txt
