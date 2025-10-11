@@ -290,21 +290,21 @@ else
     rm Awoo-Installer.zip
 fi
 
-### Fetch lastest DeepSeaToolbox from https://github.com/Team-Neptune/DeepSea-Toolbox/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Team-Neptune/DeepSea-Toolbox/releases/latest
+### Fetch lastest HekateToolbox from https://github.com/gzk47/Hekate-Toolbox/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo DeepSeaToolbox {} >> ../description.txt
+  | xargs -I {} echo HekateToolbox中文 {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*DeepSeaToolbox.nro"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*HekateToolbox.nro"' \
   | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o DeepSeaToolbox.nro
+  | xargs -I {} curl -sL {} -o HekateToolbox.nro
 if [ $? -ne 0 ]; then
-    echo "DeepSeaToolbox download\033[31m failed\033[0m."
+    echo "HekateToolbox download\033[31m failed\033[0m."
 else
-    echo "DeepSeaToolbox download\033[32m success\033[0m."
-    mkdir -p ./switch/DeepSea-Toolbox
-    mv DeepSeaToolbox.nro ./switch/DeepSea-Toolbox
+    echo "HekateToolbox download\033[32m success\033[0m."
+    mkdir -p ./switch/HekateToolbox
+    mv HekateToolbox.nro ./switch/HekateToolbox
 fi
 
 ### Fetch lastest NX-Activity-Log from https://github.com/zdm65477730/NX-Activity-Log/releases/latest
@@ -530,7 +530,7 @@ fi
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ReverseNX-Tool/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo ReverseNX-Tool {} >> ../description.txt
+  | xargs -I {} echo ReverseNX-Tool中文 {} >> ../description.txt
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*ReverseNX-Tool.nro"' \
   | sed 's/"//g' \
@@ -1554,6 +1554,21 @@ else
     echo "boot-dat download\033[32m success\033[0m."
     unzip -oq boot-dat.zip
     rm boot-dat.zip
+fi
+
+### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
+#cat latest.json \
+#  | jq '.tag_name' \
+#  | xargs -I {} echo nx-hbmenu中文 {} >> ../description.txt
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*hbmenu.nro"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o hbmenu.nro
+if [ $? -ne 0 ]; then
+    echo "hbmenu download\033[31m failed\033[0m."
+else
+    echo "hbmenu download\033[32m success\033[0m."
 fi
 
 ### Fetch readme
