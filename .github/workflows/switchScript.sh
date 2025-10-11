@@ -1569,6 +1569,7 @@ if [ $? -ne 0 ]; then
     echo "hbmenu download\033[31m failed\033[0m."
 else
     echo "hbmenu download\033[32m success\033[0m."
+    rm -f latest.json
 fi
 
 ### Fetch readme
