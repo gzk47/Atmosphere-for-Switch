@@ -160,11 +160,11 @@ cat latest.json \
   | jq '.name' \
   | xargs -I {} echo {} >> ../description.txt
 
-### Fetch lastest DeepSeaToolbox from https://github.com/Team-Neptune/DeepSea-Toolbox/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Team-Neptune/DeepSea-Toolbox/releases/latest
+### Fetch lastest HekateToolbox from https://github.com/gzk47/Hekate-Toolbox/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo DeepSeaToolbox {} >> ../description.txt
+  | xargs -I {} echo HekateToolbox中文 {} >> ../description.txt
 
 ### Fetch lastest NX-Activity-Log from https://github.com/zdm65477730/NX-Activity-Log/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/NX-Activity-Log/releases/latest
@@ -243,7 +243,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ReverseNX-Tool/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo ReverseNX-Tool {} >> ../description.txt
+  | xargs -I {} echo ReverseNX-Tool中文 {} >> ../description.txt
 
 ### Fetch lastest Goldleaf from https://github.com/XorTroll/Goldleaf/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/XorTroll/Goldleaf/releases/latest
