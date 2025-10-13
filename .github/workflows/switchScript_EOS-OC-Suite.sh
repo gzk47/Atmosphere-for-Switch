@@ -793,9 +793,12 @@ if [ $? -ne 0 ]; then
 else
     echo "lang download\033[32m success\033[0m."
     unzip -oq lang.zip -d lang
-    mkdir -p ./switch/.overlays/lang/sys-clk
-    mv lang/* ./switch/.overlays/lang/sys-clk
-    rm -rf lang.zip lang
+    # mkdir -p ./switch/.overlays/lang/sys-clk
+    # mv lang/* ./switch/.overlays/lang/sys-clk
+    # rm -rf lang.zip lang
+    mkdir -p ./config/sys-clk/lang
+    mv lang ./config/sys-clk/lang
+    rm -rf lang.zip
 fi
 
 ### Fetch latest sys-clk中文 from https://github.com/ppkantorski/sys-clk/releases/latest
