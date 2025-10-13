@@ -797,7 +797,7 @@ else
     # mv lang/* ./switch/.overlays/lang/sys-clk
     # rm -rf lang.zip lang
     mkdir -p ./config/sys-clk/lang
-    mv lang ./config/sys-clk/lang
+    mv lang ./config/sys-clk
     rm -rf lang.zip
 fi
 
