@@ -815,6 +815,116 @@ else
     mv sys-clk-overlay.ovl  ./switch/.overlays/sys-clk.ovl
 fi
 
+### Write overlays.ini in /config/Ultrahand
+mkdir -p ./config/Ultrahand
+cat > ./config/Ultrahand/overlays.ini << ENDOFFILE
+[ovl-sysmodules.ovl]
+priority=0
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=系统模块
+custom_version=
+
+[StatusMonitor.ovl]
+priority=1
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=状态监视
+custom_version=
+
+[EdiZon.ovl]
+priority=2
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=金手指
+custom_version=
+
+[ReverseNX-RT.ovl]
+priority=3
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=底座模式
+custom_version=
+
+[sys-clk.ovl]
+priority=4
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=极限超频
+custom_version=
+
+[emuiibo.ovl]
+priority=5
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=Amiibo模拟
+custom_version=
+
+[ldn_mitm.ovl]
+priority=6
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=联机插件
+custom_version=
+
+[QuickNTP.ovl]
+priority=7
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=时间同步
+custom_version=
+
+[SysDVR.ovl]
+priority=8
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=游戏串流
+custom_version=
+
+[FPSLocker.ovl]
+priority=9
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=FPS锁定
+custom_version=
+
+[sys-patch-overlay.ovl]
+priority=10
+star=false
+hide=false
+use_launch_args=false
+launch_args=
+custom_name=系统补丁
+custom_version=
+ENDOFFILE
+if [ $? -ne 0 ]; then
+    echo "Writing overlays.ini in ./config/Ultrahand\033[31m failed\033[0m."
+else
+    echo "Writing overlays.ini in ./config/Ultrahand\033[32m success\033[0m."
+fi
+
+### Rename /config/Ultrahand to /config/ultrahand 主题文件夹目前只识别小写
+mv ./config/Ultrahand ./config/ultrahand
 
 # -------------------------------------------
 
