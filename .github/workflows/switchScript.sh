@@ -697,6 +697,23 @@ else
     mv Checkpoint.nro ./switch/Checkpoint
 fi
 
+## Fetch lastest Daybreak.nro from https://github.com/gzk47/Atmosphere/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Atmosphere/releases
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$")))).tag_name' \
+  | xargs -I {} echo daybreak中文 {} >> ../description.txt
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$"))))' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*daybreak[^"]*.nro"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o daybreak.nro
+if [ $? -ne 0 ]; then
+    echo "daybreak download\033[31m failed\033[0m."
+else
+    echo "daybreak download\033[32m success\033[0m."
+    mv daybreak.nro ./switch
+fi
+
 # -------------------------------------------
 
 ###
