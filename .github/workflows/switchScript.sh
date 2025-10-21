@@ -102,10 +102,10 @@ ENDOFFILE
 ###
 
 ### Fetch sys-patch from https://github.com/impeeza/sys-patch/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-patch/releases/latest
 cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
+  | jq '.tag_name' \
+  | xargs -I {} echo sys-patch中文 {} >> ../description.txt
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-patch.zip"' \
   | sed 's/"//g' \
