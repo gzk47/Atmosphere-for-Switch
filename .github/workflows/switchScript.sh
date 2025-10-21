@@ -806,37 +806,54 @@ fi
 #ENDOFFILE
 
 ### Fetch Ultrahand-Overlay
-## Fetch latest Ultrahand-Overlay from https://github.com/zdm65477730/Ultrahand-Overlay
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Ultrahand-Overlay/releases/latest
+## Fetch latest Ultrahand-Overlay from https://github.com/ppkantorski/Ultrahand-Overlay
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ppkantorski/Ultrahand-Overlay/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Ultrahand-Overlay {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*Ultrahand[^"]*.zip"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*sdout[^"]*.zip"' \
   | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o Ultrahand.zip
+  | xargs -I {} curl -sL {} -o sdout.zip
 if [ $? -ne 0 ]; then
-    echo "Ultrahand-Overlay download\033[31m failed\033[0m."
+    echo "sdout download\033[31m failed\033[0m."
 else
-    echo "Ultrahand-Overlay download\033[32m success\033[0m."
-    unzip -oq Ultrahand.zip
-    rm Ultrahand.zip
+    echo "sdout download\033[32m success\033[0m."
+    unzip -oq sdout.zip
+    rm sdout.zip
+fi
+
+### Fetch Ultrahand-Overlay 自动转区
+## Fetch latest Ultrahand-Overlay from https://github.com/gzk47/Ultrahand-Overlay
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Ultrahand-Overlay/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo Ultrahand-Overlay {} 国行自动转国际版 >> ../description.txt
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*ovlmenu[^"]*.ovl"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o ovlmenu.ovl
+if [ $? -ne 0 ]; then
+    echo "ovlmenu download\033[31m failed\033[0m."
+else
+    echo "ovlmenu download\033[32m success\033[0m."
+    mv ovlmenu.ovl ./switch/.overlays
 fi
 
 ### Write config.ini in /config/Ultrahand
-cat > ./config/Ultrahand/config.ini << ENDOFFILE
+cat > ./config/ultrahand/config.ini << ENDOFFILE
 [ultrahand]
 default_lang=zh-cn
 key_combo=L+DDOWN
 ENDOFFILE
 if [ $? -ne 0 ]; then
-    echo "Writing config.ini in ./config/Ultrahand\033[31m failed\033[0m."
+    echo "Writing config.ini in ./config/ultrahand\033[31m failed\033[0m."
 else
-    echo "Writing config.ini in ./config/Ultrahand\033[32m success\033[0m."
+    echo "Writing config.ini in ./config/ultrahand\033[32m success\033[0m."
 fi
 
-### Write overlays.ini in /config/Ultrahand
-cat > ./config/Ultrahand/overlays.ini << ENDOFFILE
+### Write overlays.ini in /config/ultrahand
+cat > ./config/ultrahand/overlays.ini << ENDOFFILE
 [ovl-sysmodules.ovl]
 priority=0
 star=false
@@ -937,13 +954,13 @@ custom_name=系统补丁
 custom_version=
 ENDOFFILE
 if [ $? -ne 0 ]; then
-    echo "Writing overlays.ini in ./config/Ultrahand\033[31m failed\033[0m."
+    echo "Writing overlays.ini in ./config/ultrahand\033[31m failed\033[0m."
 else
-    echo "Writing overlays.ini in ./config/Ultrahand\033[32m success\033[0m."
+    echo "Writing overlays.ini in ./config/ultrahand\033[32m success\033[0m."
 fi
 
 ### Rename /config/Ultrahand to /config/ultrahand 主题文件夹目前只识别小写
-mv ./config/Ultrahand ./config/ultrahand
+#mv ./config/Ultrahand ./config/ultrahand
 
 ### Fetch ovl-sysmodules
 #curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ovl-sysmodules.zip -o ovl-sysmodules.zip
