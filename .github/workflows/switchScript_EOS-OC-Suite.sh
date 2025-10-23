@@ -818,7 +818,7 @@ fi
 ### Fetch lastest gzk47/OC-Switchcraft-EOS中文 from https://github.com/gzk47/OC-Switchcraft-EOS
 git clone https://github.com/gzk47/OC-Switchcraft-EOS
 if [ $? -ne 0 ]; then
-    echo OC-Switchcraft-EOS download\033[31m failed\033[0m."
+    echo "OC-Switchcraft-EOS download\033[31m failed\033[0m."
 else
     echo "OC-Switchcraft-EOS download\033[32m success\033[0m."
     mv OC-Switchcraft-EOS/"OC Toolkit" ./switch/.packages/"OC Toolkit"
