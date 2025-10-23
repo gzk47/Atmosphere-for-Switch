@@ -67,7 +67,7 @@ ENDOFFILE
 ###
 
 ### Fetch sys-patch from https://github.com/impeeza/sys-patch/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-patch/releases/latest
 cat latest.json \
   | jq '.name' \
   | xargs -I {} echo {} >> ../description.txt
@@ -813,6 +813,16 @@ else
     echo "sys-clk-overlay download\033[32m success\033[0m."
 
     mv sys-clk-overlay.ovl  ./switch/.overlays/sys-clk.ovl
+fi
+
+### Fetch lastest gzk47/OC-Switchcraft-EOS中文 from https://github.com/gzk47/OC-Switchcraft-EOS
+git clone https://github.com/gzk47/OC-Switchcraft-EOS
+if [ $? -ne 0 ]; then
+    echo OC-Switchcraft-EOS download\033[31m failed\033[0m."
+else
+    echo "OC-Switchcraft-EOS download\033[32m success\033[0m."
+    mv OC-Switchcraft-EOS/"OC Toolkit" ./switch/.packages/"OC Toolkit"
+    rm -rf OC-Switchcraft-EOS
 fi
 
 ### Write overlays.ini in /config/Ultrahand
