@@ -821,7 +821,7 @@ if [ $? -ne 0 ]; then
     echo "OC-Switchcraft-EOS download\033[31m failed\033[0m."
 else
     echo "OC-Switchcraft-EOS download\033[32m success\033[0m."
-    mv OC-Switchcraft-EOS/"OC Toolkit" ./switch/.packages
+    cp -rf OC-Switchcraft-EOS/"OC Toolkit"/. ./switch/.packages/"OC Toolkit"/
     rm -rf OC-Switchcraft-EOS
 fi
 
