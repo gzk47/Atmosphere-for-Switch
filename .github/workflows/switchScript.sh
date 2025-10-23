@@ -257,12 +257,12 @@ else
 fi
 
 ### Fetch lastest DBI from https://github.com/rashevskyv/dbi/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/rashevskyv/dbi/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBIPatcher/releases/latest
 cat latest.json \
   | jq '.name' \
   | xargs -I {} echo {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*DBI.nro"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*DBI.[^"]*.zhcn.nro"' \
   | sed 's/"//g' \
   | xargs -I {} curl -sL {} -o DBI.nro
 if [ $? -ne 0 ]; then
