@@ -1312,6 +1312,18 @@ else
     rm sys-con.zip
 fi
 
+### Fetch lastest XY-tools from https://github.com/gzk47/XY-tools
+git clone https://github.com/gzk47/XY-tools
+if [ $? -ne 0 ]; then
+    echo "XY-tools download\033[31m failed\033[0m."
+else
+    echo "XY-tools download\033[32m success\033[0m."
+    echo 心悦工具箱 >> ../description.txt
+    rm -rf SaltySD/plugins/FPSLocker/patches
+    mv -f XY-tools ./switch/.packages
+    rm -rf XY-tools
+fi
+
 # -------------------------------------------
 
 ###
