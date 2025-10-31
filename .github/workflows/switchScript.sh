@@ -1319,9 +1319,10 @@ if [ $? -ne 0 ]; then
 else
     echo "XY-tools download\033[32m success\033[0m."
     echo 心悦工具箱 >> ../description.txt
-    rm -rf SaltySD/plugins/FPSLocker/patches
-    mv -f XY-tools ./switch/.packages
+    rm -rf XY-tools/.git
+    mv -f XY-tools ./switch/.packages/XY-tools
     rm -rf XY-tools
+
 fi
 
 # -------------------------------------------
