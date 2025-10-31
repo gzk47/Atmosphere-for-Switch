@@ -1320,6 +1320,7 @@ else
     echo "XY-tools download\033[32m success\033[0m."
     echo 心悦工具箱 >> ../description.txt
     rm -rf XY-tools/.git
+    mkdir -p ./switch/.packages
     mv -f XY-tools ./switch/.packages/XY-tools
     rm -rf XY-tools
 
