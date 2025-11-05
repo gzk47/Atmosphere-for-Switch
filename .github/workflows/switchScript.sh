@@ -156,18 +156,6 @@ ENDOFFILE
 #    mv Lockpick_RCM.bin ./bootloader/payloads
 #fi
 
-### Fetch Lockpick_RCM.bin
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/sys/Lockpick_RCM.zip -o Lockpick_RCM.zip
-#if [ $? -ne 0 ]; then
-#    echo "Lockpick_RCM download\033[31m failed\033[0m."
-#else
-#    echo "Lockpick_RCM download\033[32m success\033[0m."
-#    echo Lockpick_RCM v1.9.12 >> ../description.txt
-#    unzip -oq Lockpick_RCM.zip
-#    mv Lockpick_RCM.bin ./bootloader/payloads
-#    rm Lockpick_RCM.zip
-#fi
-
 ### Fetch lastest Lockpick_RCMDecScots from https://github.com/zdm65477730/Lockpick_RCMDecScots/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Lockpick_RCMDecScots/releases/latest
 cat latest.json \
@@ -272,6 +260,248 @@ else
     mkdir -p ./switch/DBI
     mv DBI.nro ./switch/DBI
 fi
+
+### Write dbi.config in /switch/DBI/dbi.config
+cat > ./switch/DBI/config.ini << ENDOFFILE
+; General settings
+[General]
+; Direct exit to homescreen
+ExitToHomeScreen=false
+; Folder where saves backups are stored
+SavesFolder=sdmc:/DBIsaves/
+; Log "Install", "Check integrity" and "Cleanup" processes
+LogEvents=false
+; Folder where logs are stored
+LogsFolder=sdmc:/switch/DBI/logs/
+; Folder where game dumps are stored
+DumpsFolder=sdmc:/switch/DBI/dumps/
+; Sorting options for application list
+AppSorting=LastPlayed,InstallLocation,Size,Name
+; Sorting options for save list
+SaveSorting=AppLastPlayed,AppName,UserUid,Size,Time
+; Highlight files with updates to curently instaled titles in file browsers
+HighlightUpdates=true
+; Rotate screen upside down
+RotateScreen=false
+; Rotate joycons
+RotateJoycon=false
+; URL with title versions in format <id>|[rightsId|]<version>
+;VersionsURL=https://raw.githubusercontent.com/16BitWonder/nx-versions/master/versions.txt
+VersionsURL=https://raw.githubusercontent.com/blawar/titledb/master/versions.txt
+;VersionsURL=sdmc:/versions.txt
+; URL with titledb json
+TitleDB=https://raw.githubusercontent.com/blawar/titledb/master/US.en.json
+;Browse saves FS in Read-only mode
+ROSaveFS=false
+; Show "Update all items from here..." in context menu of file browsers
+ShowUpdateFromHere=true
+; Show cache warming spinner
+ShowCacheWarmingIndicator=true
+; Move cursor down after selection
+MoveDownAfterX=true
+; Screen idle timeout in seconds
+ScreenIdleTimeout=0
+; Auto repeat nav. buttons when holding
+Autorepeat=true
+; Show cursors on both panels in two-panel browsinig mode
+Secondcursor=false
+; Backup saves before delete
+FoolproofSaveDelete=true
+; Show time in status line
+TimeShow=true
+; Show time with seconds
+TimeShowSeconds=true
+; Run Application list from file browser by pressing L
+BrowseAppsFromFiles=false
+; Validate SSL certificates on network connections
+ValidateSSL=false
+; UpdateURL
+DBIUpdateURL=https://github.com/rashevskyv/DBI/releases/latest/download/latest.zip
+; Dump generated forwarders to configured dump location
+DumpForwarders=false
+; Do not show folder.jpg in file browser
+HideFolderJpg=true
+Custom dns servers for http connections
+;CustomDNS=8.8.8.8, 1.1.1.1
+; Try to allocate optimal socket buffer size
+SmartNetworkConfig=true
+
+[Filtering]
+; Apply filebrowser filter to directories
+FilterFolders=true
+; Inherit filter in subfolders
+InheritFilter=true
+
+; Visibility of main menu items
+[MainMenu]
+; Browse and install files from SD card
+BrowseSD=true
+; Browse and copy files from SYSTEM partition
+BrowseSystem=false
+; Browse and copy files from USER partition
+BrowseUser=false
+; Browse and install files from USB flash drives and HDD
+USBHost=true
+; Browse and install files from PC via dbibackend
+BackendInstall=true
+; Install game from inserted game cartridge
+GameCard=true
+; Browse and install files from configured network sources
+Network=true
+; Browse and install files from configured sd card folders
+Local=true
+; Browse installed applications
+BrowseApps=true
+; View where you can view or delete installed tickets
+Tickets=true
+; View where you can view or delete game saves
+Saves=true
+; MTP responder
+MTP=true
+; FTP Server
+FTP=true
+; HTTP Server
+HTTP=true
+; Tools
+Tools=true
+
+[Applications]
+; Whether check or not LFS mod size
+CalculateLFSSize=true
+
+; Install options
+[Install]
+; Check NCA hash during install
+CheckHash=true
+; Allow NSZ/XCZ install in applet mode
+EnableNSZ=true
+; Create LFS folder in /atmosphere/contents after installation
+CreateLFS=false
+;
+; Note! Following flags can make games to crash.
+; Patch restrictions for user account such as Linking
+PatchUAC=false
+; Patch restriction to create screenshots
+PatchScreenshot=false
+; Patch restriction to video recording
+PatchVideoRec=false
+
+; MTP options
+[MTP]
+; Show or not NSP that includes base game, latest update and all DLC in single multi-title file
+ShowCombinedNSP=true
+; Add [Base] and [Update] suffix to filename
+AddBaseUpdate = false
+; Show or not virtual "Mods & cheats" folder that redirects to sdmc:/atmosphere/contents/TITLEID
+ShowMAC=true
+; Use TitleID for "Mods & cheats" folder
+MACasTID=true
+; Show user defined shortcuts to MircoSD folders as separate storages
+CustomStorages=true
+; Turn screen off on start MTP mode
+TurnOffScreen=false
+; Report android extension (some initiators thinks that android has bugs)
+ReportAndroidExtension=true
+; Use single URB transfer. Will be a lot slower, but can improve stability
+SingleURB=false
+; MTP transmission buffer size in KB
+BufferSize=512
+; MTP transmission timeout in ms
+NewBufferTimeout=2000
+; Send Object_Removed event for files copied to Install storages
+AutoremoveInstalled=true
+
+; FTP options
+[FTP]
+; Turn screen off on start FTP mode
+TurnOffScreen=false
+; Read file modification time (can slow down on large dirs)
+ReadMT=false
+; Access port
+Port=5000
+; Min value for passive port range. Use 0 to Auto
+MinPassivePort=40000
+; Max value for passive port range. Use 0 to Auto
+MaxPassivePort=40100
+; send current directory as type=cdir
+CDIR=false
+; Force UTF8 usage
+ForceUtf8=true
+; Use WaitAll option in recv. Can improve speed, incompatible with some clients.
+UseWaitAll=true
+
+;HTTP options
+[HTTP]
+; Access port
+Port=1234
+; Data read timeout (seconds)
+Timeout=3
+
+
+; Access point options
+[Access point]
+; Start local access point for FTP/HTTP server
+UseAP=false
+SSID=
+Password=
+Use5GHz=false
+Hidden=false
+
+
+;Enable or disable various MTP storages
+[MTP Storages]
+1: SD Card=true
+2: Nand USER=false
+3: Nand SYSTEM=false
+4: Installed games=true
+5: SD Card install=true
+6: NAND install=true
+7: Saves=true
+8: Album=true
+9: Gamecard=false
+
+; FB2 rendering options
+[FB2]
+; Visul theme (Day, Night, Sepia, Darkroom)
+Theme=Day
+; Use word hyphenation
+Hyphenation=true
+; Default orientation
+Orientation=0
+
+; Network install sources
+[Network sources]
+; <display name>=<type>|<URL>
+;NSP Indexer=URLList|http://192.168.1.47/nspindexer/index.php?DBI
+;Home server=ApacheHTTP|http://192.168.1.47/Nintendo/Switch/
+;WebDAV test=WebDAV|http://user:password@192.168.1.47/webdav/
+;Test FTP=FTP|ftp://192.168.1.24:2121/
+;Test SFTP=SFTP|sftp://user:password@192.168.1.24/
+;Test SFTP=SFTP|sftp://remote_user@192.168.1.47/
+;Instead of password you can use sdmc:/switch/.ssh/id_rsa and sdmc:/switch/.ssh/id_rsa.pub files
+;Sorry, but it seems to be libcurl limitation to use full keypair instead of only private key.
+
+; Main menu shortcuts to SD card locations
+[Local sources]
+; <display name>=<path>
+;Homebrew=sdmc:/switch
+DBILogs=sdmc:/switch/DBI/logs
+
+[MTP custom storages]
+; <display name>=<path>
+;Homebrew=sdmc:/switch
+DBILogs=sdmc:/switch/DBI/logs
+
+; Override for display name
+; <UPPERCASED TID>=<Desired name>
+[Title name override]
+;010023901191C000=Naheulbeuk
+
+[Disabled titles to check for updates]
+BlockAllTitlesWithLFS=true
+010072400E04A000; Pokemon Cafe Mix
+
+ENDOFFILE
 
 ### Fetch lastest Awoo Installer from https://github.com/dragonflylee/Awoo-Installer/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/Awoo-Installer/releases/latest
@@ -714,6 +944,22 @@ else
     mv daybreak.nro ./switch
 fi
 
+### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo hbmenu中文 {} >> ../description.txt
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*hbmenu.nro"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o hbmenu.nro
+if [ $? -ne 0 ]; then
+    echo "hbmenu download\033[31m failed\033[0m."
+else
+    echo "hbmenu download\033[32m success\033[0m."
+    rm -f latest.json
+fi
+
 # -------------------------------------------
 
 ###
@@ -726,15 +972,6 @@ cat >> ../description.txt << ENDOFFILE
 ENDOFFILE
 ###
 
-### Fetch nx-ovlloader
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/nx-ovlloader.zip -o nx-ovlloader.zip
-#if [ $? -ne 0 ]; then
-#    echo "nx-ovlloader download\033[31m failed\033[0m."
-#else
-#    echo "nx-ovlloader download\033[32m success\033[0m."
-#    unzip -oq nx-ovlloader.zip
-#    rm nx-ovlloader.zip
-#fi
 
 ## Fetch lastest nx-ovlloader from https://github.com/zdm65477730/nx-ovlloader/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/nx-ovlloader/releases/latest
@@ -764,46 +1001,6 @@ else
     echo "Writing config.ini in ./config/tesla\033[32m success\033[0m."
 fi
 
-### Fetch Tesla-Menu
-#curl -sL #https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/Tesla-Menu.zip -o Tesla-Menu.zip
-#if [ $? -ne 0 ]; then
-#    echo "Tesla-Menu download\033[31m failed\033[0m."
-#else
-#    echo "Tesla-Menu download\033[32m success\033[0m."
-#    unzip -oq Tesla-Menu.zip
-#    rm Tesla-Menu.zip
-#fi
-
-### Fetch lastest Tesla-Menu from https://github.com/zdm65477730/Tesla-Menu/releases/latest
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/zdm65477730/Tesla-Menu/releases/latest \
-#  | jq '.tag_name' \
-#  | xargs -I {} echo Tesla-Menu {} >> ../description.txt
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/zdm65477730/Tesla-Menu/releases/latest \
-#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Tesla-Menu[^"]*.zip"' \
-#  | sed 's/"//g' \
-#  | xargs -I {} curl -sL {} -o Tesla-Menu.zip
-#if [ $? -ne 0 ]; then
-#    echo "Tesla-Menu download\033[31m failed\033[0m."
-#else
-#    echo "Tesla-Menu download\033[32m success\033[0m."
-#    unzip -oq Tesla-Menu.zip
-#    rm Tesla-Menu.zip
-#fi
-
-### Write sort.cfg in /config/Tesla-Menu/sort.cfg
-#cat > ./config/Tesla-Menu/sort.cfg << ENDOFFILE
-#ovl-sysmodules
-#StatusMonitor
-#EdiZon
-#ReverseNX-RT
-#sys-clk
-#emuiibo
-#ldn_mitm
-#QuickNTP
-#SysDVR
-#Fizeau
-#Zing
-#ENDOFFILE
 
 ### Fetch Ultrahand-Overlay
 ## Fetch latest Ultrahand-Overlay from https://github.com/ppkantorski/Ultrahand-Overlay
@@ -962,15 +1159,6 @@ fi
 ### Rename /config/Ultrahand to /config/ultrahand 主题文件夹目前只识别小写
 #mv ./config/Ultrahand ./config/ultrahand
 
-### Fetch ovl-sysmodules
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ovl-sysmodules.zip -o ovl-sysmodules.zip
-#if [ $? -ne 0 ]; then
-#    echo "ovl-sysmodules download\033[31m failed\033[0m."
-#else
-#    echo "ovl-sysmodules download\033[32m success\033[0m."
-#    unzip -oq ovl-sysmodules.zip
-#    rm ovl-sysmodules.zip
-#fi
 
 ## Fetch lastest ovl-sysmodules from https://github.com/zdm65477730/ovl-sysmodules/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ovl-sysmodules/releases/latest
@@ -1000,15 +1188,6 @@ hekateRestartControlEnabled=0
 consoleRegionControlEnabled=1
 ENDOFFILE
 
-### Fetch StatusMonitor
-#curl -sL #https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/StatusMonitor.zip -o StatusMonitor.zip
-#if [ $? -ne 0 ]; then
-#    echo "StatusMonitor download\033[31m failed\033[0m."
-#else
-#    echo "StatusMonitor download\033[32m success\033[0m."
-#    unzip -oq StatusMonitor.zip
-#    rm StatusMonitor.zip
-#fi
 
 ## Fetch lastest Status-Monitor-Overlay from https://github.com/zdm65477730/Status-Monitor-Overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Status-Monitor-Overlay/releases
@@ -1028,15 +1207,6 @@ else
     rm StatusMonitor.zip
 fi
 
-### Fetch EdiZon
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/EdiZon.zip -o EdiZon.zip
-#if [ $? -ne 0 ]; then
-#    echo "EdiZon download\033[31m failed\033[0m."
-#else
-#    echo "EdiZon download\033[32m success\033[0m."
-#    unzip -oq EdiZon.zip
-#    rm EdiZon.zip
-#fi
 
 ## Fetch lastest EdiZon-Overlay from https://github.com/zdm65477730/EdiZon-Overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/EdiZon-Overlay/releases/latest
@@ -1055,16 +1225,6 @@ else
     rm EdiZon.zip
 fi
 
-### Fetch ReverseNX-RT
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ReverseNX-RT.zip -o ReverseNX-RT.zip
-#if [ $? -ne 0 ]; then
-#    echo "ReverseNX-RT download\033[31m failed\033[0m."
-#else
-#    echo "ReverseNX-RT download\033[32m success\033[0m."
-#    unzip -oq ReverseNX-RT.zip
-#    rm ReverseNX-RT.zip
-#    rm -rf SaltySD/patches
-#fi
 
 ## Fetch lastest ReverseNX-RT from https://github.com/zdm65477730/ReverseNX-RT/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ReverseNX-RT/releases/latest
@@ -1095,15 +1255,6 @@ else
     rm -rf FPSLocker-Warehouse
 fi
 
-### Fetch sys-clk
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/sys-clk.zip -o sys-clk.zip
-#if [ $? -ne 0 ]; then
-#    echo "sys-clk download\033[31m failed\033[0m."
-#else
-#    echo "sys-clk download\033[32m success\033[0m."
-#    unzip -oq sys-clk.zip
-#    rm sys-clk.zip
-#fi
 
 ## Fetch lastest sys-clk from https://github.com/zdm65477730/sys-clk/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sys-clk/releases/latest
@@ -1122,15 +1273,6 @@ else
     rm sys-clk.zip
 fi
 
-### Fetch emuiibo
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/emuiibo.zip -o emuiibo.zip
-#if [ $? -ne 0 ]; then
-#    echo "emuiibo download\033[31m failed\033[0m."
-#else
-#    echo "emuiibo download\033[32m success\033[0m."
-#    unzip -oq emuiibo.zip
-#    rm emuiibo.zip
-#fi
 
 ## Fetch lastest emuiibo from https://github.com/zdm65477730/emuiibo/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/emuiibo/releases/latest
@@ -1149,15 +1291,6 @@ else
     rm emuiibo.zip
 fi
 
-### Fetch ldn_mitm
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ldn_mitm.zip -o ldn_mitm.zip
-#if [ $? -ne 0 ]; then
-#    echo "ldn_mitm download\033[31m failed\033[0m."
-#else
-#    echo "ldn_mitm download\033[32m success\033[0m."
-#    unzip -oq ldn_mitm.zip
-#    rm ldn_mitm.zip
-#fi
 
 ## Fetch lastest ldn_mitm from https://github.com/zdm65477730/ldn_mitm/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ldn_mitm/releases/latest
@@ -1176,15 +1309,6 @@ else
     rm ldn_mitm.zip
 fi
 
-### Fetch QuickNTP
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/QuickNTP.zip -o QuickNTP.zip
-#if [ $? -ne 0 ]; then
-#    echo "QuickNTP download\033[31m failed\033[0m."
-#else
-#    echo "QuickNTP download\033[32m success\033[0m."
-#    unzip -oq QuickNTP.zip
-#    rm QuickNTP.zip
-#fi
 
 ## Fetch lastest QuickNTP from https://github.com/zdm65477730/QuickNTP/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/QuickNTP/releases/latest
@@ -1203,15 +1327,6 @@ else
     rm QuickNTP.zip
 fi
 
-### sysDvr
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/SysDVR.zip -o SysDVR.zip
-#if [ $? -ne 0 ]; then
-#    echo "SysDVR download\033[31m failed\033[0m."
-#else
-#    echo "SysDVR download\033[32m success\033[0m."
-#    unzip -oq SysDVR.zip
-#    rm SysDVR.zip
-#fi
 
 ## Fetch lastest sysdvr-overlay from https://github.com/zdm65477730/sysdvr-overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sysdvr-overlay/releases/latest
@@ -1230,35 +1345,7 @@ else
     rm SysDVR.zip
 fi
 
-#### Fetch Fizeau
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/Fizeau.zip -o Fizeau.zip
-#if [ $? -ne 0 ]; then
-#    echo "Fizeau download\033[31m failed\033[0m."
-#else
-#    echo "Fizeau download\033[32m success\033[0m."
-#    unzip -oq Fizeau.zip
-#    rm Fizeau.zip
-#fi
 
-#### Fetch Zing
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/Zing.zip -o Zing.zip
-#if [ $? -ne 0 ]; then
-#    echo "Zing download\033[31m failed\033[0m."
-#else
-#    echo "Zing download\033[32m success\033[0m."
-#    unzip -oq Zing.zip
-#    rm Zing.zip
-#fi
-
-#### Fetch sys-tune
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/sys-tune.zip -o sys-tune.zip
-#if [ $? -ne 0 ]; then
-#    echo "sys-tune download\033[31m failed\033[0m."
-#else
-#    echo "sys-tune download\033[32m success\033[0m."
-#    unzip -oq sys-tune.zip
-#    rm sys-tune.zip
-#fi
 
 ###
 #cat >> ../description.txt << ENDOFFILE
@@ -1312,13 +1399,37 @@ else
     rm sys-con.zip
 fi
 
+# -------------------------------------------
+
+###
+cat >> ../description.txt << ENDOFFILE
+ 
+------------------------------
+ 
+心悦工具箱 
+ 
+插件管理 - 便捷管理和切换Switch插件
+Hekate启动选项 - 配置Hekate引导加载程序
+相册启动 - 设置hbmenu和sphaira等启动器
+金手指功能 - 在线下载和管理游戏金手指
+录屏设置 - 调整录屏的比特率和帧率
+DBI版本切换 - 在版本间切换
+联网防护 - 屏蔽任天堂服务器和保护序列号
+风扇增强 - 自定义风扇曲线控制温度
+帧率补丁 - 应用游戏帧率解锁补丁
+极限超频 - 优化CPU/GPU/内存性能
+工具箱更新 - 一键更新至最新版本
+ 
+ENDOFFILE
+###
+
 ### Fetch lastest XY-tools from https://github.com/gzk47/XY-tools
 git clone https://github.com/gzk47/XY-tools
 if [ $? -ne 0 ]; then
     echo "XY-tools download\033[31m failed\033[0m."
 else
     echo "XY-tools download\033[32m success\033[0m."
-    echo 心悦工具箱 >> ../description.txt
+#    echo 心悦工具箱 >> ../description.txt
     rm -rf XY-tools/.git
     mkdir -p ./switch/.packages
     mv -f XY-tools ./switch/.packages/XY-tools
@@ -1342,7 +1453,7 @@ ENDOFFILE
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo EOS{}-OC-Suite >> ../description.txt
+  | xargs -I {} echo EOS{}-OC-Suite中文 >> ../description.txt
 
 # -------------------------------------------
 
@@ -1670,21 +1781,7 @@ else
     rm boot-dat.zip
 fi
 
-### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
-#cat latest.json \
-#  | jq '.tag_name' \
-#  | xargs -I {} echo nx-hbmenu中文 {} >> ../description.txt
-cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*hbmenu.nro"' \
-  | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o hbmenu.nro
-if [ $? -ne 0 ]; then
-    echo "hbmenu download\033[31m failed\033[0m."
-else
-    echo "hbmenu download\033[32m success\033[0m."
-    rm -f latest.json
-fi
+
 
 ### Fetch readme
 curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/sys/readme.txt -o readme.txt

@@ -69,8 +69,8 @@ ENDOFFILE
 ### Fetch sys-patch from https://github.com/impeeza/sys-patch/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-patch/releases/latest
 cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
+  | jq '.tag_name' \
+  | xargs -I {} echo sys-patch中文 {} >> ../description.txt
 #curl -H "$API_AUTH" -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
 #  | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-patch.zip"' \
 #  | sed 's/"//g' \
@@ -149,7 +149,7 @@ cat latest.json \
   | xargs -I {} echo Switch_90DNS_tester {} >> ../description.txt
 
 ### Fetch lastest DBI from https://github.com/rashevskyv/dbi/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/rashevskyv/dbi/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBIPatcher/releases/latest
 cat latest.json \
   | jq '.name' \
   | xargs -I {} echo {} >> ../description.txt
@@ -171,7 +171,6 @@ curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo NX-Activity-Log {} >> ../description.txt
-
 
 ### Fetch lastest NXThemesInstaller from https://github.com/exelix11/SwitchThemeInjector/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/exelix11/SwitchThemeInjector/releases/latest
@@ -324,13 +323,21 @@ curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ITotalJustic
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo sphaira {} >> ../description.txt
-
 ### Fetch lastest Checkpoint from https://github.com/BernardoGiordano/Checkpoint/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/BernardoGiordano/Checkpoint/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Checkpoint {} >> ../description.txt
-
+## Fetch lastest Daybreak.nro from https://github.com/gzk47/Atmosphere/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Atmosphere/releases
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$")))).tag_name' \
+  | xargs -I {} echo daybreak中文 {} >> ../description.txt
+### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo hbmenu中文 {} >> ../description.txt
 # -------------------------------------------
 
 ###
@@ -343,15 +350,6 @@ cat >> ../description.txt << ENDOFFILE
 ENDOFFILE
 ###
 
-### Fetch nx-ovlloader
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/nx-ovlloader.zip -o nx-ovlloader.zip
-#if [ $? -ne 0 ]; then
-#    echo "nx-ovlloader download\033[31m failed\033[0m."
-#else
-#    echo "nx-ovlloader download\033[32m success\033[0m."
-#    unzip -oq nx-ovlloader.zip
-#    rm nx-ovlloader.zip
-#fi
 
 ## Fetch lastest nx-ovlloader from https://github.com/zdm65477730/nx-ovlloader/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/nx-ovlloader/releases/latest
@@ -359,79 +357,13 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo nx-ovlloader {} >> ../description.txt
 
-### Fetch Tesla-Menu
-#curl -sL #https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/Tesla-Menu.zip -o Tesla-Menu.zip
-#if [ $? -ne 0 ]; then
-#    echo "Tesla-Menu download\033[31m failed\033[0m."
-#else
-#    echo "Tesla-Menu download\033[32m success\033[0m."
-#    unzip -oq Tesla-Menu.zip
-#    rm Tesla-Menu.zip
-#fi
-
-### Fetch lastest Tesla-Menu from https://github.com/zdm65477730/Tesla-Menu/releases/latest
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/zdm65477730/Tesla-Menu/releases/latest \
-#  | jq '.tag_name' \
-#  | xargs -I {} echo Tesla-Menu {} >> ../description.txt
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/zdm65477730/Tesla-Menu/releases/latest \
-#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Tesla-Menu[^"]*.zip"' \
-#  | sed 's/"//g' \
-#  | xargs -I {} curl -sL {} -o Tesla-Menu.zip
-#if [ $? -ne 0 ]; then
-#    echo "Tesla-Menu download\033[31m failed\033[0m."
-#else
-#    echo "Tesla-Menu download\033[32m success\033[0m."
-#    unzip -oq Tesla-Menu.zip
-#    rm Tesla-Menu.zip
-#fi
-
-### Write sort.cfg in /config/Tesla-Menu/sort.cfg
-#cat > ./config/Tesla-Menu/sort.cfg << ENDOFFILE
-#ovl-sysmodules
-#StatusMonitor
-#EdiZon
-#ReverseNX-RT
-#sys-clk
-#emuiibo
-#ldn_mitm
-#QuickNTP
-#SysDVR
-#Fizeau
-#Zing
-#ENDOFFILE
 
 ### Fetch Ultrahand-Overlay
-## Fetch latest Ultrahand-Overlay from https://github.com/zdm65477730/Ultrahand-Overlay
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Ultrahand-Overlay/releases/latest
+## Fetch latest Ultrahand-Overlay from https://github.com/ppkantorski/Ultrahand-Overlay
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ppkantorski/Ultrahand-Overlay/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Ultrahand-Overlay {} >> ../description.txt
-
-### Fetch ovl-sysmodules
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ovl-sysmodules.zip -o ovl-sysmodules.zip
-#if [ $? -ne 0 ]; then
-#    echo "ovl-sysmodules download\033[31m failed\033[0m."
-#else
-#    echo "ovl-sysmodules download\033[32m success\033[0m."
-#    unzip -oq ovl-sysmodules.zip
-#    rm ovl-sysmodules.zip
-#fi
-
-## Fetch lastest ovl-sysmodules from https://github.com/zdm65477730/ovl-sysmodules/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ovl-sysmodules/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo ovl-sysmodules {} >> ../description.txt
-
-### Fetch StatusMonitor
-#curl -sL #https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/StatusMonitor.zip -o StatusMonitor.zip
-#if [ $? -ne 0 ]; then
-#    echo "StatusMonitor download\033[31m failed\033[0m."
-#else
-#    echo "StatusMonitor download\033[32m success\033[0m."
-#    unzip -oq StatusMonitor.zip
-#    rm StatusMonitor.zip
-#fi
 
 ## Fetch lastest Status-Monitor-Overlay from https://github.com/zdm65477730/Status-Monitor-Overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Status-Monitor-Overlay/releases/latest
@@ -439,15 +371,6 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo StatusMonitor {} >> ../description.txt
 
-### Fetch EdiZon
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/EdiZon.zip -o EdiZon.zip
-#if [ $? -ne 0 ]; then
-#    echo "EdiZon download\033[31m failed\033[0m."
-#else
-#    echo "EdiZon download\033[32m success\033[0m."
-#    unzip -oq EdiZon.zip
-#    rm EdiZon.zip
-#fi
 
 ## Fetch lastest EdiZon-Overlay from https://github.com/zdm65477730/EdiZon-Overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/EdiZon-Overlay/releases/latest
@@ -455,16 +378,6 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo EdiZon {} >> ../description.txt
 
-### Fetch ReverseNX-RT
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ReverseNX-RT.zip -o ReverseNX-RT.zip
-#if [ $? -ne 0 ]; then
-#    echo "ReverseNX-RT download\033[31m failed\033[0m."
-#else
-#    echo "ReverseNX-RT download\033[32m success\033[0m."
-#    unzip -oq ReverseNX-RT.zip
-#    rm ReverseNX-RT.zip
-#    rm -rf SaltySD/patches
-#fi
 
 ## Fetch lastest ReverseNX-RT from https://github.com/zdm65477730/ReverseNX-RT/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ReverseNX-RT/releases/latest
@@ -472,15 +385,6 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo ReverseNX-RT {} >> ../description.txt
 
-### Fetch sys-clk
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/sys-clk.zip -o sys-clk.zip
-#if [ $? -ne 0 ]; then
-#    echo "sys-clk download\033[31m failed\033[0m."
-#else
-#    echo "sys-clk download\033[32m success\033[0m."
-#    unzip -oq sys-clk.zip
-#    rm sys-clk.zip
-#fi
 
 ## Fetch lastest sys-clk from https://github.com/zdm65477730/sys-clk/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sys-clk/releases/latest
@@ -488,15 +392,6 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo sys-clk {} >> ../description.txt
 
-### Fetch emuiibo
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/emuiibo.zip -o emuiibo.zip
-#if [ $? -ne 0 ]; then
-#    echo "emuiibo download\033[31m failed\033[0m."
-#else
-#    echo "emuiibo download\033[32m success\033[0m."
-#    unzip -oq emuiibo.zip
-#    rm emuiibo.zip
-#fi
 
 ## Fetch lastest emuiibo from https://github.com/zdm65477730/emuiibo/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/emuiibo/releases/latest
@@ -504,15 +399,6 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo emuiibo {} >> ../description.txt
 
-### Fetch ldn_mitm
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ldn_mitm.zip -o ldn_mitm.zip
-#if [ $? -ne 0 ]; then
-#    echo "ldn_mitm download\033[31m failed\033[0m."
-#else
-#    echo "ldn_mitm download\033[32m success\033[0m."
-#    unzip -oq ldn_mitm.zip
-#    rm ldn_mitm.zip
-#fi
 
 ## Fetch lastest ldn_mitm from https://github.com/zdm65477730/ldn_mitm/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ldn_mitm/releases/latest
@@ -520,15 +406,6 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo ldn_mitm {} >> ../description.txt
 
-### Fetch QuickNTP
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/QuickNTP.zip -o QuickNTP.zip
-#if [ $? -ne 0 ]; then
-#    echo "QuickNTP download\033[31m failed\033[0m."
-#else
-#    echo "QuickNTP download\033[32m success\033[0m."
-#    unzip -oq QuickNTP.zip
-#    rm QuickNTP.zip
-#fi
 
 ## Fetch lastest QuickNTP from https://github.com/zdm65477730/QuickNTP/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/QuickNTP/releases/latest
@@ -536,15 +413,6 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo QuickNTP {} >> ../description.txt
 
-### sysDvr
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/SysDVR.zip -o SysDVR.zip
-#if [ $? -ne 0 ]; then
-#    echo "SysDVR download\033[31m failed\033[0m."
-#else
-#    echo "SysDVR download\033[32m success\033[0m."
-#    unzip -oq SysDVR.zip
-#    rm SysDVR.zip
-#fi
 
 ## Fetch lastest sysdvr-overlay from https://github.com/zdm65477730/sysdvr-overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sysdvr-overlay/releases/latest
@@ -552,35 +420,8 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo SysDVR {} >> ../description.txt
 
-#### Fetch Fizeau
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/Fizeau.zip -o Fizeau.zip
-#if [ $? -ne 0 ]; then
-#    echo "Fizeau download\033[31m failed\033[0m."
-#else
-#    echo "Fizeau download\033[32m success\033[0m."
-#    unzip -oq Fizeau.zip
-#    rm Fizeau.zip
-#fi
 
-#### Fetch Zing
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/Zing.zip -o Zing.zip
-#if [ $? -ne 0 ]; then
-#    echo "Zing download\033[31m failed\033[0m."
-#else
-#    echo "Zing download\033[32m success\033[0m."
-#    unzip -oq Zing.zip
-#    rm Zing.zip
-#fi
 
-#### Fetch sys-tune
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/sys-tune.zip -o sys-tune.zip
-#if [ $? -ne 0 ]; then
-#    echo "sys-tune download\033[31m failed\033[0m."
-#else
-#    echo "sys-tune download\033[32m success\033[0m."
-#    unzip -oq sys-tune.zip
-#    rm sys-tune.zip
-#fi
 
 ###
 #cat >> ../description.txt << ENDOFFILE
@@ -619,6 +460,30 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
+心悦工具箱 
+ 
+插件管理 - 便捷管理和切换Switch插件
+Hekate启动选项 - 配置Hekate引导加载程序
+相册启动 - 设置hbmenu和sphaira等启动器
+金手指功能 - 在线下载和管理游戏金手指
+录屏设置 - 调整录屏的比特率和帧率
+DBI版本切换 - 在版本间切换
+联网防护 - 屏蔽任天堂服务器和保护序列号
+风扇增强 - 自定义风扇曲线控制温度
+帧率补丁 - 应用游戏帧率解锁补丁
+极限超频 - 优化CPU/GPU/内存性能
+工具箱更新 - 一键更新至最新版本
+ 
+ENDOFFILE
+###
+
+# -------------------------------------------
+
+###
+cat >> ../description.txt << ENDOFFILE
+ 
+------------------------------
+ 
 极限超频替换包：（ 覆盖到【特斯拉版】心悦整合包上替换 ）
  
 ENDOFFILE
@@ -641,7 +506,6 @@ updater2p=1
 [CFW-SYSNAND]
 emummc_force_disable=1
 pkg3=atmosphere/package3
-kip1patch=nosigchk
 kip1=atmosphere/kips/loader.kip
 logopath=bootloader/bootlogo.bmp
 icon=bootloader/res/sysnand.bmp
@@ -651,7 +515,6 @@ id=cfw-sys
 [CFW-EMUNAND]
 emummcforce=1
 pkg3=atmosphere/package3
-kip1patch=nosigchk
 kip1=atmosphere/kips/loader.kip
 logopath=bootloader/bootlogo.bmp
 icon=bootloader/res/emunand.bmp
@@ -681,7 +544,7 @@ fi
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo EOS{}-OC-Suite >> ../description.txt
+  | xargs -I {} echo EOS{}-OC-Suite中文 >> ../description.txt
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-clk[^"]*.zip' \
@@ -825,9 +688,9 @@ else
     rm -rf OC-Switchcraft-EOS
 fi
 
-### Write overlays.ini in /config/Ultrahand
-mkdir -p ./config/Ultrahand
-cat > ./config/Ultrahand/overlays.ini << ENDOFFILE
+### Write overlays.ini in /config/ultrahand
+mkdir -p ./config/ultrahand
+cat > ./config/ultrahand/overlays.ini << ENDOFFILE
 [ovl-sysmodules.ovl]
 priority=0
 star=false
@@ -928,9 +791,9 @@ custom_name=系统补丁
 custom_version=
 ENDOFFILE
 if [ $? -ne 0 ]; then
-    echo "Writing overlays.ini in ./config/Ultrahand\033[31m failed\033[0m."
+    echo "Writing overlays.ini in ./config/ultrahand\033[31m failed\033[0m."
 else
-    echo "Writing overlays.ini in ./config/Ultrahand\033[32m success\033[0m."
+    echo "Writing overlays.ini in ./config/ultrahand\033[32m success\033[0m."
 fi
 
 ### Rename /config/Ultrahand to /config/ultrahand 主题文件夹目前只识别小写
