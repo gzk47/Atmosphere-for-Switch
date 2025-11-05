@@ -61,6 +61,9 @@
     - [x] 蓝牙手柄插件 `MissionControl` [From Here](https://github.com/ndeadly/MissionControl/releases/latest)
     - [x] 有线手柄插件 `sys-con` [From Here](https://github.com/o0Zz/sys-con/releases/latest)
 
+  - 心悦工具箱
+    - [x] 心悦工具箱 `XY-tools` [From Here](https://github.com/gzk47)
+
   - 极限超频
     - [x] 极限超频插件 `EOS-OC-Suite` [From Here](https://github.com/halop/OC_Toolkit_SC_EOS/releases/latest)
           
