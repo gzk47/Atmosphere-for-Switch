@@ -262,7 +262,7 @@ else
 fi
 
 ### Write dbi.config in /switch/DBI/dbi.config
-cat > ./switch/DBI/config.ini << ENDOFFILE
+cat > ./switch/DBI/dbi.config << ENDOFFILE
 ; General settings
 [General]
 ; Direct exit to homescreen

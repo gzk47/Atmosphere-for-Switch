@@ -364,6 +364,12 @@ curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ppkantorski/
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Ultrahand-Overlay {} >> ../description.txt
+### Fetch Ultrahand-Overlay 自动转区
+## Fetch latest Ultrahand-Overlay from https://github.com/gzk47/Ultrahand-Overlay
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Ultrahand-Overlay/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo Ultrahand-Overlay {} 国行自动转国际版 >> ../description.txt
 
 ## Fetch lastest Status-Monitor-Overlay from https://github.com/zdm65477730/Status-Monitor-Overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Status-Monitor-Overlay/releases/latest
