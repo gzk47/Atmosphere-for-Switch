@@ -649,7 +649,7 @@ else
 fi
 
 ### Fetch latest sys-clk中文 from https://github.com/ppkantorski/sys-clk/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ppkantorski/sys-clk/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-clk/releases/latest
 cat latest.json \
   | jq '.name' \
 #  | xargs -I {} echo {} >> ../description.txt
