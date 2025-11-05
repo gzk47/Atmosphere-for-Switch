@@ -803,7 +803,7 @@ else
 fi
 
 ### Rename /config/Ultrahand to /config/ultrahand 主题文件夹目前只识别小写
-mv ./config/Ultrahand ./config/ultrahand
+#mv ./config/Ultrahand ./config/ultrahand
 
 # -------------------------------------------
 
