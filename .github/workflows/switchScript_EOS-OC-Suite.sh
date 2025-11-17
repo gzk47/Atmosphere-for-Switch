@@ -36,7 +36,7 @@ cat >> ../description.txt << ENDOFFILE
 ENDOFFILE
 
 ### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases
 cat latest.json \
   | jq 'first(.[]|select(.assets|any(.name|test("^atmosphere.*\\.zip$")))).name' \
   | xargs -I {} echo {} >> ../description.txt
