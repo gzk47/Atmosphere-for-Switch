@@ -38,7 +38,7 @@ ENDOFFILE
 ### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest
 cat latest.json \
-  | jq '.name' \
+  | jq 'first(.[]|select(.assets|any(.name|test("^atmosphere.*\\.zip$")))).name' \
   | xargs -I {} echo {} >> ../description.txt
 
 
@@ -60,28 +60,11 @@ cat latest.json \
 #    rm sigpatches.zip
 #fi
 
-###
-cat >> ../description.txt << ENDOFFILE
-sigpatches
-ENDOFFILE
-###
-
 ### Fetch sys-patch from https://github.com/impeeza/sys-patch/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-patch/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo sys-patch中文 {} >> ../description.txt
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
-#  | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-patch.zip"' \
-#  | sed 's/"//g' \
-#  | xargs -I {} curl -sL {} -o sys-patch.zip
-#if [ $? -ne 0 ]; then
-#    echo "sys-patch download\033[31m failed\033[0m."
-#else
-#    echo "sys-patch download\033[32m success\033[0m."
-#    unzip -oq sys-patch.zip
-#    rm sys-patch.zip
-#fi
+  | xargs -I {} echo sys-patch {} 中文 >> ../description.txt
 
 
 # -------------------------------------------
@@ -152,7 +135,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBIPatcher/releases/latest
 cat latest.json \
   | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
+  | xargs -I {} echo {} 中文 >> ../description.txt
 
 ### Fetch lastest Awoo Installer from https://github.com/dragonflylee/Awoo-Installer/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/Awoo-Installer/releases/latest
@@ -164,7 +147,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo HekateToolbox中文 {} >> ../description.txt
+  | xargs -I {} echo HekateToolbox {} 中文 >> ../description.txt
 
 ### Fetch lastest NX-Activity-Log from https://github.com/zdm65477730/NX-Activity-Log/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/NX-Activity-Log/releases/latest
@@ -242,7 +225,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ReverseNX-Tool/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo ReverseNX-Tool中文 {} >> ../description.txt
+  | xargs -I {} echo ReverseNX-Tool {} 中文 >> ../description.txt
 
 ### Fetch lastest Goldleaf from https://github.com/XorTroll/Goldleaf/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/XorTroll/Goldleaf/releases/latest
@@ -332,12 +315,12 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Atmosphere/releases
 cat latest.json \
   | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$")))).tag_name' \
-  | xargs -I {} echo daybreak中文 {} >> ../description.txt
+  | xargs -I {} echo daybreak {} 中文 >> ../description.txt
 ### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo hbmenu中文 {} >> ../description.txt
+  | xargs -I {} echo hbmenu {} 中文 >> ../description.txt
 # -------------------------------------------
 
 ###
@@ -351,11 +334,6 @@ ENDOFFILE
 ###
 
 
-## Fetch lastest nx-ovlloader from https://github.com/zdm65477730/nx-ovlloader/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/nx-ovlloader/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo nx-ovlloader {} >> ../description.txt
 
 
 ### Fetch Ultrahand-Overlay
@@ -369,7 +347,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Ultrahand-Overlay/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo Ultrahand-Overlay {} 国行自动转国际版 >> ../description.txt
+  | xargs -I {} echo ovlmenu.ovl {} 国行自动转国际版 >> ../description.txt
 
 ## Fetch lastest Status-Monitor-Overlay from https://github.com/zdm65477730/Status-Monitor-Overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Status-Monitor-Overlay/releases/latest
@@ -476,6 +454,8 @@ Hekate启动选项 - 配置Hekate引导加载程序
 DBI版本切换 - 在版本间切换
 联网防护 - 屏蔽任天堂服务器和保护序列号
 风扇增强 - 自定义风扇曲线控制温度
+游戏模组 - 游戏模组解锁补丁
+8G内存切换 - 硬改为8G内存的机器专用
 帧率补丁 - 应用游戏帧率解锁补丁
 极限超频 - 优化CPU/GPU/内存性能
 工具箱更新 - 一键更新至最新版本
@@ -550,7 +530,7 @@ fi
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo EOS{}-OC-Suite中文 >> ../description.txt
+  | xargs -I {} echo EOS{}-OC-Suite 中文 >> ../description.txt
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-clk[^"]*.zip' \
@@ -855,8 +835,6 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
-SwitchSD-Pure  为：纯净版
-SwitchSD-Tesla 为：特斯拉版
 SwitchSD       为：特斯拉版+sys-patch
 EOS-OC-Suite   为：极限超频替换包
  
