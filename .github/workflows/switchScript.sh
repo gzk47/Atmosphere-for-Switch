@@ -182,19 +182,20 @@ ENDOFFILE
 #    mv Lockpick_RCM.bin ./bootloader/payloads
 #fi
 
-### Fetch lastest Lockpick_RCMDecScots from https://github.com/zdm65477730/Lockpick_RCMDecScots/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Lockpick_RCMDecScots/releases/latest
+### Fetch lastest Lockpick_RCMDecScots from https://github.com/impeeza/Lockpick_RCMDecScots/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/impeeza/Lockpick_RCMDecScots/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Lockpick_RCM {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*Lockpick_RCM.bin"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*Lockpick_RCM[^"]*.zip"' \
   | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o Lockpick_RCM.bin
+  | xargs -I {} curl -sL {} -o Lockpick_RCM.zip
 if [ $? -ne 0 ]; then
     echo "Lockpick_RCM download\033[31m failed\033[0m."
 else
     echo "Lockpick_RCM download\033[32m success\033[0m."
+	unzip -oq Lockpick_RCM.zip
     mkdir -p ./bootloader/payloads
     mv Lockpick_RCM.bin ./bootloader/payloads
 fi
@@ -271,12 +272,12 @@ else
 fi
 
 ### Fetch lastest DBI from https://github.com/rashevskyv/dbi/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBIPatcher/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBI/releases/latest
 cat latest.json \
   | jq '.name' \
   | xargs -I {} echo {} 中文 >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*DBI.[^"]*.zhcn.nro"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*DBI.[^"]*.nro"' \
   | sed 's/"//g' \
   | xargs -I {} curl -sL {} -o DBI.nro
 if [ $? -ne 0 ]; then
@@ -530,21 +531,21 @@ BlockAllTitlesWithLFS=true
 ENDOFFILE
 
 ### Fetch lastest Awoo Installer from https://github.com/dragonflylee/Awoo-Installer/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/Awoo-Installer/releases/latest
-cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
-cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*Awoo-Installer.zip"' \
-  | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o Awoo-Installer.zip
-if [ $? -ne 0 ]; then
-    echo "Awoo Installer download\033[31m failed\033[0m."
-else
-    echo "Awoo Installer download\033[32m success\033[0m."
-    unzip -oq Awoo-Installer.zip
-    rm Awoo-Installer.zip
-fi
+#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/Awoo-Installer/releases/latest
+#cat latest.json \
+#  | jq '.name' \
+#  | xargs -I {} echo {} >> ../description.txt
+#cat latest.json \
+#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Awoo-Installer.zip"' \
+#  | sed 's/"//g' \
+#  | xargs -I {} curl -sL {} -o Awoo-Installer.zip
+#if [ $? -ne 0 ]; then
+#    echo "Awoo Installer download\033[31m failed\033[0m."
+#else
+#    echo "Awoo Installer download\033[32m success\033[0m."
+#    unzip -oq Awoo-Installer.zip
+#    rm Awoo-Installer.zip
+#fi
 
 ### Fetch lastest HekateToolbox from https://github.com/gzk47/Hekate-Toolbox/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
@@ -896,15 +897,21 @@ else
     mv Haku33.nro ./switch/Haku33
 fi
 
-### Fetch linkalho
-curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/nro/linkalho.zip -o linkalho.zip
+### Fetch lastest linkalho from https://github.com/gzk47/linkalho/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/linkalho/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo linkalho {} 中文 >> ../description.txt
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*linkalho.nro"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o linkalho.nro
 if [ $? -ne 0 ]; then
     echo "linkalho download\033[31m failed\033[0m."
 else
     echo "linkalho download\033[32m success\033[0m."
-    echo linkalho >> ../description.txt
-    unzip -oq linkalho.zip
-    rm linkalho.zip
+    mkdir -p ./switch/linkalho
+    mv linkalho.nro ./switch/linkalho
 fi
 
 ### Fetch lastest sphaira from https://github.com/ITotalJustice/sphaira/releases/latest
