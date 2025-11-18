@@ -94,8 +94,8 @@ ENDOFFILE
 #    mv Lockpick_RCM.bin ./bootloader/payloads
 #fi
 
-### Fetch lastest Lockpick_RCMDecScots from https://github.com/zdm65477730/Lockpick_RCMDecScots/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Lockpick_RCMDecScots/releases/latest
+### Fetch lastest Lockpick_RCMDecScots from https://github.com/impeeza/Lockpick_RCMDecScots/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/impeeza/Lockpick_RCMDecScots/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Lockpick_RCM {} >> ../description.txt
@@ -132,16 +132,16 @@ cat latest.json \
   | xargs -I {} echo Switch_90DNS_tester {} >> ../description.txt
 
 ### Fetch lastest DBI from https://github.com/rashevskyv/dbi/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBIPatcher/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBI/releases/latest
 cat latest.json \
   | jq '.name' \
   | xargs -I {} echo {} 中文 >> ../description.txt
 
 ### Fetch lastest Awoo Installer from https://github.com/dragonflylee/Awoo-Installer/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/Awoo-Installer/releases/latest
-cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
+#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/Awoo-Installer/releases/latest
+#cat latest.json \
+#  | jq '.name' \
+#  | xargs -I {} echo {} >> ../description.txt
 
 ### Fetch lastest HekateToolbox from https://github.com/gzk47/Hekate-Toolbox/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
@@ -284,22 +284,11 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Haku33 {} >> ../description.txt
 
-### Fetch linkalho
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/nro/linkalho.zip -o linkalho.zip
-#if [ $? -ne 0 ]; then
-#    echo "linkalho download\033[31m failed\033[0m."
-#else
-#    echo "linkalho download\033[32m success\033[0m."
-#    echo linkalho >> ../description.txt
-#    unzip -oq linkalho.zip
-#    rm linkalho.zip
-#fi
-
-###
-cat >> ../description.txt << ENDOFFILE
-linkalho
-ENDOFFILE
-###
+### Fetch lastest linkalho from https://github.com/gzk47/linkalho/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/linkalho/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo linkalho {} 中文 >> ../description.txt
 
 ### Fetch lastest sphaira from https://github.com/ITotalJustice/sphaira/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ITotalJustice/sphaira/releases/latest
