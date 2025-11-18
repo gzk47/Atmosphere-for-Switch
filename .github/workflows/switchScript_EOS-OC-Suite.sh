@@ -537,9 +537,9 @@ else
     echo "sys-clk download\033[32m success\033[0m."
     unzip -oq sys-clk.zip
     rm sys-clk.zip
-    mv ./switch/.overlays/sys-clk-overlay.ovl ./switch/.overlays/sys-clk.ovl
+    mv ./switch/.overlays/sys-clk-overlay.ovl ./switch/.overlays/sys-clk-overlay.ovl
     mkdir -p ./switch/sys-clk
-    mv ./switch/sys-clk-manager.nro ./switch/sys-clk/sys-clk.nro
+    mv ./switch/sys-clk-manager.nro ./switch/sys-clk/sys-clk-manager.nro
 fi
 
 ### Write toolbox.json in /atmosphere/contents/00FF0000636C6BFF
@@ -656,7 +656,7 @@ if [ $? -ne 0 ]; then
 else
     echo "sys-clk-overlay download\033[32m success\033[0m."
 
-    mv sys-clk-overlay.ovl  ./switch/.overlays/sys-clk.ovl
+    mv sys-clk-overlay.ovl  ./switch/.overlays/sys-clk-overlay.ovl
 fi
 
 ### Fetch lastest gzk47/OC-Switchcraft-EOS中文 from https://github.com/gzk47/OC-Switchcraft-EOS
@@ -708,7 +708,7 @@ launch_args=
 custom_name=底座模式
 custom_version=
 
-[sys-clk.ovl]
+[sys-clk-overlay.ovl]
 priority=4
 star=false
 hide=false
