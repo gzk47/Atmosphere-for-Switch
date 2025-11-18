@@ -1289,8 +1289,8 @@ else
 fi
 
 
-## Fetch lastest sys-clk from https://github.com/zdm65477730/sys-clk/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sys-clk/releases/latest
+## Fetch lastest sys-clk from https://github.com/gzk47/sys-clk/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-clk/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo sys-clk {} >> ../description.txt
