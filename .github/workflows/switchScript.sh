@@ -1120,7 +1120,7 @@ launch_args=
 custom_name=底座模式
 custom_version=
 
-[sys-clk.ovl]
+[sys-clk-overlay.ovl]
 priority=4
 star=false
 hide=false
