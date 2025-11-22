@@ -167,8 +167,8 @@ cat latest.json \
   | jq '.name' \
   | xargs -I {} echo JKSV {} >> ../description.txt
 
-### Fetch lastest tencent-switcher-gui from https://github.com/CaiMiao/Tencent-switcher-GUI/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/CaiMiao/Tencent-switcher-GUI/releases/latest
+### Fetch lastest tencent-switcher-gui from https://github.com/gzk47/Tencent-switcher-GUI/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Tencent-switcher-GUI/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo tencent-switcher-gui {} >> ../description.txt
@@ -208,12 +208,6 @@ curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/XITRIX/Moonl
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Moonlight {} >> ../description.txt
-
-### Fetch NX-Shell from https://github.com/zdm65477730/NX-Shell/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/NX-Shell/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo NX-Shell {} >> ../description.txt
 
 ### Fetch lastest hb-appstore from https://github.com/fortheusers/hb-appstore/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/fortheusers/hb-appstore/releases/latest
