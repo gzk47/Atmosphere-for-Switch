@@ -627,8 +627,8 @@ cat > ./config/JKSV/webdav.json << ENDOFFILE
 }
 ENDOFFILE
 
-### Fetch lastest tencent-switcher-gui from https://github.com/CaiMiao/Tencent-switcher-GUI/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/CaiMiao/Tencent-switcher-GUI/releases/latest
+### Fetch lastest tencent-switcher-gui from https://github.com/gzk47/Tencent-switcher-GUI/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Tencent-switcher-GUI/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo tencent-switcher-gui {} >> ../description.txt
@@ -748,23 +748,6 @@ else
     echo "Moonlight download\033[32m success\033[0m."
     mkdir -p ./switch/Moonlight-Switch
     mv Moonlight-Switch.nro ./switch/Moonlight-Switch
-fi
-
-### Fetch NX-Shell from https://github.com/zdm65477730/NX-Shell/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/NX-Shell/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo NX-Shell {} >> ../description.txt
-cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*NX-Shell.nro"' \
-  | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o NX-Shell.nro
-if [ $? -ne 0 ]; then
-    echo "NX-Shell download\033[31m failed\033[0m."
-else
-    echo "NX-Shell download\033[32m success\033[0m."
-    mkdir -p ./switch/NX-Shell
-    mv NX-Shell.nro ./switch/NX-Shell
 fi
 
 ### Fetch lastest hb-appstore from https://github.com/fortheusers/hb-appstore/releases/latest
