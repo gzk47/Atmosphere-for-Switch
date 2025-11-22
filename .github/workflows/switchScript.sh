@@ -531,8 +531,8 @@ BlockAllTitlesWithLFS=true
 
 ENDOFFILE
 
-### Fetch lastest Awoo Installer from https://github.com/dragonflylee/Awoo-Installer/releases/latest
-#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/Awoo-Installer/releases/latest
+### Fetch lastest Awoo Installer from https://github.com/Huntereb/Awoo-Installer/releases/latest
+#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Huntereb/Awoo-Installer/releases/latest
 #cat latest.json \
 #  | jq '.name' \
 #  | xargs -I {} echo {} >> ../description.txt
