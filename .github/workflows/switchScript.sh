@@ -532,20 +532,20 @@ BlockAllTitlesWithLFS=true
 ENDOFFILE
 
 ### Fetch lastest Awoo Installer from https://github.com/Huntereb/Awoo-Installer/releases/latest
-#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Huntereb/Awoo-Installer/releases/latest
-#cat latest.json \
-#  | jq '.name' \
-#  | xargs -I {} echo {} >> ../description.txt
-#cat latest.json \
-#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Awoo-Installer.zip"' \
-#  | sed 's/"//g' \
-#  | xargs -I {} curl -sL {} -o Awoo-Installer.zip
-#if [ $? -ne 0 ]; then
-#    echo "Awoo Installer download\033[31m failed\033[0m."
-#else
-#    echo "Awoo Installer download\033[32m success\033[0m."
-#    unzip -oq Awoo-Installer.zip
-#    rm Awoo-Installer.zip
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Huntereb/Awoo-Installer/releases/latest
+cat latest.json \
+  | jq '.name' \
+  | xargs -I {} echo {} >> ../description.txt
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*Awoo-Installer.zip"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o Awoo-Installer.zip
+if [ $? -ne 0 ]; then
+    echo "Awoo Installer download\033[31m failed\033[0m."
+else
+    echo "Awoo Installer download\033[32m success\033[0m."
+    unzip -oq Awoo-Installer.zip
+    rm Awoo-Installer.zip
 #fi
 
 ### Fetch lastest HekateToolbox from https://github.com/gzk47/Hekate-Toolbox/releases/latest
