@@ -546,7 +546,7 @@ else
     echo "Awoo Installer download\033[32m success\033[0m."
     unzip -oq Awoo-Installer.zip
     rm Awoo-Installer.zip
-#fi
+fi
 
 ### Fetch lastest HekateToolbox from https://github.com/gzk47/Hekate-Toolbox/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
