@@ -137,11 +137,11 @@ cat latest.json \
   | jq '.name' \
   | xargs -I {} echo {} 中文 >> ../description.txt
 
-### Fetch lastest Awoo Installer from https://github.com/dragonflylee/Awoo-Installer/releases/latest
-#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/Awoo-Installer/releases/latest
-#cat latest.json \
-#  | jq '.name' \
-#  | xargs -I {} echo {} >> ../description.txt
+### Fetch lastest Awoo Installer from https://github.com/Huntereb/Awoo-Installer/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Huntereb/Awoo-Installer/releases/latest
+cat latest.json \
+  | jq '.name' \
+  | xargs -I {} echo {} >> ../description.txt
 
 ### Fetch lastest HekateToolbox from https://github.com/gzk47/Hekate-Toolbox/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
