@@ -837,21 +837,21 @@ fi
 #fi
 
 ### Fetch lastest Firmware-Dumper【Chinese lang】 from https://github.com/zdm65477730/Switch-Firmware-Dumper/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Switch-Firmware-Dumper/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Firmware-Dumper {} >> ../description.txt
-cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*Firmware-Dumper.zip"' \
-  | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o Firmware-Dumper.zip
-if [ $? -ne 0 ]; then
-    echo "Firmware-Dumper download\033[31m failed\033[0m."
-else
-    echo "Firmware-Dumper download\033[32m success\033[0m."
-    unzip -oq Firmware-Dumper.zip
-    rm Firmware-Dumper.zip
-fi
+#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Switch-Firmware-Dumper/releases/latest
+#cat latest.json \
+#  | jq '.tag_name' \
+#  | xargs -I {} echo Firmware-Dumper {} >> ../description.txt
+#cat latest.json \
+#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Firmware-Dumper.zip"' \
+#  | sed 's/"//g' \
+#  | xargs -I {} curl -sL {} -o Firmware-Dumper.zip
+#if [ $? -ne 0 ]; then
+#    echo "Firmware-Dumper download\033[31m failed\033[0m."
+#else
+#    echo "Firmware-Dumper download\033[32m success\033[0m."
+#    unzip -oq Firmware-Dumper.zip
+#    rm Firmware-Dumper.zip
+#fi
 
 ### Fetch lastest nxdumptool(nxdt_rw_poc) from https://github.com/DarkMatterCore/nxdumptool/releases/download/rewrite-prerelease/nxdt_rw_poc.nro
 curl -sL https://github.com/DarkMatterCore/nxdumptool/releases/download/rewrite-prerelease/nxdt_rw_poc.nro -o nxdt_rw_poc.nro
