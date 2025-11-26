@@ -366,8 +366,8 @@ cat latest.json \
   | xargs -I {} echo sys-clk {} >> ../description.txt
 
 
-## Fetch lastest emuiibo from https://github.com/zdm65477730/emuiibo/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/emuiibo/releases/latest
+## Fetch lastest emuiibo from https://github.com/gzk47/emuiibo/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/emuiibo/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo emuiibo {} >> ../description.txt
