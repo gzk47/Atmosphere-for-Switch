@@ -675,9 +675,9 @@ if [ $? -ne 0 ]; then
 else
     echo "wiliwili download\033[32m success\033[0m."
     unzip -oq wiliwili-NintendoSwitch.zip
-    mkdir -p ./switch/wiliwili
-    mv wiliwili/wiliwili.nro ./switch/wiliwili
-    rm -rf wiliwili
+    #mkdir -p ./switch/wiliwili
+    #mv wiliwili/wiliwili.nro ./switch/wiliwili
+    #rm -rf wiliwili
     rm wiliwili-NintendoSwitch.zip
 fi
 
