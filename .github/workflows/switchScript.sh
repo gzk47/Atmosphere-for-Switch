@@ -662,7 +662,7 @@ else
 fi
 
 ### Fetch lastest wiliwili from https://github.com/xfangfang/wiliwili/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/xfangfang/wiliwili/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/wiliwili/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo wiliwili {} >> ../description.txt
