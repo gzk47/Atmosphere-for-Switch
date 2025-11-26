@@ -256,7 +256,7 @@ ENDOFFILE
 ###
 
 ### Fetch lastest Switch_90DNS_tester from https://github.com/meganukebmp/Switch_90DNS_tester/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/meganukebmp/Switch_90DNS_tester/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Switch_90DNS_tester/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Switch_90DNS_tester {} >> ../description.txt
@@ -802,20 +802,18 @@ else
 fi
 
 ### Fetch lastest Safe_Reboot_Shutdown from https://github.com/dezem/Safe_Reboot_Shutdown/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dezem/Safe_Reboot_Shutdown/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Safe_Reboot_Shutdown/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Safe_Reboot_Shutdown {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*Safe_Reboot_Shutdown.zip"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*Safe_Reboot_Shutdown.nro"' \
   | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o Safe_Reboot_Shutdown.zip
+  | xargs -I {} curl -sL {} -o Safe_Reboot_Shutdown.nro
 if [ $? -ne 0 ]; then
     echo "Safe_Reboot_Shutdown download\033[31m failed\033[0m."
 else
     echo "Safe_Reboot_Shutdown download\033[32m success\033[0m."
-    unzip -oq Safe_Reboot_Shutdown.zip
-    rm Safe_Reboot_Shutdown.zip
     mkdir -p ./switch/SafeReboot
     mv Safe_Reboot_Shutdown.nro ./switch/SafeReboot
 fi
@@ -1628,6 +1626,7 @@ cat > ./atmosphere/hosts/emummc.txt << ENDOFFILE
 127.0.0.1 *nintendo.co.za
 127.0.0.1 *nintendo.se
 127.0.0.1 *nintendo.ch
+127.0.0.1 *nintendo.pl
 127.0.0.1 *nintendoswitch.com
 127.0.0.1 *nintendoswitch.com.cn
 127.0.0.1 *nintendoswitch.cn
