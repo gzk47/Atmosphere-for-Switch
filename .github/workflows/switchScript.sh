@@ -959,6 +959,23 @@ else
     mv daybreak.nro ./switch
 fi
 
+### Fetch lastest switch-time from https://github.com/gzk47/switch-time/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/switch-time/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo switch-time {} >> ../description.txt
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*switch-time.nro"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o switch-time.nro
+if [ $? -ne 0 ]; then
+    echo "switch-time download\033[31m failed\033[0m."
+else
+    echo "switch-time download\033[32m success\033[0m."
+    mkdir -p ./switch/switch-time
+    mv switch-time.nro ./switch/switch-time
+fi
+
 ### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
 cat latest.json \
