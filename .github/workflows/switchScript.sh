@@ -739,7 +739,7 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Moonlight {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*Moonlight-Switch.nro"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*Moonlight-Switch-hos21.nro"' \
   | sed 's/"//g' \
   | xargs -I {} curl -sL {} -o Moonlight-Switch.nro
 if [ $? -ne 0 ]; then
@@ -751,12 +751,12 @@ else
 fi
 
 ### Fetch lastest hb-appstore from https://github.com/fortheusers/hb-appstore/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/fortheusers/hb-appstore/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/hb-appstore/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo hb-appstore {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*appstore.nro"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*appstore[^"]*.nro"' \
   | sed 's/"//g' \
   | xargs -I {} curl -sL {} -o appstore.nro
 if [ $? -ne 0 ]; then
