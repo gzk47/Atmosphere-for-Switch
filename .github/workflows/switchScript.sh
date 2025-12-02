@@ -785,7 +785,7 @@ else
 fi
 
 ### Fetch lastest Goldleaf from https://github.com/XorTroll/Goldleaf/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/XorTroll/Goldleaf/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Goldleaf/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Goldleaf {} >> ../description.txt
