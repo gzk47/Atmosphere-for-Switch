@@ -897,20 +897,22 @@ else
 fi
 
 ### Fetch lastest sphaira from https://github.com/ITotalJustice/sphaira/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ITotalJustice/sphaira/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sphaira/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo sphaira {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*sphaira[^"]*.zip"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*sphaira[^"]*.nro"' \
   | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o sphaira.zip
+  | xargs -I {} curl -sL {} -o sphaira.nro
 if [ $? -ne 0 ]; then
     echo "sphaira download\033[31m failed\033[0m."
 else
     echo "sphaira download\033[32m success\033[0m."
-    unzip -oq sphaira.zip
-    rm sphaira.zip
+    #unzip -oq sphaira.zip
+    #rm sphaira.zip
+	mkdir -p ./switch/sphaira
+    mv sphaira.nro ./switch/sphaira
 fi
 
 ### Write config.ini in /config/sphaira/config.ini
