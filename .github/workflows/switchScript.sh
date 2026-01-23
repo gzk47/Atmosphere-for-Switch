@@ -699,7 +699,7 @@ else
 fi
 
 ### Fetch lastest SimpleModManager from https://github.com/nadrino/SimpleModManager/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/nadrino/SimpleModManager/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/SimpleModManager/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo SimpleModManager {} >> ../description.txt
@@ -1363,7 +1363,7 @@ fi
 
 
 ## Fetch lastest sysdvr-overlay from https://github.com/zdm65477730/sysdvr-overlay/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sysdvr-overlay/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sysdvr-overlay/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo SysDVR {} >> ../description.txt
