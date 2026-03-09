@@ -991,7 +991,23 @@ if [ $? -ne 0 ]; then
     echo "hbmenu download\033[31m failed\033[0m."
 else
     echo "hbmenu download\033[32m success\033[0m."
-    rm -f latest.json
+fi
+
+## Fetch lastest ftpd.nro from https://github.com/gzk47/ftpd/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ftpd/releases
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^ftpd.*\\.nro$")))).tag_name' \
+  | xargs -I {} echo ftpd {} >> ../description.txt
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^ftpd.*\\.nro$"))))' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*ftpd[^"]*.nro"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o ftpd.nro
+if [ $? -ne 0 ]; then
+    echo "ftpd download\033[31m failed\033[0m."
+else
+    echo "ftpd download\033[32m success\033[0m."
+    mv ftpd.nro ./switch
 fi
 
 # -------------------------------------------
@@ -1087,102 +1103,51 @@ fi
 cat > ./config/ultrahand/overlays.ini << ENDOFFILE
 [ovl-sysmodules.ovl]
 priority=0
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=系统模块
-custom_version=
 
 [StatusMonitor.ovl]
 priority=1
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=状态监视
-custom_version=
 
 [EdiZon.ovl]
 priority=2
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=金手指
-custom_version=
 
 [ReverseNX-RT.ovl]
 priority=3
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=底座模式
-custom_version=
 
 [sys-clk-overlay.ovl]
 priority=4
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=系统超频
-custom_version=
 
 [emuiibo.ovl]
 priority=5
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=Amiibo模拟
-custom_version=
 
 [ldn_mitm.ovl]
 priority=6
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=联机插件
-custom_version=
 
 [QuickNTP.ovl]
 priority=7
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=时间同步
-custom_version=
 
 [SysDVR.ovl]
 priority=8
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=游戏串流
-custom_version=
 
 [FPSLocker.ovl]
 priority=9
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=FPS锁定
-custom_version=
 
 [sys-patch-overlay.ovl]
 priority=10
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=系统补丁
-custom_version=
+
+[ovlEdiZon.ovl]
+priority=20
+custom_name=金手指-在线下载
 ENDOFFILE
 if [ $? -ne 0 ]; then
     echo "Writing overlays.ini in ./config/ultrahand\033[31m failed\033[0m."
@@ -1774,7 +1739,7 @@ fi
 ### Delete unneeded files
 rm -f bootloader/res/icon_payload.bmp
 rm -f bootloader/res/icon_switch.bmp
-rm -f switch/haze.nro
+# rm -f switch/haze.nro
 rm -f switch/reboot_to_hekate.nro
 rm -f switch/reboot_to_payload.nro
 rm -rf mods
@@ -1850,6 +1815,7 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
+SwitchSD-Pure  为：纯净版
 SwitchSD       为：特斯拉版+sys-patch
 EOS-OC-Suite   为：极限超频替换包
  
@@ -1857,6 +1823,8 @@ ENDOFFILE
 ###
 
 # -------------------------------------------
+
+cp -a ../description.txt ./软件详情.txt
 
 echo ""
 echo "\033[32mYour Switch SD card is prepared!\033[0m"
