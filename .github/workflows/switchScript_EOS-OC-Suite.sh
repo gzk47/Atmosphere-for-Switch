@@ -5,6 +5,7 @@ set -e
 ### Script created by Fraxalotl
 ### Mod by huangqian8
 ### Mod by gzk_47
+### Mod by menshiyun
 
 # -------------------------------------------
 
@@ -126,7 +127,7 @@ ENDOFFILE
 ###
 
 ### Fetch lastest Switch_90DNS_tester from https://github.com/meganukebmp/Switch_90DNS_tester/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/meganukebmp/Switch_90DNS_tester/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Switch_90DNS_tester/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Switch_90DNS_tester {} >> ../description.txt
@@ -180,7 +181,7 @@ cat latest.json \
   | xargs -I {} echo aio-switch-updater {} >> ../description.txt
 
 ### Fetch lastest wiliwili from https://github.com/xfangfang/wiliwili/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/xfangfang/wiliwili/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/wiliwili/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo wiliwili {} >> ../description.txt
@@ -192,7 +193,7 @@ cat latest.json \
   | xargs -I {} echo SimpleModDownloader {} >> ../description.txt
 
 ### Fetch lastest SimpleModManager from https://github.com/nadrino/SimpleModManager/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/nadrino/SimpleModManager/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/SimpleModManager/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo SimpleModManager {} >> ../description.txt
@@ -210,7 +211,7 @@ cat latest.json \
   | xargs -I {} echo Moonlight {} >> ../description.txt
 
 ### Fetch lastest hb-appstore from https://github.com/fortheusers/hb-appstore/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/fortheusers/hb-appstore/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/hb-appstore/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo hb-appstore {} >> ../description.txt
@@ -222,13 +223,13 @@ cat latest.json \
   | xargs -I {} echo ReverseNX-Tool {} 中文 >> ../description.txt
 
 ### Fetch lastest Goldleaf from https://github.com/XorTroll/Goldleaf/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/XorTroll/Goldleaf/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Goldleaf/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Goldleaf {} >> ../description.txt
 
 ### Fetch lastest Safe_Reboot_Shutdown from https://github.com/dezem/Safe_Reboot_Shutdown/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dezem/Safe_Reboot_Shutdown/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Safe_Reboot_Shutdown/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Safe_Reboot_Shutdown {} >> ../description.txt
@@ -250,10 +251,21 @@ cat latest.json \
 #fi
 
 ### Fetch lastest Firmware-Dumper【Chinese lang】 from https://github.com/zdm65477730/Switch-Firmware-Dumper/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Switch-Firmware-Dumper/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Firmware-Dumper {} >> ../description.txt
+#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Switch-Firmware-Dumper/releases/latest
+#cat latest.json \
+#  | jq '.tag_name' \
+#  | xargs -I {} echo Firmware-Dumper {} >> ../description.txt
+#cat latest.json \
+#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Firmware-Dumper.zip"' \
+#  | sed 's/"//g' \
+#  | xargs -I {} curl -sL {} -o Firmware-Dumper.zip
+#if [ $? -ne 0 ]; then
+#    echo "Firmware-Dumper download\033[31m failed\033[0m."
+#else
+#    echo "Firmware-Dumper download\033[32m success\033[0m."
+#    unzip -oq Firmware-Dumper.zip
+#    rm Firmware-Dumper.zip
+#fi
 
 ### Fetch lastest nxdumptool(nxdt_rw_poc) from https://github.com/DarkMatterCore/nxdumptool/releases/download/rewrite-prerelease/nxdt_rw_poc.nro
 #curl -sL https://github.com/DarkMatterCore/nxdumptool/releases/download/rewrite-prerelease/nxdt_rw_poc.nro -o nxdt_rw_poc.nro
@@ -285,7 +297,7 @@ cat latest.json \
   | xargs -I {} echo linkalho {} 中文 >> ../description.txt
 
 ### Fetch lastest sphaira from https://github.com/ITotalJustice/sphaira/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ITotalJustice/sphaira/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sphaira/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo sphaira {} >> ../description.txt
@@ -299,11 +311,22 @@ curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Atmosp
 cat latest.json \
   | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$")))).tag_name' \
   | xargs -I {} echo daybreak {} 中文 >> ../description.txt
+### Fetch lastest switch-time from https://github.com/gzk47/switch-time/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/switch-time/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo switch-time {} >> ../description.txt
 ### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo hbmenu {} 中文 >> ../description.txt
+## Fetch lastest ftpd.nro from https://github.com/gzk47/ftpd/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ftpd/releases
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^ftpd.*\\.nro$")))).tag_name' \
+  | xargs -I {} echo ftpd {} >> ../description.txt
+
 # -------------------------------------------
 
 ###
@@ -317,21 +340,19 @@ ENDOFFILE
 ###
 
 
-
-
 ### Fetch Ultrahand-Overlay
 ## Fetch latest Ultrahand-Overlay from https://github.com/ppkantorski/Ultrahand-Overlay
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ppkantorski/Ultrahand-Overlay/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Ultrahand-Overlay {} >> ../description.txt
+
 ### Fetch Ultrahand-Overlay 自动转区
 ## Fetch latest Ultrahand-Overlay from https://github.com/gzk47/Ultrahand-Overlay
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Ultrahand-Overlay/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo ovlmenu.ovl {} 国行自动转国际版 >> ../description.txt
-
 ## Fetch lastest ovl-sysmodules from https://github.com/zdm65477730/ovl-sysmodules/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ovl-sysmodules/releases/latest
 cat latest.json \
@@ -339,9 +360,9 @@ cat latest.json \
   | xargs -I {} echo ovl-sysmodules {} >> ../description.txt
 
 ## Fetch lastest Status-Monitor-Overlay from https://github.com/zdm65477730/Status-Monitor-Overlay/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Status-Monitor-Overlay/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Status-Monitor-Overlay/releases
 cat latest.json \
-  | jq '.tag_name' \
+  | jq 'first(.[]|select(.assets|any(.name|test("^StatusMonitor.*\\.zip$")))).tag_name' \
   | xargs -I {} echo StatusMonitor {} >> ../description.txt
 
 
@@ -388,7 +409,7 @@ cat latest.json \
 
 
 ## Fetch lastest sysdvr-overlay from https://github.com/zdm65477730/sysdvr-overlay/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sysdvr-overlay/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sysdvr-overlay/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo SysDVR {} >> ../description.txt
@@ -445,6 +466,8 @@ DBI版本切换 - 在版本间切换
 风扇增强 - 自定义风扇曲线控制温度
 游戏模组 - 游戏模组解锁补丁
 8G内存切换 - 硬改为8G内存的机器专用
+国行自动转区 - 国行机器开机自动转国际版
+系统内存设置 - 系统内存大小调整、内存缓冲区配置等
 帧率补丁 - 应用游戏帧率解锁补丁
 极限超频 - 优化CPU/GPU/内存性能
 工具箱更新 - 一键更新至最新版本
@@ -464,6 +487,13 @@ cat >> ../description.txt << ENDOFFILE
 ENDOFFILE
 ###
 
+### Fetch latest EOS-OC-Suite sys-clk.zip from https://github.com/halop/OC_Toolkit_SC_EOS/releases/latest
+#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest
+#cat latest.json \
+#  | jq '.tag_name' \
+#  | xargs -I {} echo EOS{}-OC-Suite 中文 >> ../description.txt
+
+# -------------------------------------------
 ### Write hekate_ipl.ini in /bootloader/
 mkdir -p ./bootloader
 cat > ./bootloader/hekate_ipl.ini << ENDOFFILE
@@ -668,102 +698,49 @@ mkdir -p ./config/ultrahand
 cat > ./config/ultrahand/overlays.ini << ENDOFFILE
 [ovl-sysmodules.ovl]
 priority=0
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=系统模块
-custom_version=
 
 [StatusMonitor.ovl]
 priority=1
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=状态监视
-custom_version=
 
 [EdiZon.ovl]
 priority=2
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=金手指
-custom_version=
 
 [ReverseNX-RT.ovl]
 priority=3
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=底座模式
 custom_version=
-
 [sys-clk-overlay.ovl]
 priority=4
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=极限超频
-custom_version=
 
 [emuiibo.ovl]
 priority=5
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=Amiibo模拟
-custom_version=
 
 [ldn_mitm.ovl]
 priority=6
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=联机插件
-custom_version=
 
 [QuickNTP.ovl]
 priority=7
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=时间同步
-custom_version=
-
 [SysDVR.ovl]
 priority=8
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=游戏串流
-custom_version=
-
 [FPSLocker.ovl]
 priority=9
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=FPS锁定
-custom_version=
 
 [sys-patch-overlay.ovl]
 priority=10
-star=false
-hide=false
-use_launch_args=false
-launch_args=
 custom_name=系统补丁
-custom_version=
+
+[ovlEdiZon.ovl]
+priority=20
+custom_name=金手指-在线下载
 ENDOFFILE
 if [ $? -ne 0 ]; then
     echo "Writing overlays.ini in ./config/ultrahand\033[31m failed\033[0m."
@@ -816,6 +793,16 @@ else
 
 fi
 
+### Fetch gzk
+#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/sys/gzk.zip -o gzk.zip
+#if [ $? -ne 0 ]; then
+#    echo "gzk download\033[31m failed\033[0m."
+#else
+#    echo "gzk download\033[32m success\033[0m."
+##    echo gzk >> ../description.txt
+#    unzip -oq gzk.zip
+#    rm gzk.zip
+#fi
 
 # -------------------------------------------
 
@@ -824,6 +811,7 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
+SwitchSD-Pure  为：纯净版
 SwitchSD       为：特斯拉版+sys-patch
 EOS-OC-Suite   为：极限超频替换包
  
