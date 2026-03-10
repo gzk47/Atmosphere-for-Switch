@@ -1816,7 +1816,7 @@ cat >> ../description.txt << ENDOFFILE
 ------------------------------
  
 SwitchSD-Pure  为：纯净版
-SwitchSD       为：特斯拉版+sys-patch
+SwitchSD       为：特斯拉版
 EOS-OC-Suite   为：极限超频替换包
  
 ENDOFFILE
