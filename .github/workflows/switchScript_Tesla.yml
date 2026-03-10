@@ -10,8 +10,8 @@ on:
       - '#README.md'
       - '#switchScript.sh'
       
-  #schedule:
-  #  - cron: 0 4 * * *
+  schedule:
+    - cron: 0 4 * * *
 
 env:
   SCRIPT_SH: ./.github/workflows/switchScript_Tesla.sh
@@ -40,7 +40,7 @@ jobs:
         echo "tag_name=$(date +%Y%m%d)" >> $GITHUB_ENV
         chmod +x $SCRIPT_SH
         ./$SCRIPT_SH
-        zip -rq SwitchSD-Tesla.zip SwitchSD-Tesla
+        zip -rq AMS-Tesla.zip AMS-Tesla
 
     - name: Read description.txt
       id: description
@@ -57,7 +57,7 @@ jobs:
         commit: main
         token: ${{ secrets.GITHUB_TOKEN }}
         body: "${{ steps.description.outputs.content }}"
-        artifacts: "SwitchSD-Tesla.zip"
+        artifacts: "AMS-Tesla.zip"
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.2

@@ -811,8 +811,8 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
-SwitchSD-Pure  为：纯净版
-SwitchSD       为：特斯拉版
+AMS-Pure       为：纯净版
+AMS-Tesla      为：特斯拉版
 EOS-OC-Suite   为：极限超频替换包
  
 ENDOFFILE

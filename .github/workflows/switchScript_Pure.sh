@@ -16,18 +16,18 @@ API_VER="X-GitHub-Api-Version: 2022-11-28"
 # -------------------------------------------
 
 ### Create a new folder for storing files
-if [ -d SwitchSD-Pure ]; then
-  rm -rf SwitchSD-Pure
+if [ -d AMS-Pure ]; then
+  rm -rf AMS-Pure
 fi
 if [ -e description.txt ]; then
   rm -rf description.txt
 fi
-mkdir -p ./SwitchSD-Pure
-mkdir -p ./SwitchSD-Pure/atmosphere/config
-mkdir -p ./SwitchSD-Pure/atmosphere/hosts
-mkdir -p ./SwitchSD-Pure/bootloader/ini
-# mkdir -p ./SwitchSD-Pure/emuiibo/overlay
-cd SwitchSD-Pure
+mkdir -p ./AMS-Pure
+mkdir -p ./AMS-Pure/atmosphere/config
+mkdir -p ./AMS-Pure/atmosphere/hosts
+mkdir -p ./AMS-Pure/bootloader/ini
+# mkdir -p ./AMS-Pure/emuiibo/overlay
+cd AMS-Pure
 
 # -------------------------------------------
 
@@ -1092,7 +1092,7 @@ else
 fi
 
 ### Write more.ini in /bootloader/ini/
-#mkdir -p ./SwitchSD-Pure/bootloader/ini
+#mkdir -p ./AMS-Pure/bootloader/ini
 cat > ./bootloader/ini/more.ini << ENDOFFILE
 [SXOS]
 payload=bootloader/payloads/sxos.bin
@@ -1390,8 +1390,8 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
-SwitchSD-Pure  为：纯净版
-SwitchSD       为：特斯拉版
+AMS-Pure       为：纯净版
+AMS-Tesla      为：特斯拉版
 EOS-OC-Suite   为：极限超频替换包
  
 ENDOFFILE
@@ -1402,4 +1402,4 @@ ENDOFFILE
 cp -a ../description.txt ./软件详情.txt
 
 echo ""
-echo "\033[32mYour SwitchSD-Pure card is prepared!\033[0m"
+echo "\033[32mYour AMS-Pure card is prepared!\033[0m"

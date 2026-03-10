@@ -5,6 +5,7 @@ set -e
 ### Script created by Fraxalotl
 ### Mod by huangqian8
 ### Mod by gzk_47
+### Mod by menshiyun
 
 # -------------------------------------------
 
@@ -36,9 +37,26 @@ cat >> ../description.txt << ENDOFFILE
 ENDOFFILE
 
 ### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest
+#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest
+#cat latest.json \
+#  | jq '.name' \
+#  | xargs -I {} echo {} >> ../description.txt
+#cat latest.json \
+#  | grep -oP '"browser_download_url": "\Khttps://[^"]*atmosphere[^"]*.zip' \
+#  | sed 's/"//g' \
+#  | xargs -I {} curl -sL {} -o atmosphere.zip
+#if [ $? -ne 0 ]; then
+#    echo "atmosphere download\033[31m failed\033[0m."
+#else
+#    echo "atmosphere download\033[32m success\033[0m."
+#    unzip -oq atmosphere.zip
+#    rm atmosphere.zip
+#fi
+
+### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases
 cat latest.json \
-  | jq '.name' \
+  | jq 'first(.[]|select(.assets|any(.name|test("^atmosphere.*\\.zip$")))).name' \
   | xargs -I {} echo {} >> ../description.txt
 
 
@@ -60,29 +78,11 @@ cat latest.json \
 #    rm sigpatches.zip
 #fi
 
-###
-cat >> ../description.txt << ENDOFFILE
-sigpatches
-ENDOFFILE
-###
-
 ### Fetch sys-patch from https://github.com/impeeza/sys-patch/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-patch/releases/latest
 cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/impeeza/sys-patch/releases/latest \
-#  | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-patch.zip"' \
-#  | sed 's/"//g' \
-#  | xargs -I {} curl -sL {} -o sys-patch.zip
-#if [ $? -ne 0 ]; then
-#    echo "sys-patch download\033[31m failed\033[0m."
-#else
-#    echo "sys-patch download\033[32m success\033[0m."
-#    unzip -oq sys-patch.zip
-#    rm sys-patch.zip
-#fi
-
+  | jq '.tag_name' \
+  | xargs -I {} echo sys-patch {} 中文 >> ../description.txt
 
 # -------------------------------------------
 
@@ -173,28 +173,28 @@ ENDOFFILE
 ###
 
 ### Fetch lastest Switch_90DNS_tester from https://github.com/meganukebmp/Switch_90DNS_tester/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/meganukebmp/Switch_90DNS_tester/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Switch_90DNS_tester/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Switch_90DNS_tester {} >> ../description.txt
 
 ### Fetch lastest DBI from https://github.com/rashevskyv/dbi/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/rashevskyv/dbi/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBI/releases/latest
+cat latest.json \
+  | jq '.name' \
+  | xargs -I {} echo {} 中文 >> ../description.txt
+
+### Fetch lastest Awoo Installer from https://github.com/Huntereb/Awoo-Installer/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Huntereb/Awoo-Installer/releases/latest
 cat latest.json \
   | jq '.name' \
   | xargs -I {} echo {} >> ../description.txt
 
-### Fetch lastest Awoo Installer from https://github.com/dragonflylee/Awoo-Installer/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/Awoo-Installer/releases/latest
-cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
-
-### Fetch lastest DeepSeaToolbox from https://github.com/Team-Neptune/DeepSea-Toolbox/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Team-Neptune/DeepSea-Toolbox/releases/latest
+### Fetch lastest HekateToolbox from https://github.com/gzk47/Hekate-Toolbox/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo DeepSeaToolbox {} >> ../description.txt
+  | xargs -I {} echo HekateToolbox {} 中文 >> ../description.txt
 
 ### Fetch lastest NX-Activity-Log from https://github.com/zdm65477730/NX-Activity-Log/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/NX-Activity-Log/releases/latest
@@ -225,8 +225,8 @@ cat latest.json \
   | jq '.name' \
   | xargs -I {} echo JKSV {} >> ../description.txt
 
-### Fetch lastest tencent-switcher-gui from https://github.com/CaiMiao/Tencent-switcher-GUI/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/CaiMiao/Tencent-switcher-GUI/releases/latest
+### Fetch lastest tencent-switcher-gui from https://github.com/gzk47/Tencent-switcher-GUI/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Tencent-switcher-GUI/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo tencent-switcher-gui {} >> ../description.txt
@@ -238,7 +238,7 @@ cat latest.json \
   | xargs -I {} echo aio-switch-updater {} >> ../description.txt
 
 ### Fetch lastest wiliwili from https://github.com/xfangfang/wiliwili/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/xfangfang/wiliwili/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/wiliwili/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo wiliwili {} >> ../description.txt
@@ -250,7 +250,7 @@ cat latest.json \
   | xargs -I {} echo SimpleModDownloader {} >> ../description.txt
 
 ### Fetch lastest SimpleModManager from https://github.com/nadrino/SimpleModManager/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/nadrino/SimpleModManager/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/SimpleModManager/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo SimpleModManager {} >> ../description.txt
@@ -267,54 +267,26 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Moonlight {} >> ../description.txt
 
-### Fetch NX-Shell from https://github.com/zdm65477730/NX-Shell/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/NX-Shell/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo NX-Shell {} >> ../description.txt
-cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*NX-Shell.nro"' \
-  | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o NX-Shell.nro
-if [ $? -ne 0 ]; then
-    echo "NX-Shell download\033[31m failed\033[0m."
-else
-    echo "NX-Shell download\033[32m success\033[0m."
-    mkdir -p ./switch/NX-Shell
-    mv NX-Shell.nro ./switch/NX-Shell
-fi
-
 ### Fetch lastest hb-appstore from https://github.com/fortheusers/hb-appstore/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/fortheusers/hb-appstore/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/hb-appstore/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo hb-appstore {} >> ../description.txt
 
 ### Fetch lastest ReverseNX-Tool from https://github.com/masagrator/ReverseNX-Tool/releases
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/masagrator/ReverseNX-Tool/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ReverseNX-Tool/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo ReverseNX-Tool {} >> ../description.txt
-cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*ReverseNX-Tool.nro"' \
-  | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o ReverseNX-Tool.nro
-if [ $? -ne 0 ]; then
-    echo "ReverseNX-Tool download\033[31m failed\033[0m."
-else
-    echo "ReverseNX-Tool download\033[32m success\033[0m."
-    mkdir -p ./switch/ReverseNX-Tool
-    mv ReverseNX-Tool.nro ./switch/ReverseNX-Tool
-fi
+  | xargs -I {} echo ReverseNX-Tool {} 中文 >> ../description.txt
 
 ### Fetch lastest Goldleaf from https://github.com/XorTroll/Goldleaf/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/XorTroll/Goldleaf/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Goldleaf/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Goldleaf {} >> ../description.txt
 
 ### Fetch lastest Safe_Reboot_Shutdown from https://github.com/dezem/Safe_Reboot_Shutdown/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dezem/Safe_Reboot_Shutdown/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Safe_Reboot_Shutdown/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Safe_Reboot_Shutdown {} >> ../description.txt
@@ -336,10 +308,21 @@ cat latest.json \
 #fi
 
 ### Fetch lastest Firmware-Dumper【Chinese lang】 from https://github.com/zdm65477730/Switch-Firmware-Dumper/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Switch-Firmware-Dumper/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Firmware-Dumper {} >> ../description.txt
+#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Switch-Firmware-Dumper/releases/latest
+#cat latest.json \
+#  | jq '.tag_name' \
+#  | xargs -I {} echo Firmware-Dumper {} >> ../description.txt
+#cat latest.json \
+#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Firmware-Dumper.zip"' \
+#  | sed 's/"//g' \
+#  | xargs -I {} curl -sL {} -o Firmware-Dumper.zip
+#if [ $? -ne 0 ]; then
+#    echo "Firmware-Dumper download\033[31m failed\033[0m."
+#else
+#    echo "Firmware-Dumper download\033[32m success\033[0m."
+#    unzip -oq Firmware-Dumper.zip
+#    rm Firmware-Dumper.zip
+#fi
 
 ### Fetch lastest nxdumptool(nxdt_rw_poc) from https://github.com/DarkMatterCore/nxdumptool/releases/download/rewrite-prerelease/nxdt_rw_poc.nro
 #curl -sL https://github.com/DarkMatterCore/nxdumptool/releases/download/rewrite-prerelease/nxdt_rw_poc.nro -o nxdt_rw_poc.nro
@@ -364,25 +347,14 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Haku33 {} >> ../description.txt
 
-### Fetch linkalho
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/nro/linkalho.zip -o linkalho.zip
-#if [ $? -ne 0 ]; then
-#    echo "linkalho download\033[31m failed\033[0m."
-#else
-#    echo "linkalho download\033[32m success\033[0m."
-#    echo linkalho >> ../description.txt
-#    unzip -oq linkalho.zip
-#    rm linkalho.zip
-#fi
-
-###
-cat >> ../description.txt << ENDOFFILE
-linkalho
-ENDOFFILE
-###
+### Fetch lastest linkalho from https://github.com/gzk47/linkalho/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/linkalho/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo linkalho {} 中文 >> ../description.txt
 
 ### Fetch lastest sphaira from https://github.com/ITotalJustice/sphaira/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ITotalJustice/sphaira/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sphaira/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo sphaira {} >> ../description.txt
@@ -392,6 +364,26 @@ curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/BernardoGior
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Checkpoint {} >> ../description.txt
+## Fetch lastest Daybreak.nro from https://github.com/gzk47/Atmosphere/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Atmosphere/releases
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$")))).tag_name' \
+  | xargs -I {} echo daybreak {} 中文 >> ../description.txt
+### Fetch lastest switch-time from https://github.com/gzk47/switch-time/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/switch-time/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo switch-time {} >> ../description.txt
+### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo hbmenu {} 中文 >> ../description.txt
+## Fetch lastest ftpd.nro from https://github.com/gzk47/ftpd/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ftpd/releases
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^ftpd.*\\.nro$")))).tag_name' \
+  | xargs -I {} echo ftpd {} >> ../description.txt
 
 # -------------------------------------------
 
@@ -405,15 +397,6 @@ cat >> ../description.txt << ENDOFFILE
 ENDOFFILE
 ###
 
-### Fetch nx-ovlloader
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/nx-ovlloader.zip -o nx-ovlloader.zip
-#if [ $? -ne 0 ]; then
-#    echo "nx-ovlloader download\033[31m failed\033[0m."
-#else
-#    echo "nx-ovlloader download\033[32m success\033[0m."
-#    unzip -oq nx-ovlloader.zip
-#    rm nx-ovlloader.zip
-#fi
 
 ## Fetch lastest nx-ovlloader from https://github.com/zdm65477730/nx-ovlloader/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/nx-ovlloader/releases/latest
@@ -433,24 +416,14 @@ else
 fi
 
 ### Write config.ini in /config/tesla
-cat > ./config/tesla/config.ini << ENDOFFILE
-[tesla]
-key_combo=L+DDOWN
-ENDOFFILE
-if [ $? -ne 0 ]; then
-    echo "Writing config.ini in ./config/tesla\033[31m failed\033[0m."
-else
-    echo "Writing config.ini in ./config/tesla\033[32m success\033[0m."
-fi
-
-### Fetch Tesla-Menu
-#curl -sL #https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/Tesla-Menu.zip -o Tesla-Menu.zip
+#cat > ./config/tesla/config.ini << ENDOFFILE
+#[tesla]
+#key_combo=L+DDOWN
+#ENDOFFILE
 #if [ $? -ne 0 ]; then
-#    echo "Tesla-Menu download\033[31m failed\033[0m."
+#    echo "Writing config.ini in ./config/tesla\033[31m failed\033[0m."
 #else
-#    echo "Tesla-Menu download\033[32m success\033[0m."
-#    unzip -oq Tesla-Menu.zip
-#    rm Tesla-Menu.zip
+#    echo "Writing config.ini in ./config/tesla\033[32m success\033[0m."
 #fi
 
 #保留压缩包Tesla-Menu.zip
@@ -520,36 +493,51 @@ fi
 cat > ./config/Ultrahand/overlays.ini << ENDOFFILE
 [ovl-sysmodules.ovl]
 priority=0
+custom_name=系统模块
 
 [StatusMonitor.ovl]
 priority=1
+custom_name=状态监视
 
 [EdiZon.ovl]
 priority=2
+custom_name=金手指
 
 [ReverseNX-RT.ovl]
 priority=3
+custom_name=底座模式
 
 [sys-clk.ovl]
 priority=4
+custom_name=系统超频
 
 [emuiibo.ovl]
 priority=5
+custom_name=Amiibo模拟
 
 [ldn_mitm.ovl]
 priority=6
+custom_name=联机插件
 
 [QuickNTP.ovl]
 priority=7
+custom_name=时间同步
 
 [SysDVR.ovl]
 priority=8
+custom_name=游戏串流
 
 [FPSLocker.ovl]
 priority=9
+custom_name=FPS锁定
 
 [sys-patch-overlay.ovl]
 priority=10
+custom_name=系统补丁
+
+[ovlEdiZon.ovl]
+priority=20
+custom_name=金手指-在线下载
 ENDOFFILE
 if [ $? -ne 0 ]; then
     echo "Writing overlays.ini in ./config/Ultrahand\033[31m failed\033[0m."
@@ -560,15 +548,6 @@ fi
 ### Rename /config/Ultrahand to /config/ultrahand 主题文件夹目前只识别小写
 mv ./config/Ultrahand ./config/ultrahand
 
-### Fetch ovl-sysmodules
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ovl-sysmodules.zip -o ovl-sysmodules.zip
-#if [ $? -ne 0 ]; then
-#    echo "ovl-sysmodules download\033[31m failed\033[0m."
-#else
-#    echo "ovl-sysmodules download\033[32m success\033[0m."
-#    unzip -oq ovl-sysmodules.zip
-#    rm ovl-sysmodules.zip
-#fi
 
 ## Fetch lastest ovl-sysmodules from https://github.com/zdm65477730/ovl-sysmodules/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ovl-sysmodules/releases/latest
@@ -598,15 +577,6 @@ hekateRestartControlEnabled=0
 consoleRegionControlEnabled=1
 ENDOFFILE
 
-### Fetch StatusMonitor
-#curl -sL #https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/StatusMonitor.zip -o StatusMonitor.zip
-#if [ $? -ne 0 ]; then
-#    echo "StatusMonitor download\033[31m failed\033[0m."
-#else
-#    echo "StatusMonitor download\033[32m success\033[0m."
-#    unzip -oq StatusMonitor.zip
-#    rm StatusMonitor.zip
-#fi
 
 ## Fetch lastest Status-Monitor-Overlay from https://github.com/zdm65477730/Status-Monitor-Overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Status-Monitor-Overlay/releases/latest
@@ -625,15 +595,6 @@ else
     rm StatusMonitor.zip
 fi
 
-### Fetch EdiZon
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/EdiZon.zip -o EdiZon.zip
-#if [ $? -ne 0 ]; then
-#    echo "EdiZon download\033[31m failed\033[0m."
-#else
-#    echo "EdiZon download\033[32m success\033[0m."
-#    unzip -oq EdiZon.zip
-#    rm EdiZon.zip
-#fi
 
 ## Fetch lastest EdiZon-Overlay from https://github.com/zdm65477730/EdiZon-Overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/EdiZon-Overlay/releases/latest
@@ -652,16 +613,6 @@ else
     rm EdiZon.zip
 fi
 
-### Fetch ReverseNX-RT
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ReverseNX-RT.zip -o ReverseNX-RT.zip
-#if [ $? -ne 0 ]; then
-#    echo "ReverseNX-RT download\033[31m failed\033[0m."
-#else
-#    echo "ReverseNX-RT download\033[32m success\033[0m."
-#    unzip -oq ReverseNX-RT.zip
-#    rm ReverseNX-RT.zip
-#    rm -rf SaltySD/patches
-#fi
 
 ## Fetch lastest ReverseNX-RT from https://github.com/zdm65477730/ReverseNX-RT/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ReverseNX-RT/releases/latest
@@ -692,15 +643,6 @@ else
     rm -rf FPSLocker-Warehouse
 fi
 
-### Fetch sys-clk
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/sys-clk.zip -o sys-clk.zip
-#if [ $? -ne 0 ]; then
-#    echo "sys-clk download\033[31m failed\033[0m."
-#else
-#    echo "sys-clk download\033[32m success\033[0m."
-#    unzip -oq sys-clk.zip
-#    rm sys-clk.zip
-#fi
 
 ## Fetch lastest sys-clk from https://github.com/zdm65477730/sys-clk/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sys-clk/releases/latest
@@ -719,15 +661,6 @@ else
     rm sys-clk.zip
 fi
 
-### Fetch emuiibo
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/emuiibo.zip -o emuiibo.zip
-#if [ $? -ne 0 ]; then
-#    echo "emuiibo download\033[31m failed\033[0m."
-#else
-#    echo "emuiibo download\033[32m success\033[0m."
-#    unzip -oq emuiibo.zip
-#    rm emuiibo.zip
-#fi
 
 ## Fetch lastest emuiibo from https://github.com/zdm65477730/emuiibo/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/emuiibo/releases/latest
@@ -735,7 +668,7 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo emuiibo {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*emuiibo[^"]*.zip"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*emuiibo.zip"' \
   | sed 's/"//g' \
   | xargs -I {} curl -sL {} -o emuiibo.zip
 if [ $? -ne 0 ]; then
@@ -746,15 +679,6 @@ else
     rm emuiibo.zip
 fi
 
-### Fetch ldn_mitm
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/ldn_mitm.zip -o ldn_mitm.zip
-#if [ $? -ne 0 ]; then
-#    echo "ldn_mitm download\033[31m failed\033[0m."
-#else
-#    echo "ldn_mitm download\033[32m success\033[0m."
-#    unzip -oq ldn_mitm.zip
-#    rm ldn_mitm.zip
-#fi
 
 ## Fetch lastest ldn_mitm from https://github.com/zdm65477730/ldn_mitm/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ldn_mitm/releases/latest
@@ -773,15 +697,6 @@ else
     rm ldn_mitm.zip
 fi
 
-### Fetch QuickNTP
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/QuickNTP.zip -o QuickNTP.zip
-#if [ $? -ne 0 ]; then
-#    echo "QuickNTP download\033[31m failed\033[0m."
-#else
-#    echo "QuickNTP download\033[32m success\033[0m."
-#    unzip -oq QuickNTP.zip
-#    rm QuickNTP.zip
-#fi
 
 ## Fetch lastest QuickNTP from https://github.com/zdm65477730/QuickNTP/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/QuickNTP/releases/latest
@@ -800,15 +715,6 @@ else
     rm QuickNTP.zip
 fi
 
-### sysDvr
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/SysDVR.zip -o SysDVR.zip
-#if [ $? -ne 0 ]; then
-#    echo "SysDVR download\033[31m failed\033[0m."
-#else
-#    echo "SysDVR download\033[32m success\033[0m."
-#    unzip -oq SysDVR.zip
-#    rm SysDVR.zip
-#fi
 
 ## Fetch lastest sysdvr-overlay from https://github.com/zdm65477730/sysdvr-overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sysdvr-overlay/releases/latest
@@ -827,35 +733,7 @@ else
     rm SysDVR.zip
 fi
 
-#### Fetch Fizeau
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/Fizeau.zip -o Fizeau.zip
-#if [ $? -ne 0 ]; then
-#    echo "Fizeau download\033[31m failed\033[0m."
-#else
-#    echo "Fizeau download\033[32m success\033[0m."
-#    unzip -oq Fizeau.zip
-#    rm Fizeau.zip
-#fi
 
-#### Fetch Zing
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/Zing.zip -o Zing.zip
-#if [ $? -ne 0 ]; then
-#    echo "Zing download\033[31m failed\033[0m."
-#else
-#    echo "Zing download\033[32m success\033[0m."
-#    unzip -oq Zing.zip
-#    rm Zing.zip
-#fi
-
-#### Fetch sys-tune
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/plugins/sys-tune.zip -o sys-tune.zip
-#if [ $? -ne 0 ]; then
-#    echo "sys-tune download\033[31m failed\033[0m."
-#else
-#    echo "sys-tune download\033[32m success\033[0m."
-#    unzip -oq sys-tune.zip
-#    rm sys-tune.zip
-#fi
 
 ###
 #cat >> ../description.txt << ENDOFFILE
@@ -916,6 +794,34 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
+心悦工具箱 
+ 
+插件管理 - 便捷管理和切换Switch插件
+Hekate启动选项 - 配置Hekate引导加载程序
+相册启动 - 设置hbmenu和sphaira等启动器
+金手指功能 - 在线下载和管理游戏金手指
+录屏设置 - 调整录屏的比特率和帧率
+DBI版本切换 - 在版本间切换
+联网防护 - 屏蔽任天堂服务器和保护序列号
+风扇增强 - 自定义风扇曲线控制温度
+游戏模组 - 游戏模组解锁补丁
+8G内存切换 - 硬改为8G内存的机器专用
+国行自动转区 - 国行机器开机自动转国际版
+系统内存设置 - 系统内存大小调整、内存缓冲区配置等
+帧率补丁 - 应用游戏帧率解锁补丁
+极限超频 - 优化CPU/GPU/内存性能
+工具箱更新 - 一键更新至最新版本
+ 
+ENDOFFILE
+###
+
+# -------------------------------------------
+
+###
+cat >> ../description.txt << ENDOFFILE
+ 
+------------------------------
+ 
 极限超频替换包：（ 覆盖到【特斯拉版】心悦整合包上替换 ）
  
 ENDOFFILE
@@ -925,7 +831,7 @@ ENDOFFILE
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo EOS{}-OC-Suite >> ../description.txt
+  | xargs -I {} echo EOS{}-OC-Suite 中文 >> ../description.txt
 
 # -------------------------------------------
 
@@ -972,6 +878,16 @@ else
 
 fi
 
+### Fetch gzk
+#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/sys/gzk.zip -o gzk.zip
+#if [ $? -ne 0 ]; then
+#    echo "gzk download\033[31m failed\033[0m."
+#else
+#    echo "gzk download\033[32m success\033[0m."
+##    echo gzk >> ../description.txt
+#    unzip -oq gzk.zip
+#    rm gzk.zip
+#fi
 
 # -------------------------------------------
 
@@ -980,15 +896,16 @@ cat >> ../description.txt << ENDOFFILE
  
 ------------------------------
  
-SwitchSD-Pure  为：纯净版
-SwitchSD-Tesla 为：特斯拉版
-SwitchSD       为：特斯拉版+sys-patch
+AMS-Pure       为：纯净版
+AMS-Tesla      为：特斯拉版
 EOS-OC-Suite   为：极限超频替换包
  
 ENDOFFILE
 ###
 
 # -------------------------------------------
+
+cp -a ../description.txt ./软件详情.txt
 
 echo ""
 echo "\033[32mYour ZDM-Tesla card is prepared!\033[0m"

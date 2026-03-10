@@ -40,7 +40,7 @@ jobs:
         echo "tag_name=$(date +%Y%m%d)" >> $GITHUB_ENV
         chmod +x $SCRIPT_SH
         ./$SCRIPT_SH
-        zip -rq SwitchSD-Pure.zip SwitchSD-Pure
+        zip -rq AMS-Pure.zip AMS-Pure
 
     - name: Read description.txt
       id: description
@@ -57,7 +57,7 @@ jobs:
         commit: main
         token: ${{ secrets.GITHUB_TOKEN }}
         body: "${{ steps.description.outputs.content }}"
-        artifacts: "SwitchSD-Pure.zip"
+        artifacts: "AMS-Pure.zip"
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.2
