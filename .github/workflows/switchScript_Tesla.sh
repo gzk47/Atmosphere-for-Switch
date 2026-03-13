@@ -1328,7 +1328,7 @@ fi
 
 
 ## Fetch lastest sysdvr-overlay from https://github.com/zdm65477730/sysdvr-overlay/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sysdvr-overlay/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sysdvr-overlay/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo SysDVR {} >> ../description.txt
@@ -1821,6 +1821,16 @@ EOS-OC-Suite   为：极限超频替换包
  
 ENDOFFILE
 ###
+
+# -------------------------------------------
+
+cat >> ../description.txt << ENDOFFILE
+
+------------------------------
+
+构建时间：$(date +%Y%m%d)
+
+ENDOFFILE
 
 # -------------------------------------------
 
