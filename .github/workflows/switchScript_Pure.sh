@@ -189,7 +189,7 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Lockpick_RCM {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*Lockpick_RCM.zip"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*Lockpick_RCM[^"]*.zip"' \
   | sed 's/"//g' \
   | xargs -I {} curl -sL {} -o Lockpick_RCM.zip
 if [ $? -ne 0 ]; then
@@ -279,7 +279,7 @@ cat latest.json \
   | jq '.name' \
   | xargs -I {} echo {} 中文 >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*DBI.[^"]*.nro"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*DBI[^"]*.nro"' \
   | sed 's/"//g' \
   | xargs -I {} curl -sL {} -o DBI.nro
 if [ $? -ne 0 ]; then
