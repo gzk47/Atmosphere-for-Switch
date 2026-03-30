@@ -82,7 +82,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-patch/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo sys-patch {} 中文 >> ../description.txt
+  | xargs -I {} echo sys-patch {} >> ../description.txt
 
 # -------------------------------------------
 
@@ -182,7 +182,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBI/releases/latest
 cat latest.json \
   | jq '.name' \
-  | xargs -I {} echo {} 中文 >> ../description.txt
+  | xargs -I {} echo {} >> ../description.txt
 
 ### Fetch lastest Awoo Installer from https://github.com/Huntereb/Awoo-Installer/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Huntereb/Awoo-Installer/releases/latest
@@ -194,7 +194,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo HekateToolbox {} 中文 >> ../description.txt
+  | xargs -I {} echo HekateToolbox {} >> ../description.txt
 
 ### Fetch lastest NX-Activity-Log from https://github.com/zdm65477730/NX-Activity-Log/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/NX-Activity-Log/releases/latest
@@ -277,7 +277,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ReverseNX-Tool/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo ReverseNX-Tool {} 中文 >> ../description.txt
+  | xargs -I {} echo ReverseNX-Tool {} >> ../description.txt
 
 ### Fetch lastest Goldleaf from https://github.com/XorTroll/Goldleaf/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Goldleaf/releases/latest
@@ -351,7 +351,7 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/linkalho/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo linkalho {} 中文 >> ../description.txt
+  | xargs -I {} echo linkalho {} >> ../description.txt
 
 ### Fetch lastest sphaira from https://github.com/ITotalJustice/sphaira/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sphaira/releases/latest
@@ -368,23 +368,27 @@ cat latest.json \
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Atmosphere/releases
 cat latest.json \
   | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$")))).tag_name' \
-  | xargs -I {} echo daybreak {} 中文 >> ../description.txt
+  | xargs -I {} echo daybreak {} >> ../description.txt
 ### Fetch lastest switch-time from https://github.com/gzk47/switch-time/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/switch-time/releases/latest
 cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo switch-time {} >> ../description.txt
-### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo hbmenu {} 中文 >> ../description.txt
 ## Fetch lastest ftpd.nro from https://github.com/gzk47/ftpd/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ftpd/releases
 cat latest.json \
   | jq 'first(.[]|select(.assets|any(.name|test("^ftpd.*\\.nro$")))).tag_name' \
   | xargs -I {} echo ftpd {} >> ../description.txt
-
+### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo hbmenu {} >> ../description.txt
+## Fetch lastest hbl.nsp from https://github.com/gzk47/nx-hbloader/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbloader/releases
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^hbl.*\\.nsp$")))).tag_name' \
+  | xargs -I {} echo hbl {} >> ../description.txt
 # -------------------------------------------
 
 ###

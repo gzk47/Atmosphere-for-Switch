@@ -54,7 +54,7 @@ ENDOFFILE
 #fi
 
 ### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Atmosphere/releases
 cat latest.json \
   | jq 'first(.[]|select(.assets|any(.name|test("^atmosphere.*\\.zip$")))).name' \
   | xargs -I {} echo {} >> ../description.txt
@@ -84,7 +84,7 @@ fi
 #    mv fusee.bin ./bootloader/payloads
 #fi
 
-### Fetch latest fusee.bin from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
+### Fetch latest fusee.bin from https://github.com/Atmosphere-NX/gzk47/releases/latest
 cat latest.json \
   | jq 'first(.[]|select(.assets|any(.name|test("^fusee.*\\.bin$"))))' \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*fusee[^"]*.bin"' \
@@ -131,7 +131,7 @@ fi
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-patch/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo sys-patch {} 中文 >> ../description.txt
+  | xargs -I {} echo sys-patch {} >> ../description.txt
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-patch.zip"' \
   | sed 's/"//g' \
@@ -276,260 +276,24 @@ fi
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBI/releases/latest
 cat latest.json \
   | jq '.name' \
-  | xargs -I {} echo {} 中文 >> ../description.txt
+  | xargs -I {} echo {} >> ../description.txt
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*DBI[^"]*.nro"' \
   | sed 's/"//g' \
   | xargs -I {} curl -sL {} -o DBI.nro
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/rashevskyv/DBI/releases/latest
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*dbi[^"]*.config"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o dbi.config
 if [ $? -ne 0 ]; then
     echo "DBI download\033[31m failed\033[0m."
 else
     echo "DBI download\033[32m success\033[0m."
     mkdir -p ./switch/DBI
     mv DBI.nro ./switch/DBI
+    mv -f dbi.config ./switch/DBI/
 fi
-
-### Write dbi.config in /switch/DBI/dbi.config
-cat > ./switch/DBI/dbi.config << ENDOFFILE
-; General settings
-[General]
-; Direct exit to homescreen
-ExitToHomeScreen=false
-; Folder where saves backups are stored
-SavesFolder=sdmc:/DBIsaves/
-; Log "Install", "Check integrity" and "Cleanup" processes
-LogEvents=false
-; Folder where logs are stored
-LogsFolder=sdmc:/switch/DBI/logs/
-; Folder where game dumps are stored
-DumpsFolder=sdmc:/switch/DBI/dumps/
-; Sorting options for application list
-AppSorting=LastPlayed,InstallLocation,Size,Name
-; Sorting options for save list
-SaveSorting=AppLastPlayed,AppName,UserUid,Size,Time
-; Highlight files with updates to curently instaled titles in file browsers
-HighlightUpdates=true
-; Rotate screen upside down
-RotateScreen=false
-; Rotate joycons
-RotateJoycon=false
-; URL with title versions in format <id>|[rightsId|]<version>
-;VersionsURL=https://raw.githubusercontent.com/16BitWonder/nx-versions/master/versions.txt
-VersionsURL=https://raw.githubusercontent.com/blawar/titledb/master/versions.txt
-;VersionsURL=sdmc:/versions.txt
-; URL with titledb json
-TitleDB=https://raw.githubusercontent.com/blawar/titledb/master/US.en.json
-;Browse saves FS in Read-only mode
-ROSaveFS=false
-; Show "Update all items from here..." in context menu of file browsers
-ShowUpdateFromHere=true
-; Show cache warming spinner
-ShowCacheWarmingIndicator=true
-; Move cursor down after selection
-MoveDownAfterX=true
-; Screen idle timeout in seconds
-ScreenIdleTimeout=0
-; Auto repeat nav. buttons when holding
-Autorepeat=true
-; Show cursors on both panels in two-panel browsinig mode
-Secondcursor=false
-; Backup saves before delete
-FoolproofSaveDelete=true
-; Show time in status line
-TimeShow=true
-; Show time with seconds
-TimeShowSeconds=true
-; Run Application list from file browser by pressing L
-BrowseAppsFromFiles=false
-; Validate SSL certificates on network connections
-ValidateSSL=false
-; UpdateURL
-DBIUpdateURL=https://github.com/rashevskyv/DBI/releases/latest/download/latest.zip
-; Dump generated forwarders to configured dump location
-DumpForwarders=false
-; Do not show folder.jpg in file browser
-HideFolderJpg=true
-Custom dns servers for http connections
-;CustomDNS=8.8.8.8, 1.1.1.1
-; Try to allocate optimal socket buffer size
-SmartNetworkConfig=true
-
-[Filtering]
-; Apply filebrowser filter to directories
-FilterFolders=true
-; Inherit filter in subfolders
-InheritFilter=true
-
-; Visibility of main menu items
-[MainMenu]
-; Browse and install files from SD card
-BrowseSD=true
-; Browse and copy files from SYSTEM partition
-BrowseSystem=false
-; Browse and copy files from USER partition
-BrowseUser=false
-; Browse and install files from USB flash drives and HDD
-USBHost=true
-; Browse and install files from PC via dbibackend
-BackendInstall=true
-; Install game from inserted game cartridge
-GameCard=true
-; Browse and install files from configured network sources
-Network=true
-; Browse and install files from configured sd card folders
-Local=true
-; Browse installed applications
-BrowseApps=true
-; View where you can view or delete installed tickets
-Tickets=true
-; View where you can view or delete game saves
-Saves=true
-; MTP responder
-MTP=true
-; FTP Server
-FTP=true
-; HTTP Server
-HTTP=true
-; Tools
-Tools=true
-
-[Applications]
-; Whether check or not LFS mod size
-CalculateLFSSize=true
-
-; Install options
-[Install]
-; Check NCA hash during install
-CheckHash=true
-; Allow NSZ/XCZ install in applet mode
-EnableNSZ=true
-; Create LFS folder in /atmosphere/contents after installation
-CreateLFS=false
-;
-; Note! Following flags can make games to crash.
-; Patch restrictions for user account such as Linking
-PatchUAC=false
-; Patch restriction to create screenshots
-PatchScreenshot=false
-; Patch restriction to video recording
-PatchVideoRec=false
-
-; MTP options
-[MTP]
-; Show or not NSP that includes base game, latest update and all DLC in single multi-title file
-ShowCombinedNSP=true
-; Add [Base] and [Update] suffix to filename
-AddBaseUpdate = false
-; Show or not virtual "Mods & cheats" folder that redirects to sdmc:/atmosphere/contents/TITLEID
-ShowMAC=true
-; Use TitleID for "Mods & cheats" folder
-MACasTID=true
-; Show user defined shortcuts to MircoSD folders as separate storages
-CustomStorages=true
-; Turn screen off on start MTP mode
-TurnOffScreen=false
-; Report android extension (some initiators thinks that android has bugs)
-ReportAndroidExtension=true
-; Use single URB transfer. Will be a lot slower, but can improve stability
-SingleURB=false
-; MTP transmission buffer size in KB
-BufferSize=512
-; MTP transmission timeout in ms
-NewBufferTimeout=2000
-; Send Object_Removed event for files copied to Install storages
-AutoremoveInstalled=true
-
-; FTP options
-[FTP]
-; Turn screen off on start FTP mode
-TurnOffScreen=false
-; Read file modification time (can slow down on large dirs)
-ReadMT=false
-; Access port
-Port=5000
-; Min value for passive port range. Use 0 to Auto
-MinPassivePort=40000
-; Max value for passive port range. Use 0 to Auto
-MaxPassivePort=40100
-; send current directory as type=cdir
-CDIR=false
-; Force UTF8 usage
-ForceUtf8=true
-; Use WaitAll option in recv. Can improve speed, incompatible with some clients.
-UseWaitAll=true
-
-;HTTP options
-[HTTP]
-; Access port
-Port=1234
-; Data read timeout (seconds)
-Timeout=3
-
-
-; Access point options
-[Access point]
-; Start local access point for FTP/HTTP server
-UseAP=false
-SSID=
-Password=
-Use5GHz=false
-Hidden=false
-
-
-;Enable or disable various MTP storages
-[MTP Storages]
-1: SD Card=true
-2: Nand USER=false
-3: Nand SYSTEM=false
-4: Installed games=true
-5: SD Card install=true
-6: NAND install=true
-7: Saves=true
-8: Album=true
-9: Gamecard=false
-
-; FB2 rendering options
-[FB2]
-; Visul theme (Day, Night, Sepia, Darkroom)
-Theme=Day
-; Use word hyphenation
-Hyphenation=true
-; Default orientation
-Orientation=0
-
-; Network install sources
-[Network sources]
-; <display name>=<type>|<URL>
-;NSP Indexer=URLList|http://192.168.1.47/nspindexer/index.php?DBI
-;Home server=ApacheHTTP|http://192.168.1.47/Nintendo/Switch/
-;WebDAV test=WebDAV|http://user:password@192.168.1.47/webdav/
-;Test FTP=FTP|ftp://192.168.1.24:2121/
-;Test SFTP=SFTP|sftp://user:password@192.168.1.24/
-;Test SFTP=SFTP|sftp://remote_user@192.168.1.47/
-;Instead of password you can use sdmc:/switch/.ssh/id_rsa and sdmc:/switch/.ssh/id_rsa.pub files
-;Sorry, but it seems to be libcurl limitation to use full keypair instead of only private key.
-
-; Main menu shortcuts to SD card locations
-[Local sources]
-; <display name>=<path>
-;Homebrew=sdmc:/switch
-DBILogs=sdmc:/switch/DBI/logs
-
-[MTP custom storages]
-; <display name>=<path>
-;Homebrew=sdmc:/switch
-DBILogs=sdmc:/switch/DBI/logs
-
-; Override for display name
-; <UPPERCASED TID>=<Desired name>
-[Title name override]
-;010023901191C000=Naheulbeuk
-
-[Disabled titles to check for updates]
-BlockAllTitlesWithLFS=true
-010072400E04A000; Pokemon Cafe Mix
-
-ENDOFFILE
 
 ### Fetch lastest Awoo Installer from https://github.com/Huntereb/Awoo-Installer/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Huntereb/Awoo-Installer/releases/latest
@@ -552,7 +316,7 @@ fi
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo HekateToolbox {} 中文 >> ../description.txt
+  | xargs -I {} echo HekateToolbox {} >> ../description.txt
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*HekateToolbox.nro"' \
   | sed 's/"//g' \
@@ -739,7 +503,7 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Moonlight {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*Moonlight-Switch-hos21.nro"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*Moonlight[^"]*.nro"' \
   | sed 's/"//g' \
   | xargs -I {} curl -sL {} -o Moonlight-Switch.nro
 if [ $? -ne 0 ]; then
@@ -771,7 +535,7 @@ fi
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ReverseNX-Tool/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo ReverseNX-Tool {} 中文 >> ../description.txt
+  | xargs -I {} echo ReverseNX-Tool {} >> ../description.txt
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*ReverseNX-Tool.nro"' \
   | sed 's/"//g' \
@@ -883,7 +647,7 @@ fi
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/linkalho/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo linkalho {} 中文 >> ../description.txt
+  | xargs -I {} echo linkalho {} >> ../description.txt
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*linkalho.nro"' \
   | sed 's/"//g' \
@@ -948,7 +712,7 @@ fi
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Atmosphere/releases
 cat latest.json \
   | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$")))).tag_name' \
-  | xargs -I {} echo daybreak {} 中文 >> ../description.txt
+  | xargs -I {} echo daybreak {} >> ../description.txt
 cat latest.json \
   | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$"))))' \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*daybreak[^"]*.nro"' \
@@ -978,21 +742,6 @@ else
     mv switch-time.nro ./switch/switch-time
 fi
 
-### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo hbmenu {} 中文 >> ../description.txt
-cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*hbmenu.nro"' \
-  | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o hbmenu.nro
-if [ $? -ne 0 ]; then
-    echo "hbmenu download\033[31m failed\033[0m."
-else
-    echo "hbmenu download\033[32m success\033[0m."
-fi
-
 ## Fetch lastest ftpd.nro from https://github.com/gzk47/ftpd/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ftpd/releases
 cat latest.json \
@@ -1007,7 +756,40 @@ if [ $? -ne 0 ]; then
     echo "ftpd download\033[31m failed\033[0m."
 else
     echo "ftpd download\033[32m success\033[0m."
+    mkdir -p ./switch/ftpd
     mv ftpd.nro ./switch
+fi
+
+### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
+cat latest.json \
+  | jq '.tag_name' \
+  | xargs -I {} echo hbmenu {} >> ../description.txt
+cat latest.json \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*hbmenu.nro"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o hbmenu.nro
+if [ $? -ne 0 ]; then
+    echo "hbmenu download\033[31m failed\033[0m."
+else
+    echo "hbmenu download\033[32m success\033[0m."
+fi
+
+## Fetch lastest hbl.nsp from https://github.com/gzk47/nx-hbloader/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbloader/releases
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^hbl.*\\.nsp$")))).tag_name' \
+  | xargs -I {} echo hbl {} >> ../description.txt
+cat latest.json \
+  | jq 'first(.[]|select(.assets|any(.name|test("^hbl.*\\.nsp$"))))' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*hbl[^"]*.nsp"' \
+  | sed 's/"//g' \
+  | xargs -I {} curl -sL {} -o hbl.nsp
+if [ $? -ne 0 ]; then
+    echo "hbl download\033[31m failed\033[0m."
+else
+    echo "hbl download\033[32m success\033[0m."
+    mv hbl.nsp ./atmosphere
 fi
 
 # -------------------------------------------
