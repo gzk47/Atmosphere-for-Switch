@@ -41,6 +41,7 @@ jobs:
         chmod +x $SCRIPT_SH
         ./$SCRIPT_SH
         zip -rq ZDM-Tesla.zip ZDM-Tesla
+        mv ZDM-Tesla.zip ZDM-Tesla-v${{ env.tag_name }}.zip
 
     - name: Read description.txt
       id: description
@@ -57,7 +58,7 @@ jobs:
         commit: main
         token: ${{ secrets.GITHUB_TOKEN }}
         body: "${{ steps.description.outputs.content }}"
-        artifacts: "ZDM-Tesla.zip"
+        artifacts: "ZDM-Tesla-v${{ env.tag_name }}.zip"
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.2

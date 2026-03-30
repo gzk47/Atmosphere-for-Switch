@@ -188,15 +188,15 @@ cat latest.json \
   | jq '.tag_name' \
   | xargs -I {} echo Lockpick_RCM {} >> ../description.txt
 cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*Lockpick_RCM[^"]*.zip"' \
+  | grep -oP '"browser_download_url": "\Khttps://[^"]*Lockpick_RCM[^"]*.bin"' \
   | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o Lockpick_RCM.zip
+  | xargs -I {} curl -sL {} -o Lockpick_RCM.bin
 if [ $? -ne 0 ]; then
     echo "Lockpick_RCM download\033[31m failed\033[0m."
 else
     echo "Lockpick_RCM download\033[32m success\033[0m."
-	unzip -oq Lockpick_RCM.zip
-	rm Lockpick_RCM.zip
+	# unzip -oq Lockpick_RCM.zip
+	# rm Lockpick_RCM.zip
     mkdir -p ./bootloader/payloads
     mv Lockpick_RCM.bin ./bootloader/payloads
 fi
@@ -757,7 +757,7 @@ if [ $? -ne 0 ]; then
 else
     echo "ftpd download\033[32m success\033[0m."
     mkdir -p ./switch/ftpd
-    mv ftpd.nro ./switch
+    mv ftpd.nro ./switch/ftpd
 fi
 
 ### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
