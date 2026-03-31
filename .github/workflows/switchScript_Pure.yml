@@ -41,7 +41,7 @@ jobs:
         chmod +x $SCRIPT_SH
         ./$SCRIPT_SH
         zip -rq AMS-Pure.zip AMS-Pure
-        mv AMS-Pure.zip AMS-Pure-v${{ env.tag_name }}.zip
+        mv AMS-Pure.zip AMS-Pure-v$(date +%Y%m%d).zip
 
     - name: Read description.txt
       id: description

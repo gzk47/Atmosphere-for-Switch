@@ -41,7 +41,7 @@ jobs:
         chmod +x $SCRIPT_SH
         ./$SCRIPT_SH
         zip -rq AMS-Tesla.zip AMS-Tesla
-        mv AMS-Tesla.zip AMS-Tesla-v${{ env.tag_name }}.zip
+        mv AMS-Tesla.zip AMS-Tesla-v$(date +%Y%m%d).zip
 
     - name: Read description.txt
       id: description
