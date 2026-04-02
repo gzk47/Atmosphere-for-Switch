@@ -675,7 +675,7 @@ else
 fi
 
 ### Fetch latest sys-clk中文 from https://github.com/ppkantorski/sys-clk/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ppkantorski/sys-clk/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-clk/releases/latest
 cat latest.json \
   | grep -oP '"browser_download_url": "\Khttps://[^"]*sys-clk-overlay.ovl"' \
   | sed 's/"//g' \
