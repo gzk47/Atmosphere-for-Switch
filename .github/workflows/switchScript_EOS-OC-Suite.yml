@@ -36,11 +36,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        curl -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest \
-        | jq -r '.tag_name' > version.txt
-        EOS_VERSION=$(cat version.txt)
+        # curl -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest \
+        # | jq -r '.tag_name' > version.txt
+        # EOS_VERSION=$(cat version.txt)
 
-        echo "EOS_VERSION=$EOS_VERSION" >> $GITHUB_ENV
+        # echo "EOS_VERSION=$EOS_VERSION" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y%m%d %H:%M:%S")" >> $GITHUB_ENV
         echo "tag_name=$(date +%Y%m%d)" >> $GITHUB_ENV
         
@@ -48,7 +48,7 @@ jobs:
         ./$SCRIPT_SH
 
         zip -rq EOS-OC-Suite.zip EOS-OC-Suite
-        mv EOS-OC-Suite.zip EOS${EOS_VERSION}-OC-Suite.zip
+        # mv EOS-OC-Suite.zip EOS${EOS_VERSION}-OC-Suite.zip
 
     - name: Read description.txt
       id: description
@@ -65,7 +65,8 @@ jobs:
         commit: main
         token: ${{ secrets.GITHUB_TOKEN }}
         body: "${{ steps.description.outputs.content }}"
-        artifacts: "EOS${{ env.EOS_VERSION }}-OC-Suite.zip"
+        artifacts: "EOS-OC-Suite.zip"
+        # artifacts: "EOS${{ env.EOS_VERSION }}-OC-Suite.zip" 超手暂不支持通配符下载，故使用固定文件名方便心悦工具箱抓取更新。
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.3.2
