@@ -65,7 +65,7 @@
     - [x] 心悦工具箱 `XY-tools` [From Here](https://github.com/gzk47)
 
   - 极限超频
-    - [x] 极限超频插件 `EOS-OC-Suite` [From Here](https://github.com/halop/OC_Toolkit_SC_EOS/releases/latest)
+    - [x] 极限超频插件 `Horizon-OC` [From Here](https://github.com/Horizon-OC/Horizon-OC/releases/latest)
           
 - 文件操作：
     - [x] 移动 `fusee.bin` 至 `bootloader/payloads` 文件夹
