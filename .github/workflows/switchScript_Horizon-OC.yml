@@ -1,71 +1,77 @@
-name: switchScript_Horizon-OC
+name: Build switchScript_Horizon-OC
 
 on:
   workflow_dispatch:
-  
   push:
     branches:
       - main
     paths:
       - '#README.md'
       - '#switchScript_Horizon-OC.sh'
-      
   schedule:
     - cron: 0 4 * * *
 
 env:
   SCRIPT_SH: ./.github/workflows/switchScript_Horizon-OC.sh
   TZ: Asia/Shanghai
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
+    name: Build and Release
     runs-on: ubuntu-latest
+    # container: devkitpro/devkita64:latest
+    permissions:
+      contents: write
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        ref: main
+      # - name: Add safe.directory Update libnx
+        # run: |
+          # git config --global --add safe.directory "*"
+          # git clone --recurse-submodules https://github.com/switchbrew/libnx.git
+          # cd libnx
+          # make -j$(nproc) install
 
-    - name: Initialization environment
-      env:
-        DEBIAN_FRONTEND: noninteractive
-      run: |
-        sudo -E apt install -y jq
+      - name: Checkout latest code
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          clean: true
+          fetch-depth: 0
+          fetch-tags: true
+          # submodules: recursive
 
-    - name: "Build & Release"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
+      - name: Initialization environment
+        run: |
+          sudo -E apt install -y jq
 
-        echo "DATE=$(date "+%Y%m%d %H:%M:%S")" >> $GITHUB_ENV
-        echo "tag_name=$(date +%Y%m%d)" >> $GITHUB_ENV
-        
-        chmod +x $SCRIPT_SH
-        ./$SCRIPT_SH
+      - name: Extract version
+        run: |
+          echo "TAG_NAME=$(date +%Y%m%d)" >> "$GITHUB_ENV"
+          echo "RELEASE_NAME=心悦大气层中文整合包 v$(date '+%Y%m%d %H:%M:%S')" >> "$GITHUB_ENV"
 
-        zip -rq Horizon-OC.zip Horizon-OC
+      - name: Build
+        run: |
+          chmod +x $SCRIPT_SH
+          ./$SCRIPT_SH
 
-    - name: Read description.txt
-      id: description
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./description.txt
+          zip -rq Horizon-OC.zip Horizon-OC
 
-    - name: Create release
-      uses: ncipollo/release-action@v1
-      with:
-        name: 心悦大气层中文整合包 v${{ env.DATE }} 
-        allowUpdates: true
-        tag: ${{ env.tag_name }}
-        commit: main
-        token: ${{ secrets.GITHUB_TOKEN }}
-        body: "${{ steps.description.outputs.content }}"
-        artifacts: "Horizon-OC.zip"
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          name: ${{ env.RELEASE_NAME }}
+          body_path: description.txt
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+          make_latest: true
+          files: |
+            Horizon-OC.zip
 
-    - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.3.2
-      with:
-        keep_latest: 7
-        delete_tags: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Remove old Releases
+        uses: dev-drprasad/delete-older-releases@v0.3.2
+        with:
+          keep_latest: 7
+          delete_tags: true
