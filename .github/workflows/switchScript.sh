@@ -1198,7 +1198,6 @@ DBI版本切换 - 在版本间切换
 联网防护 - 屏蔽任天堂服务器和保护序列号
 风扇增强 - 自定义风扇曲线控制温度
 游戏模组 - 游戏模组解锁补丁
-8G内存切换 - 硬改为8G内存的机器专用
 国行自动转区 - 国行机器开机自动转国际版
 系统内存设置 - 系统内存大小调整、内存缓冲区配置等
 帧率补丁 - 应用游戏帧率解锁补丁
@@ -1234,11 +1233,11 @@ cat >> ../description.txt << ENDOFFILE
 ENDOFFILE
 ###
 
-### Fetch latest EOS-OC-Suite sys-clk.zip from https://github.com/halop/OC_Toolkit_SC_EOS/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/halop/OC_Toolkit_SC_EOS/releases/latest
+### Fetch latest Horizon-OC dist.zip from https://github.com/Horizon-OC/Horizon-OC/releases/latest
+curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Horizon-OC/Horizon-OC/releases/latest
 cat latest.json \
   | jq '.tag_name' \
-  | xargs -I {} echo EOS{}-OC-Suite 中文 >> ../description.txt
+  | xargs -I {} echo Horizon-OC v{}>> ../description.txt
 
 # -------------------------------------------
 
@@ -1599,7 +1598,7 @@ cat >> ../description.txt << ENDOFFILE
  
 SwitchSD-Pure  为：纯净版
 SwitchSD       为：特斯拉版+sys-patch
-EOS-OC-Suite   为：极限超频替换包
+Horizon-OC     为：极限超频替换包
  
 ENDOFFILE
 ###
