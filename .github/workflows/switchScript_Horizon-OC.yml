@@ -8,6 +8,7 @@ on:
     paths:
       - '#README.md'
       - '#switchScript_Horizon-OC.sh'
+
   schedule:
     - cron: 0 4 * * *
 

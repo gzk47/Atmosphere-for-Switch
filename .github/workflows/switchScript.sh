@@ -895,6 +895,10 @@ custom_name=状态监视
 priority=2
 custom_name=金手指
 
+[ovlEdiZon.ovl]
+priority=2
+custom_name=金手指-在线下载
+
 [ReverseNX-RT.ovl]
 priority=3
 custom_name=底座模式
@@ -926,10 +930,6 @@ custom_name=FPS锁定
 [sys-patch-overlay.ovl]
 priority=10
 custom_name=系统补丁
-
-[ovlEdiZon.ovl]
-priority=20
-custom_name=金手指-在线下载
 ENDOFFILE
 if [ $? -ne 0 ]; then
     echo "Writing overlays.ini in ./config/ultrahand\033[31m failed\033[0m."
@@ -986,8 +986,15 @@ else
     echo "StatusMonitor download\033[32m success\033[0m."
     unzip -oq StatusMonitor.zip
     rm StatusMonitor.zip
+    # sed -i 's/^key_combo=.*/key_combo=L+DDOWN/' ./config/status-monitor/config.ini
 fi
 
+### Write config.ini in ./config/status-monitor/
+mkdir -p ./config/status-monitor
+cat > ./config/status-monitor/config.ini << ENDOFFILE
+[status-monitor]
+key_combo=L+DDOWN
+ENDOFFILE
 
 ## Fetch lastest EdiZon-Overlay from https://github.com/zdm65477730/EdiZon-Overlay/releases/latest
 curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/EdiZon-Overlay/releases/latest
@@ -1336,6 +1343,7 @@ debugmode=1
 debugmode_user=0
 disable_user_exception_handlers=0
 enable_user_pmu_access=0
+enable_mem_mode=1
 blank_prodinfo_sysmmc=1
 blank_prodinfo_emummc=1
 allow_writing_to_cal_sysmmc=0

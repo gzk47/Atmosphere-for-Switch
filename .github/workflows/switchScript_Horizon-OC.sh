@@ -561,6 +561,20 @@ else
     echo "Writing hekate_ipl.ini in ./bootloader/ directory\033[32m success\033[0m."
 fi
 
+### Write config.ini in /config/Ultrahand
+mkdir -p ./config/ultrahand
+cat > ./config/ultrahand/config.ini << ENDOFFILE
+[ultrahand]
+default_lang=zh-cn
+key_combo=L+DDOWN
+hide_hidden=true
+ENDOFFILE
+if [ $? -ne 0 ]; then
+    echo "Writing config.ini in ./config/ultrahand\033[31m failed\033[0m."
+else
+    echo "Writing config.ini in ./config/ultrahand\033[32m success\033[0m."
+fi
+
 ### Write overlays.ini in /config/ultrahand
 mkdir -p ./config/ultrahand
 cat > ./config/ultrahand/overlays.ini << ENDOFFILE
