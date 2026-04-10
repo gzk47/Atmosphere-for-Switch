@@ -571,10 +571,19 @@ custom_name=系统模块
 [StatusMonitor.ovl]
 priority=1
 custom_name=状态监视
+hide=true
+
+[Horizon-OC-Monitor.ovl]
+priority=1
+custom_name=性能监视
 
 [EdiZon.ovl]
 priority=2
 custom_name=金手指
+
+[ovlEdiZon.ovl]
+priority=2
+custom_name=金手指-在线下载
 
 [ReverseNX-RT.ovl]
 priority=3
@@ -583,6 +592,7 @@ custom_name=底座模式
 [sys-clk-overlay.ovl]
 priority=4
 custom_name=系统超频
+hide=true
 
 [horizon-oc-overlay.ovl]
 priority=4
@@ -611,10 +621,6 @@ custom_name=FPS锁定
 [sys-patch-overlay.ovl]
 priority=10
 custom_name=系统补丁
-
-[ovlEdiZon.ovl]
-priority=20
-custom_name=金手指-在线下载
 ENDOFFILE
 if [ $? -ne 0 ]; then
     echo "Writing overlays.ini in ./config/ultrahand\033[31m failed\033[0m."
