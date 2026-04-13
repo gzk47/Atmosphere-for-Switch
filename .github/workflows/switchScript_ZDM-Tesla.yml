@@ -8,6 +8,7 @@ on:
     paths:
       - '#README.md'
       - '#switchScript_ZDM-Tesla.sh'
+
   # schedule:
     # - cron: 0 4 * * *
 
@@ -45,18 +46,25 @@ jobs:
         run: |
           sudo -E apt install -y jq
 
-      - name: Extract version
-        run: |
-          echo "TAG_NAME=$(date +%Y%m%d)" >> "$GITHUB_ENV"
-          echo "RELEASE_NAME=心悦大气层中文整合包 v$(date '+%Y%m%d %H:%M:%S')" >> "$GITHUB_ENV"
-
-      - name: Build
+      - name: Build and Extract version
         run: |
           chmod +x $SCRIPT_SH
           ./$SCRIPT_SH
+          
+          APP_NAME="心悦大气层中文整合包"
+          VER_FILE="description.txt"
+          KEY="Atmosphère"
+          
+          VERSION=$(grep -F "$KEY" "$VER_FILE" | grep -oE '[0-9]+' | head -3 | paste -s -d '.')
+          DATE=$(date +%Y%m%d)
+          DATE_TIME=$(date '+%Y%m%d %H:%M:%S')
+          
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          echo "TAG_NAME=${DATE}" >> "$GITHUB_ENV"
+          echo "RELEASE_NAME=${APP_NAME} v${DATE_TIME}" >> "$GITHUB_ENV"
 
           zip -rq ZDM-Tesla.zip ZDM-Tesla
-          mv ZDM-Tesla.zip ZDM-Tesla-v$(date +%Y%m%d).zip
+          mv ZDM-Tesla.zip ZDM-Tesla-v${DATE}.zip
 
       - name: Upload release asset
         uses: softprops/action-gh-release@v2
