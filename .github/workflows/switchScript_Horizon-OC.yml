@@ -65,6 +65,7 @@ jobs:
 
           zip -rq Horizon-OC.zip Horizon-OC
           # mv Horizon-OC.zip Horizon-OC-${VERSION}-v${DATE}.zip
+          cp Horizon-OC.zip Horizon-OC-${VERSION}-v${DATE}.zip
 
       - name: Upload release asset
         uses: softprops/action-gh-release@v2
@@ -77,8 +78,9 @@ jobs:
           generate_release_notes: false
           make_latest: true
           files: |
-            Horizon-OC.zip
+            # Horizon-OC.zip
             # Horizon-OC-${{ env.VERSION }}-v${{ env.TAG_NAME }}.zip
+            *.zip
 
       - name: Remove old Releases
         uses: dev-drprasad/delete-older-releases@v0.3.2

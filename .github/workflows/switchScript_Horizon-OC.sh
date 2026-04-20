@@ -1,568 +1,393 @@
 #!/bin/sh
+
 set -e
 
-### Credit to the Authors at https://rentry.org/CFWGuides
-### Script created by Fraxalotl
-### Mod by huangqian8
-### Mod by gzk_47
-### Mod by menshiyun
+# ------------------------------------------------------------------
+# GitHub API Helpers & Common Functions
+# Author: gzk_47
+# ------------------------------------------------------------------
 
-# -------------------------------------------
+# GitHub API Headers (to avoid rate limiting)
+API_AUTH="Authorization: Bearer ${GITHUB_TOKEN}"
+API_VER="X-GitHub-Api-Version: 2026-03-10"
 
-### GitHub API Headers
-API_AUTH="Authorization: Bearer $GITHUB_TOKEN"
-API_VER="X-GitHub-Api-Version: 2022-11-28"
+# Fetch latest releases JSON from GitHub API
+fetch_api() {
+    API_URL="https://api.github.com/repos/${REPO}/releases"
+    curl -H "${API_AUTH}" -H "${API_VER}" -o latest.json -sL "${API_URL}"
+}
+fetch_api_latest() {
+    API_URL="https://api.github.com/repos/${REPO}/releases/latest"
+    curl -H "${API_AUTH}" -H "${API_VER}" -o latest.json -sL "${API_URL}"
+}
 
-# -------------------------------------------
+# Parse version tag from JSON and write to description
+get_version() {
+    VERSION=$(jq -r 'first(.[]|select(.assets|any(.name|test(".*'"${MATCH_KEY}"'.*[.]'"${END_KEY}"'$")))).tag_name' latest.json | sed 's/^v//')
+    echo "${APP_NAME} ${VERSION}" >> ../description.txt
+}
+get_version_latest() {
+    VERSION=$(jq -r '.tag_name' latest.json | sed 's/^v//')
+    echo "${APP_NAME} ${VERSION}" >> ../description.txt
+}
 
-### Create a new folder for storing files
-if [ -d Horizon-OC ]; then
-  rm -rf Horizon-OC
+# Download matched asset from GitHub release
+download_file() {
+    DL_URL=$(jq -r 'first(.[]|select(.assets|any(.name|test(".*'"${MATCH_KEY}"'.*[.]'"${END_KEY}"'$")))).assets[] | select(.name|test(".*'"${MATCH_KEY}"'.*[.]'"${END_KEY}"'$")) | .browser_download_url' latest.json)
+    curl -sL "${DL_URL}" -o "${APP_NAME}.${END_KEY}"
+}
+download_file_latest() {
+    DL_URL=$(jq -r '.assets[] | select(.name|test(".*'"${MATCH_KEY}"'.*[.]'"${END_KEY}"'$")) | .browser_download_url' latest.json)
+    curl -sL "${DL_URL}" -o "${APP_NAME}.${END_KEY}"
+}
+
+# Check last command result and print status
+check_result() {
+    if [ $? -ne 0 ]; then
+        echo "${APP_NAME} \033[31m❌\033[0m"
+    else
+        echo "${APP_NAME} \033[32m✅\033[0m"
+    fi
+}
+
+# Unzip package and remove archive
+unzip_and_clean() {
+    unzip -oq "${APP_NAME}.${END_KEY}"
+    rm -f "${APP_NAME}.${END_KEY}"
+}
+
+# Create directory and move file to /switch/[app]
+move_to_switch_dir() {
+    mkdir -p ./switch/"${APP_NAME}"
+    mv "${APP_NAME}.${END_KEY}" ./switch/"${APP_NAME}"
+}
+
+# Create directory and move file to /bootloader/payloads
+move_to_payloads_dir() {
+    mkdir -p ./bootloader/payloads
+    mv "${APP_NAME}.${END_KEY}" ./bootloader/payloads
+}
+
+# ------------------------------------------------------------------
+# Working Directory Initialization
+# ------------------------------------------------------------------
+
+WORK_DIR="Horizon-OC"
+
+if [ -d "${WORK_DIR}" ]; then
+  rm -rf "${WORK_DIR}"
 fi
 if [ -e description.txt ]; then
   rm -rf description.txt
 fi
-mkdir -p ./Horizon-OC
-#mkdir -p ./Horizon-OC/atmosphere/config
-#mkdir -p ./Horizon-OC/atmosphere/hosts
-#mkdir -p ./Horizon-OC/bootloader/ini
-#mkdir -p ./Horizon-OC/emuiibo/overlay
-cd Horizon-OC
+mkdir -p "${WORK_DIR}"
+# mkdir -p "${WORK_DIR}/atmosphere/config"
+# mkdir -p "${WORK_DIR}/atmosphere/hosts"
+# mkdir -p "${WORK_DIR}/bootloader/ini"
+# mkdir -p "${WORK_DIR}/emuiibo/overlay"
 
-# -------------------------------------------
+cd "${WORK_DIR}"
+
+# ------------------------------------------------------------------
+
 
 cat >> ../description.txt << ENDOFFILE
 大气层核心套件：
  
 ENDOFFILE
 
-### Fetch latest atmosphere from https://github.com/Atmosphere-NX/Atmosphere/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases
-cat latest.json \
-  | jq 'first(.[]|select(.assets|any(.name|test("^atmosphere.*\\.zip$")))).name' \
-  | xargs -I {} echo {} >> ../description.txt
+# ==================================================================
+APP_NAME="Atmosphere"
+REPO="gzk47/Atmosphere" MATCH_KEY="atmosphere" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
+# ==================================================================
+APP_NAME="Hekate"
+REPO="easyworld/hekate" MATCH_KEY="_sc" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
-### Fetch Hekate + Nyx CHS from https://github.com/easyworld/hekate/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/easyworld/hekate/releases/latest
-cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
+# ==================================================================
+APP_NAME="Sys-patch"
+REPO="gzk47/sys-patch" MATCH_KEY="sys-patch" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
-### Fetch Sigpatches 
-### from https://gbatemp.net/threads/sigpatches-for-atmosphere-hekate-fss0-fusee-package3.571543/
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/sys/sigpatches.zip -o sigpatches.zip
-#if [ $? -ne 0 ]; then
-#    echo "sigpatches download\033[31m failed\033[0m."
-#else
-#    echo "sigpatches download\033[32m success\033[0m."
-#    echo sigpatches >> ../description.txt
-#    unzip -oq sigpatches.zip
-#    rm sigpatches.zip
-#fi
+# rm -rf switch/.overlays
 
-### Fetch sys-patch from https://github.com/impeeza/sys-patch/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-patch/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo sys-patch {} >> ../description.txt
+# ------------------------------------------------------------------
 
-
-# -------------------------------------------
-
-###
 cat >> ../description.txt << ENDOFFILE
  
-------------------------------
+------------------------------------------------------------------
  
 Hekate payloads 二次引导软件：
  
 ENDOFFILE
-###
 
-#### Fetch latest Lockpick_RCM.bin from https://github.com/Decscots/Lockpick_RCM/releases/latest
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/Decscots/Lockpick_RCM/releases/latest \
-#  | jq '.tag_name' \
-#  | xargs -I {} echo Lockpick_RCM {} >> ../description.txt
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/Decscots/Lockpick_RCM/releases/latest \
-#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Lockpick_RCM.bin"' \
-#  | sed 's/"//g' \
-#  | xargs -I {} curl -sL {} -o Lockpick_RCM.bin
-#if [ $? -ne 0 ]; then
-#    echo "Lockpick_RCM download\033[31m failed\033[0m."
-#else
-#    echo "Lockpick_RCM download\033[32m success\033[0m."
-#    mv Lockpick_RCM.bin ./bootloader/payloads
-#fi
+# ==================================================================
+APP_NAME="Lockpick_RCM"
+REPO="impeeza/Lockpick_RCMDecScots" MATCH_KEY="Lockpick_RCM" END_KEY="bin"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_payloads_dir
 
-### Fetch lastest Lockpick_RCMDecScots from https://github.com/impeeza/Lockpick_RCMDecScots/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/impeeza/Lockpick_RCMDecScots/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Lockpick_RCM {} >> ../description.txt
+# ==================================================================
+APP_NAME="TegraExplorer"
+REPO="zdm65477730/TegraExplorer" MATCH_KEY="TegraExplorer" END_KEY="bin"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_payloads_dir
 
-### Fetch latest TegraExplorer.bin form https://github.com/zdm65477730/TegraExplorer/releases
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/TegraExplorer/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo TegraExplorer {} >> ../description.txt
+# ==================================================================
+APP_NAME="CommonProblemResolver"
+REPO="zdm65477730/CommonProblemResolver" MATCH_KEY="CommonProblemResolver" END_KEY="bin"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_payloads_dir
 
+# ------------------------------------------------------------------
 
-### Fetch latest CommonProblemResolver.bin form https://github.com/zdm65477730/CommonProblemResolver/releases
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/CommonProblemResolver/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo CommonProblemResolver {} >> ../description.txt
-
-# -------------------------------------------
-
-###
 cat >> ../description.txt << ENDOFFILE
  
-------------------------------
+------------------------------------------------------------------
  
 相册nro软件：
  
 ENDOFFILE
-###
 
-### Fetch lastest Switch_90DNS_tester from https://github.com/meganukebmp/Switch_90DNS_tester/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Switch_90DNS_tester/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Switch_90DNS_tester {} >> ../description.txt
+# ==================================================================
+APP_NAME="Switch_90DNS_tester"
+REPO="gzk47/Switch_90DNS_tester" MATCH_KEY="Switch_90DNS_tester" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest DBI from https://github.com/rashevskyv/dbi/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/DBI/releases/latest
-cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
+# ==================================================================
+APP_NAME="DBI"
+REPO="gzk47/DBI" MATCH_KEY="DBI" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest Awoo Installer from https://github.com/Huntereb/Awoo-Installer/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Huntereb/Awoo-Installer/releases/latest
-cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo {} >> ../description.txt
+# ==================================================================
+APP_NAME="Awoo-Installer"
+REPO="Huntereb/Awoo-Installer" MATCH_KEY="Awoo-Installer" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
-### Fetch lastest HekateToolbox from https://github.com/gzk47/Hekate-Toolbox/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Hekate-Toolbox/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo HekateToolbox {} >> ../description.txt
+# ==================================================================
+APP_NAME="HekateToolbox"
+REPO="gzk47/Hekate-Toolbox" MATCH_KEY="HekateToolbox" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest NX-Activity-Log from https://github.com/zdm65477730/NX-Activity-Log/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/NX-Activity-Log/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo NX-Activity-Log {} >> ../description.txt
+# ==================================================================
+APP_NAME="NX-Activity-Log"
+REPO="zdm65477730/NX-Activity-Log" MATCH_KEY="NX-Activity-Log" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest NXThemesInstaller from https://github.com/exelix11/SwitchThemeInjector/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/exelix11/SwitchThemeInjector/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo NXThemesInstaller {} >> ../description.txt
+# ==================================================================
+APP_NAME="NXThemesInstaller"
+REPO="exelix11/SwitchThemeInjector" MATCH_KEY="NXThemesInstaller" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest JKSV from https://github.com/J-D-K/JKSV/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/J-D-K/JKSV/releases/latest
-cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo JKSV {} >> ../description.txt
+# ==================================================================
+APP_NAME="JKSV"
+REPO="J-D-K/JKSV" MATCH_KEY="JKSV" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest tencent-switcher-gui from https://github.com/gzk47/Tencent-switcher-GUI/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Tencent-switcher-GUI/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo tencent-switcher-gui {} >> ../description.txt
+# ==================================================================
+APP_NAME="Tencent-switcher-gui"
+REPO="gzk47/Tencent-switcher-GUI" MATCH_KEY="tencent-switcher-gui" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest aio-switch-updater from https://github.com/HamletDuFromage/aio-switch-updater/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/HamletDuFromage/aio-switch-updater/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo aio-switch-updater {} >> ../description.txt
+# ==================================================================
+APP_NAME="Aio-switch-updater"
+REPO="HamletDuFromage/aio-switch-updater" MATCH_KEY="aio-switch-updater" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
-### Fetch lastest wiliwili from https://github.com/xfangfang/wiliwili/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/wiliwili/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo wiliwili {} >> ../description.txt
+# ==================================================================
+APP_NAME="Wiliwili"
+REPO="gzk47/wiliwili" MATCH_KEY="wiliwili" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
-### Fetch lastest SimpleModDownloader from https://github.com/PoloNX/SimpleModDownloader/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/PoloNX/SimpleModDownloader/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo SimpleModDownloader {} >> ../description.txt
+# ==================================================================
+APP_NAME="SimpleModDownloader"
+REPO="PoloNX/SimpleModDownloader" MATCH_KEY="SimpleModDownloader" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest SimpleModManager from https://github.com/nadrino/SimpleModManager/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/SimpleModManager/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo SimpleModManager {} >> ../description.txt
+# ==================================================================
+APP_NAME="SimpleModManager"
+REPO="gzk47/SimpleModManager" MATCH_KEY="SimpleModManager" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest Switchfin from https://github.com/dragonflylee/switchfin/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/dragonflylee/switchfin/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Switchfin {} >> ../description.txt
+# ==================================================================
+APP_NAME="Switchfin"
+REPO="dragonflylee/Switchfin" MATCH_KEY="Switchfin" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest Moonlight from https://github.com/XITRIX/Moonlight-Switch/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/XITRIX/Moonlight-Switch/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Moonlight {} >> ../description.txt
+# ==================================================================
+APP_NAME="Moonlight"
+REPO="XITRIX/Moonlight-Switch" MATCH_KEY="Moonlight" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest hb-appstore from https://github.com/fortheusers/hb-appstore/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/hb-appstore/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo hb-appstore {} >> ../description.txt
+# ==================================================================
+APP_NAME="Appstore"
+REPO="gzk47/hb-appstore" MATCH_KEY="appstore" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest ReverseNX-Tool from https://github.com/masagrator/ReverseNX-Tool/releases
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ReverseNX-Tool/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo ReverseNX-Tool {} >> ../description.txt
+# ==================================================================
+APP_NAME="ReverseNX-Tool"
+REPO="gzk47/ReverseNX-Tool" MATCH_KEY="ReverseNX-Tool" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest Goldleaf from https://github.com/XorTroll/Goldleaf/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Goldleaf/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Goldleaf {} >> ../description.txt
+# ==================================================================
+APP_NAME="Goldleaf"
+REPO="gzk47/Goldleaf" MATCH_KEY="Goldleaf" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest Safe_Reboot_Shutdown from https://github.com/dezem/Safe_Reboot_Shutdown/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Safe_Reboot_Shutdown/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Safe_Reboot_Shutdown {} >> ../description.txt
+# ==================================================================
+APP_NAME="Safe_Reboot_Shutdown"
+REPO="gzk47/Safe_Reboot_Shutdown" MATCH_KEY="Safe_Reboot_Shutdown" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest Firmware-Dumper from https://github.com/mrdude2478/Switch-Firmware-Dumper/releases
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/mrdude2478/Switch-Firmware-Dumper/releases/latest \
-#  | jq '.tag_name' \
-#  | xargs -I {} echo Firmware-Dumper {} >> ../description.txt
-#curl -H "$API_AUTH" -sL https://api.github.com/repos/mrdude2478/Switch-Firmware-Dumper/releases/latest \
-#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Firmware-Dumper.nro"' \
-#  | sed 's/"//g' \
-#  | xargs -I {} curl -sL {} -o Firmware-Dumper.nro
-#if [ $? -ne 0 ]; then
-#    echo "Firmware-Dumper download\033[31m failed\033[0m."
-#else
-#    echo "Firmware-Dumper download\033[32m success\033[0m."
-#    mkdir -p ./switch/Firmware-Dumper
-#    mv Firmware-Dumper.nro ./switch/Firmware-Dumper
-#fi
+# ==================================================================
+APP_NAME="Haku33"
+REPO="StarDustCFW/Haku33" MATCH_KEY="Haku33" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest Firmware-Dumper【Chinese lang】 from https://github.com/zdm65477730/Switch-Firmware-Dumper/releases/latest
-#curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Switch-Firmware-Dumper/releases/latest
-#cat latest.json \
-#  | jq '.tag_name' \
-#  | xargs -I {} echo Firmware-Dumper {} >> ../description.txt
-#cat latest.json \
-#  | grep -oP '"browser_download_url": "\Khttps://[^"]*Firmware-Dumper.zip"' \
-#  | sed 's/"//g' \
-#  | xargs -I {} curl -sL {} -o Firmware-Dumper.zip
-#if [ $? -ne 0 ]; then
-#    echo "Firmware-Dumper download\033[31m failed\033[0m."
-#else
-#    echo "Firmware-Dumper download\033[32m success\033[0m."
-#    unzip -oq Firmware-Dumper.zip
-#    rm Firmware-Dumper.zip
-#fi
+# ==================================================================
+APP_NAME="Linkalho"
+REPO="gzk47/linkalho" MATCH_KEY="linkalho" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest nxdumptool(nxdt_rw_poc) from https://github.com/DarkMatterCore/nxdumptool/releases/download/rewrite-prerelease/nxdt_rw_poc.nro
-#curl -sL https://github.com/DarkMatterCore/nxdumptool/releases/download/rewrite-prerelease/nxdt_rw_poc.nro -o nxdt_rw_poc.nro
-#if [ $? -ne 0 ]; then
-#    echo "nxdt_rw_poc download\033[31m failed\033[0m."
-#else
-#    echo "nxdt_rw_poc download\033[32m success\033[0m."
-#    echo nxdumptool-rewrite latest >> ../description.txt
-#    mkdir -p ./switch/nxdumptool
-#    mv nxdt_rw_poc.nro ./switch/nxdumptool
-#fi
+# ==================================================================
+APP_NAME="Checkpoint"
+REPO="BernardoGiordano/Checkpoint" MATCH_KEY="Checkpoint" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-###
-cat >> ../description.txt << ENDOFFILE
-nxdumptool-rewrite latest
-ENDOFFILE
-###
+# ==================================================================
+APP_NAME="Switch-time"
+REPO="gzk47/switch-time" MATCH_KEY="switch-time" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest Haku33 from https://github.com/StarDustCFW/Haku33/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/StarDustCFW/Haku33/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Haku33 {} >> ../description.txt
+# ==================================================================
+APP_NAME="Ftpd"
+REPO="gzk47/ftpd" MATCH_KEY="ftpd" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
 
-### Fetch lastest linkalho from https://github.com/gzk47/linkalho/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/linkalho/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo linkalho {} >> ../description.txt
+# ==================================================================
+APP_NAME="nxdumptool"
+REPO="DarkMatterCore/nxdumptool" MATCH_KEY="nxdt_rw_poc" END_KEY="nro"
+# ==================================================================
+#API_URL="https://github.com/${REPO}/releases/download/rewrite-prerelease/${MATCH_KEY}.${END_KEY}"
+#curl -sL "${API_URL}" -o "${APP_NAME}.${END_KEY}"
+echo "nxdumptool-rewrite latest" >> ../description.txt
 
-### Fetch lastest sphaira from https://github.com/ITotalJustice/sphaira/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sphaira/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo sphaira {} >> ../description.txt
-### Fetch lastest Checkpoint from https://github.com/BernardoGiordano/Checkpoint/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/BernardoGiordano/Checkpoint/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Checkpoint {} >> ../description.txt
-## Fetch lastest Daybreak.nro from https://github.com/gzk47/Atmosphere/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Atmosphere/releases
-cat latest.json \
-  | jq 'first(.[]|select(.assets|any(.name|test("^daybreak.*\\.nro$")))).tag_name' \
-  | xargs -I {} echo daybreak {} >> ../description.txt
-### Fetch lastest switch-time from https://github.com/gzk47/switch-time/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/switch-time/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo switch-time {} >> ../description.txt
-## Fetch lastest ftpd.nro from https://github.com/gzk47/ftpd/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/ftpd/releases
-cat latest.json \
-  | jq 'first(.[]|select(.assets|any(.name|test("^ftpd.*\\.nro$")))).tag_name' \
-  | xargs -I {} echo ftpd {} >> ../description.txt
-### Fetch lastest nx-hbmenu from https://github.com/gzk47/nx-hbmenu/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbmenu/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo hbmenu {} >> ../description.txt
-## Fetch lastest hbl.nsp from https://github.com/gzk47/nx-hbloader/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/nx-hbloader/releases
-cat latest.json \
-  | jq 'first(.[]|select(.assets|any(.name|test("^hbl.*\\.nsp$")))).tag_name' \
-  | xargs -I {} echo hbl {} >> ../description.txt
+# ==================================================================
+APP_NAME="daybreak"
+REPO="gzk47/Atmosphere" MATCH_KEY="daybreak" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result
 
-# -------------------------------------------
+# mkdir -p ./switch
+# mv "${APP_NAME}.${END_KEY}" ./switch
 
-###
+# ==================================================================
+APP_NAME="sphaira"
+REPO="gzk47/sphaira" MATCH_KEY="sphaira" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; move_to_switch_dir
+
+# ==================================================================
+APP_NAME="hbmenu"
+REPO="gzk47/nx-hbmenu" MATCH_KEY="hbmenu" END_KEY="nro"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result
+
+# ==================================================================
+APP_NAME="hbl"
+REPO="gzk47/nx-hbloader" MATCH_KEY="hbl" END_KEY="nsp"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result
+
+# mv "${APP_NAME}.${END_KEY}" ./atmosphere
+
+# ------------------------------------------------------------------
+
 cat >> ../description.txt << ENDOFFILE
  
-------------------------------
+------------------------------------------------------------------
  
 特斯拉中文版插件：（纯净版 没有特斯拉插件）
  
 ENDOFFILE
-###
 
+# ==================================================================
+APP_NAME="Ultrahand-Overlay"
+REPO="ppkantorski/Ultrahand-Overlay" MATCH_KEY="sdout" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
-### Fetch Ultrahand-Overlay
-## Fetch latest Ultrahand-Overlay from https://github.com/ppkantorski/Ultrahand-Overlay
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ppkantorski/Ultrahand-Overlay/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Ultrahand-Overlay {} >> ../description.txt
+# ==================================================================
+APP_NAME="ovlmenu"
+REPO="gzk47/Ultrahand-Overlay" MATCH_KEY="ovlmenu" END_KEY="ovl"
+# ==================================================================
+fetch_api; get_version
 
-### Fetch Ultrahand-Overlay 自动转区
-## Fetch latest Ultrahand-Overlay from https://github.com/gzk47/Ultrahand-Overlay
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/Ultrahand-Overlay/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo ovlmenu.ovl {} 国行自动转国际版 >> ../description.txt
-## Fetch lastest ovl-sysmodules from https://github.com/zdm65477730/ovl-sysmodules/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ovl-sysmodules/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo ovl-sysmodules {} >> ../description.txt
-
-## Fetch lastest Status-Monitor-Overlay from https://github.com/zdm65477730/Status-Monitor-Overlay/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/Status-Monitor-Overlay/releases
-cat latest.json \
-  | jq 'first(.[]|select(.assets|any(.name|test("^StatusMonitor.*\\.zip$")))).tag_name' \
-  | xargs -I {} echo StatusMonitor {} >> ../description.txt
-
-
-## Fetch lastest EdiZon-Overlay from https://github.com/zdm65477730/EdiZon-Overlay/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/EdiZon-Overlay/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo EdiZon {} >> ../description.txt
-
-
-## Fetch lastest ReverseNX-RT from https://github.com/zdm65477730/ReverseNX-RT/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ReverseNX-RT/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo ReverseNX-RT {} >> ../description.txt
-
-
-## Fetch lastest sys-clk from https://github.com/gzk47/sys-clk/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/sys-clk/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo sys-clk {} >> ../description.txt
-
-
-## Fetch lastest emuiibo from https://github.com/gzk47/emuiibo/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/gzk47/emuiibo/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo emuiibo {} >> ../description.txt
-
-
-## Fetch lastest ldn_mitm from https://github.com/zdm65477730/ldn_mitm/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/ldn_mitm/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo ldn_mitm {} >> ../description.txt
-
-
-## Fetch lastest QuickNTP from https://github.com/zdm65477730/QuickNTP/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/QuickNTP/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo QuickNTP {} >> ../description.txt
-
-
-## Fetch lastest sysdvr-overlay from https://github.com/zdm65477730/sysdvr-overlay/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/zdm65477730/sysdvr-overlay/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo SysDVR {} >> ../description.txt
-
-
-
-
-###
-#cat >> ../description.txt << ENDOFFILE
-
-#nx-ovlloader
-#Tesla-Menu
-#ovl-sysmodules
-#StatusMonitor
-#EdiZon
-#ReverseNX-RT
-#sys-clk
-#emuiibo
-#ldn_mitm
-#QuickNTP
-#SysDVR
-
-#ENDOFFILE
-###
-
-### Fetch MissionControl from https://github.com//ndeadly/MissionControl/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/ndeadly/MissionControl/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo MissionControl {} >> ../description.txt
-
-## Fetch lastest sys-con from https://github.com/o0Zz/sys-con/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/o0Zz/sys-con/releases/latest
-cat latest.json \
-  | jq '.name' \
-  | xargs -I {} echo sys-con {} >> ../description.txt
-
-# -------------------------------------------
-
-###
-cat >> ../description.txt << ENDOFFILE
- 
-------------------------------
- 
-心悦工具箱 
- 
-插件管理 - 便捷管理和切换Switch插件
-Hekate启动选项 - 配置Hekate引导加载程序
-相册启动 - 设置hbmenu和sphaira等启动器
-金手指功能 - 在线下载和管理游戏金手指
-录屏设置 - 调整录屏的比特率和帧率
-DBI版本切换 - 在版本间切换
-联网防护 - 屏蔽任天堂服务器和保护序列号
-风扇增强 - 自定义风扇曲线控制温度
-游戏模组 - 游戏模组解锁补丁
-8G内存切换 - 硬改为8G内存的机器专用
-国行自动转区 - 国行机器开机自动转国际版
-系统内存设置 - 系统内存大小调整、内存缓冲区配置等
-帧率补丁 - 应用游戏帧率解锁补丁
-极限超频 - 优化CPU/GPU/内存性能
-工具箱更新 - 一键更新至最新版本
- 
-ENDOFFILE
-###
-
-# -------------------------------------------
-
-###
-cat >> ../description.txt << ENDOFFILE
- 
-------------------------------
- 
-极限超频替换包：（ 覆盖到【特斯拉版】心悦整合包上替换 ）
- 
-ENDOFFILE
-###
-
-### Fetch latest Horizon-OC dist.zip from https://github.com/Horizon-OC/Horizon-OC/releases/latest
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Horizon-OC/Horizon-OC/releases/latest
-cat latest.json \
-  | jq '.tag_name' \
-  | xargs -I {} echo Horizon-OC v{}>> ../description.txt
-curl -H "$API_AUTH" -o latest.json -sL https://api.github.com/repos/Horizon-OC/Horizon-OC/releases/latest
-cat latest.json \
-  | grep -oP '"browser_download_url": "\Khttps://[^"]*dist[^"]*.zip' \
-  | sed 's/"//g' \
-  | xargs -I {} curl -sL {} -o dist.zip
-if [ $? -ne 0 ]; then
-    echo "Horizon-OC download\033[31m failed\033[0m."
-else
-    echo "Horizon-OC download\033[32m success\033[0m."
-    unzip -oq dist.zip
-    rm dist.zip
-fi
-
-# -------------------------------------------
-### Write hekate_ipl.ini in /bootloader/
-mkdir -p ./bootloader
-cat > ./bootloader/hekate_ipl.ini << ENDOFFILE
-[config]
-autoboot=0
-autoboot_list=0
-bootwait=3
-backlight=100
-autohosoff=1
-autonogc=1
-updater2p=1
-
-{心悦}
-
-[CFW-SYSNAND]
-emummc_force_disable=1
-pkg3=atmosphere/package3
-kip1=atmosphere/kips/hoc.kip
-logopath=bootloader/bootlogo.bmp
-icon=bootloader/res/sysnand.bmp
-id=cfw-sys
-{大气层-真实系统}
-
-[CFW-EMUNAND]
-emummcforce=1
-pkg3=atmosphere/package3
-kip1=atmosphere/kips/hoc.kip
-logopath=bootloader/bootlogo.bmp
-icon=bootloader/res/emunand.bmp
-id=cfw-emu
-{大气层-虚拟系统}
-
-[OFW-SYSNAND]
-emummc_force_disable=1
-pkg3=atmosphere/package3
-stock=1
-icon=bootloader/res/switch.bmp
-id=ofw-sys
-{机身正版系统}
-
-[CFW-AUTO]
-payload=bootloader/payloads/fusee.bin
-icon=bootloader/res/auto.bmp
-{大气层-自动识别}
-ENDOFFILE
-if [ $? -ne 0 ]; then
-    echo "Writing hekate_ipl.ini in ./bootloader/ directory\033[31m failed\033[0m."
-else
-    echo "Writing hekate_ipl.ini in ./bootloader/ directory\033[32m success\033[0m."
-fi
-
-### Write config.ini in /config/Ultrahand
+# ------------------------------------------------------------------
+# Write config.ini in /config/Ultrahand
+# ------------------------------------------------------------------
 mkdir -p ./config/ultrahand
 cat > ./config/ultrahand/config.ini << ENDOFFILE
 [ultrahand]
@@ -576,7 +401,9 @@ else
     echo "Writing config.ini in ./config/ultrahand\033[32m success\033[0m."
 fi
 
-### Write overlays.ini in /config/ultrahand
+# ------------------------------------------------------------------
+# Write overlays.ini in /config/ultrahand
+# ------------------------------------------------------------------
 mkdir -p ./config/ultrahand
 cat > ./config/ultrahand/overlays.ini << ENDOFFILE
 [ovl-sysmodules.ovl]
@@ -643,12 +470,225 @@ else
     echo "Writing overlays.ini in ./config/ultrahand\033[32m success\033[0m."
 fi
 
-### Rename /config/Ultrahand to /config/ultrahand 主题文件夹目前只识别小写
-#mv ./config/Ultrahand ./config/ultrahand
+# ==================================================================
+APP_NAME="ovl-sysmodules"
+REPO="zdm65477730/ovl-sysmodules" MATCH_KEY="ovl-sysmodules" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
-# -------------------------------------------
+# ==================================================================
+APP_NAME="StatusMonitor"
+REPO="zdm65477730/Status-Monitor-Overlay" MATCH_KEY="StatusMonitor" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
-### Delete unneeded files
+# ==================================================================
+APP_NAME="EdiZon"
+REPO="zdm65477730/EdiZon-Overlay" MATCH_KEY="EdiZon" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
+
+# ==================================================================
+APP_NAME="ReverseNX-RT"
+REPO="zdm65477730/ReverseNX-RT" MATCH_KEY="ReverseNX-RT" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
+
+# ==================================================================
+APP_NAME="Sys-clk"
+REPO="gzk47/sys-clk" MATCH_KEY="sys-clk" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
+
+# ==================================================================
+APP_NAME="Emuiibo"
+REPO="gzk47/emuiibo" MATCH_KEY="emuiibo" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
+
+# ==================================================================
+APP_NAME="Ldn_mitm"
+REPO="zdm65477730/ldn_mitm" MATCH_KEY="ldn_mitm" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
+
+# ==================================================================
+APP_NAME="QuickNTP"
+REPO="zdm65477730/QuickNTP" MATCH_KEY="QuickNTP" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
+
+# ==================================================================
+APP_NAME="SysDVR"
+REPO="zdm65477730/sysdvr-overlay" MATCH_KEY="SysDVR" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
+
+# ==================================================================
+APP_NAME="MissionControl"
+REPO="ndeadly/MissionControl" MATCH_KEY="MissionControl" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
+
+# ==================================================================
+APP_NAME="Sys-con"
+REPO="o0Zz/sys-con" MATCH_KEY="sys-con" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
+
+# ------------------------------------------------------------------
+
+cat >> ../description.txt << ENDOFFILE
+ 
+------------------------------------------------------------------
+ 
+心悦工具箱 
+ 
+插件管理 - 便捷管理和切换Switch插件
+Hekate启动选项 - 配置Hekate引导加载程序
+相册启动 - 设置hbmenu和sphaira等启动器
+金手指功能 - 在线下载和管理游戏金手指
+录屏设置 - 调整录屏的比特率和帧率
+DBI版本切换 - 在版本间切换
+联网防护 - 屏蔽任天堂服务器和保护序列号
+风扇增强 - 自定义风扇曲线控制温度
+游戏模组 - 游戏模组解锁补丁
+8G内存切换 - 硬改为8G内存的机器专用
+国行自动转区 - 国行机器开机自动转国际版
+系统内存设置 - 系统内存大小调整、内存缓冲区配置等
+帧率补丁 - 应用游戏帧率解锁补丁
+极限超频 - 优化CPU/GPU/内存性能
+工具箱更新 - 一键更新至最新版本
+ 
+ENDOFFILE
+
+# ------------------------------------------------------------------
+
+cat >> ../description.txt << ENDOFFILE
+ 
+------------------------------------------------------------------
+ 
+极限超频替换包：（ 覆盖到【特斯拉版】心悦整合包上替换 ）
+ 
+ENDOFFILE
+
+## ==================================================================
+#APP_NAME="Horizon-OC"
+#API_URL="https://api.github.com/repos/Horizon-OC/Horizon-OC/releases/latest"
+## ==================================================================
+
+#curl -H "${API_AUTH}" -o latest.json -sL "${API_URL}"
+#HOC_VER=$(jq -r '.tag_name' latest.json | sed 's/^v//')
+
+#RAW_URL="https://raw.githubusercontent.com/Horizon-OC/Horizon-OC/main/ams_ver.txt"
+#AMS_VER=$(curl -sL "${RAW_URL}")
+
+#echo "${APP_NAME} ${HOC_VER} ( for AMS ${AMS_VER} )" >> ../description.txt
+
+#DL_URL=$(jq -r '.assets[] | select(.name|test("^dist.*\\.zip$")) | .browser_download_url' latest.json)
+#curl -sL "${DL_URL}" -o ${APP_NAME}.zip
+
+#if [ $? -ne 0 ]; then
+#    echo "${APP_NAME} download\033[31m failed\033[0m."
+#else
+#    echo "${APP_NAME} download\033[32m success\033[0m."
+#fi
+
+#unzip -oq ${APP_NAME}.zip
+#rm -f ${APP_NAME}.zip
+
+# ==================================================================
+APP_NAME="Horizon-OC"
+REPO="Horizon-OC/Horizon-OC" MATCH_KEY="dist" END_KEY="zip"
+# ==================================================================
+API_URL="https://api.github.com/repos/${REPO}/releases"
+curl -H "${API_AUTH}" -H "${API_VER}" -o latest.json -sL "${API_URL}"
+HOC_VER=$(jq -r 'first(.[]|select(.assets|any(.name|test(".*'"${MATCH_KEY}"'.*[.]'"${END_KEY}"'$")))).tag_name' latest.json | sed 's/^v//')
+
+RAW_URL="https://raw.githubusercontent.com/${REPO}/main/ams_ver.txt"
+AMS_VER=$(curl -sL "${RAW_URL}")
+
+echo "${APP_NAME} ${HOC_VER} ( for AMS ${AMS_VER} )" >> ../description.txt
+
+DL_URL=$(jq -r 'first(.[]|select(.assets|any(.name|test(".*'"${MATCH_KEY}"'.*[.]'"${END_KEY}"'$")))).assets[] | select(.name|test(".*'"${MATCH_KEY}"'.*[.]'"${END_KEY}"'$")) | .browser_download_url' latest.json)
+curl -sL "${DL_URL}" -o "${APP_NAME}.${END_KEY}"
+
+if [ $? -ne 0 ]; then
+    echo "${APP_NAME} \033[31m❌\033[0m"
+else
+    echo "${APP_NAME} \033[32m✅\033[0m"
+fi
+
+unzip -oq "${APP_NAME}.${END_KEY}"
+rm -f "${APP_NAME}.${END_KEY}"
+
+# ------------------------------------------------------------------
+# Write hekate_ipl.ini in /bootloader/
+# ------------------------------------------------------------------
+mkdir -p ./bootloader
+cat > ./bootloader/hekate_ipl.ini << ENDOFFILE
+[config]
+autoboot=0
+autoboot_list=0
+bootwait=3
+backlight=100
+autohosoff=1
+autonogc=1
+updater2p=1
+
+{心悦}
+
+[CFW-SYSNAND]
+emummc_force_disable=1
+pkg3=atmosphere/package3
+kip1=atmosphere/kips/hoc.kip
+logopath=bootloader/bootlogo.bmp
+icon=bootloader/res/sysnand.bmp
+id=cfw-sys
+{大气层-真实系统}
+
+[CFW-EMUNAND]
+emummcforce=1
+pkg3=atmosphere/package3
+kip1=atmosphere/kips/hoc.kip
+logopath=bootloader/bootlogo.bmp
+icon=bootloader/res/emunand.bmp
+id=cfw-emu
+{大气层-虚拟系统}
+
+[OFW-SYSNAND]
+emummc_force_disable=1
+pkg3=atmosphere/package3
+stock=1
+icon=bootloader/res/switch.bmp
+id=ofw-sys
+{机身正版系统}
+
+[CFW-AUTO]
+payload=bootloader/payloads/fusee.bin
+icon=bootloader/res/auto.bmp
+{大气层-自动识别}
+ENDOFFILE
+if [ $? -ne 0 ]; then
+    echo "Writing hekate_ipl.ini in ./bootloader/ directory \033[31m❌\033[0m"
+else
+    echo "Writing hekate_ipl.ini in ./bootloader/ directory \033[32m✅\033[0m"
+fi
+
+# ------------------------------------------------------------------
+# Delete unneeded files
+# ------------------------------------------------------------------
 rm -f bootloader/res/icon_payload.bmp
 rm -f bootloader/res/icon_switch.bmp
 rm -f switch/haze.nro
@@ -656,8 +696,9 @@ rm -f switch/reboot_to_hekate.nro
 rm -f switch/reboot_to_payload.nro
 rm -rf mods
 rm -f latest.json
-
-### Delete boot2 files
+# ------------------------------------------------------------------
+# Delete boot2 files
+# ------------------------------------------------------------------
 rm -f atmosphere/contents/00FF0000A53BB665/flags/*.*
 #00FF0000A53BB665--SysDVR
 #rm -f atmosphere/contents/00FF0000636C6BFF/flags/*.*
@@ -675,55 +716,42 @@ rm -f atmosphere/contents/690000000000000D/flags/*.*
 rm -f atmosphere/contents/4200000000000010/flags/*.*
 #4200000000000010--ldn_mitm
 
-# -------------------------------------------
-
-
-### Fetch readme
+# ------------------------------------------------------------------
+# Fetch readme
+# ------------------------------------------------------------------
 curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/sys/readme.txt -o readme.txt
 if [ $? -ne 0 ]; then
-    echo "readme download\033[31m failed\033[0m."
+    echo "readme \033[31m❌\033[0m"
 else
-    echo "readme download\033[32m success\033[0m."
-    mv readme.txt Horizon-OC极限超频替换包v$(date +%Y%m%d).txt
-
+    echo "readme \033[32m✅\033[0m"
+    mv readme.txt "Horizon-OC ${HOC_VER} ( for AMS${AMS_VER} )极限超频替换包v$(date +%Y%m%d).txt"
 fi
 
-### Fetch gzk
-#curl -sL https://raw.githubusercontent.com/gzk47/SwitchPlugins/main/sys/gzk.zip -o gzk.zip
-#if [ $? -ne 0 ]; then
-#    echo "gzk download\033[31m failed\033[0m."
-#else
-#    echo "gzk download\033[32m success\033[0m."
-##    echo gzk >> ../description.txt
-#    unzip -oq gzk.zip
-#    rm gzk.zip
-#fi
+# ------------------------------------------------------------------
 
-# -------------------------------------------
-
-###
 cat >> ../description.txt << ENDOFFILE
  
-------------------------------
+------------------------------------------------------------------
  
 AMS-Pure       为：纯净版
 AMS-Tesla      为：特斯拉版
 Horizon-OC     为：极限超频替换包
  
 ENDOFFILE
-###
 
-# -------------------------------------------
+# ------------------------------------------------------------------
 
 cat >> ../description.txt << ENDOFFILE
 
-------------------------------
+------------------------------------------------------------------
 
 构建时间：$(date '+%Y%m%d %H:%M:%S')
 
 ENDOFFILE
 
-# -------------------------------------------
+# ------------------------------------------------------------------
+
+#cp -a ../description.txt ./软件详情.txt
 
 echo ""
-echo "\033[32mYour Horizon-OC card is prepared!\033[0m"
+echo "\033[32m ${WORK_DIR} ready ✅ \033[0m"
