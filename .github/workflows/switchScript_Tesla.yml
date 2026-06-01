@@ -67,7 +67,7 @@ jobs:
           mv AMS-Tesla.zip AMS-${VERSION}-Tesla-v${DATE}.zip
 
       - name: Upload release asset
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.TAG_NAME }}
           name: ${{ env.RELEASE_NAME }}
@@ -81,7 +81,7 @@ jobs:
             *.zip
 
       - name: Remove old Releases
-        uses: dev-drprasad/delete-older-releases@v0.3.2
+        uses: gzk47/delete-older-releases@v0.3.5
         with:
           keep_latest: 7
           delete_tags: true
