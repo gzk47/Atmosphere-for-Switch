@@ -83,7 +83,7 @@ jobs:
             *.zip
 
       - name: Remove old Releases
-        uses: gzk47/delete-older-releases@v0.3.5
+        uses: gzk47/delete-older-releases@v0.3.6
         with:
           keep_latest: 1
           delete_tags: true
