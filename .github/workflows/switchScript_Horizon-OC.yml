@@ -85,5 +85,6 @@ jobs:
       - name: Remove old Releases
         uses: gzk47/delete-older-releases@v0.3.5
         with:
-          keep_latest: 7
+          keep_latest: 1
           delete_tags: true
+          tag_whitelist: 01
