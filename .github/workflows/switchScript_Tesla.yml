@@ -85,4 +85,4 @@ jobs:
         with:
           keep_latest: 1
           delete_tags: true
-          tag_whitelist: 01
+          tag_whitelist: '01'
