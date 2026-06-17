@@ -610,7 +610,7 @@ ENDOFFILE
 
 # ==================================================================
 APP_NAME="Horizon-OC"
-REPO="Horizon-OC/Horizon-OC" MATCH_KEY="dist" END_KEY="zip"
+REPO="Horizon-OC/Horizon-OC" MATCH_KEY="dist." END_KEY="zip"
 # ==================================================================
 API_URL="https://api.github.com/repos/${REPO}/releases"
 curl -H "${API_AUTH}" -H "${API_VER}" -o latest.json -sL "${API_URL}"
