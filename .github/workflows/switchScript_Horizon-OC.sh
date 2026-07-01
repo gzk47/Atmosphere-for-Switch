@@ -98,7 +98,7 @@ ENDOFFILE
 
 # ==================================================================
 APP_NAME="Atmosphere"
-REPO="gzk47/Atmosphere" MATCH_KEY="atmosphere" END_KEY="zip"
+REPO="Atmosphere-NX/Atmosphere" MATCH_KEY="atmosphere" END_KEY="zip"
 # ==================================================================
 fetch_api; get_version
 # download_file; check_result; unzip_and_clean
@@ -274,7 +274,7 @@ fetch_api; get_version
 
 # ==================================================================
 APP_NAME="Goldleaf"
-REPO="gzk47/Goldleaf" MATCH_KEY="Goldleaf" END_KEY="nro"
+REPO="XorTroll/Goldleaf" MATCH_KEY="Goldleaf" END_KEY="nro"
 # ==================================================================
 fetch_api; get_version
 # download_file; check_result; move_to_switch_dir
@@ -610,7 +610,7 @@ ENDOFFILE
 
 # ==================================================================
 APP_NAME="Horizon-OC"
-REPO="Horizon-OC/Horizon-OC" MATCH_KEY="dist." END_KEY="zip"
+REPO="Horizon-OC/Horizon-OC" MATCH_KEY="dist_ext" END_KEY="zip"
 # ==================================================================
 API_URL="https://api.github.com/repos/${REPO}/releases"
 curl -H "${API_AUTH}" -H "${API_VER}" -o latest.json -sL "${API_URL}"
@@ -632,6 +632,7 @@ fi
 
 unzip -oq "${APP_NAME}.${END_KEY}"
 rm -f "${APP_NAME}.${END_KEY}"
+rm -rf bootloader/sys
 
 # ------------------------------------------------------------------
 # Write hekate_ipl.ini in /bootloader/
