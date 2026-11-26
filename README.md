@@ -9,14 +9,14 @@
     - [x] `Sigpatches` [From Here](https://gbatemp.net/threads/sigpatches-for-atmosphere-hekate-fss0-fusee-package3.571543/)
     - [x] `自编译大气层内置Sigpatch` [From Here]()
   - Payload插件
-    - [x] 主机系统的密钥提取工具 `Lockpick_RCM` [From Here](https://github.com/zdm65477730/Lockpick_RCMDecScots/releases/latest)
+    - [x] 主机系统的密钥提取工具 `Lockpick_RCM` [From Here](https://github.com/impeeza/Lockpick_RCMDecScots/releases/latest)
     - [x] Hekate下的文件管理工具 `TegraExplorer` [From Here](https://github.com/zdm65477730/TegraExplorer/releases/latest)
     - [x] Hekate下删除主题和关闭插件自动启动 `CommonProblemResolver` [From Here](https://github.com/zdm65477730/CommonProblemResolver/releases/latest)
   - 相册Nro软件
     - [x] 联网检测是否屏蔽任天堂服务器 `Switch_90DNS_tester` [From Here](https://github.com/meganukebmp/Switch_90DNS_tester/releases/latest)
     - [x] 游戏安装，存档管理和文件传输工具 `DBI` [From Here](https://github.com/rashevskyv/dbi/releases/latest)
-    - [x] 游戏安装和文件传输工具 `Awoo Installer` [From Here](https://github.com/dragonflylee/Awoo-Installer/releases/latest)
-    - [x] 深海工具箱 `DeepSea-Toolbox` [From Here](https://github.com/Team-Neptune/DeepSea-Toolbox/releases/latest)
+    - [x] 游戏安装和文件传输工具 `Awoo Installer` [From Here](https://github.com/Huntereb/Awoo-Installer/releases/latest)
+    - [x] Hekate工具箱 `Hekate-Toolbox` [From Here](https://github.com/WerWolv/Hekate-Toolbox/releases/latest)
     - [x] 游戏游玩时间记录工具 `NX-Activity-Log` [From Here](https://github.com/zdm65477730/NX-Activity-Log/releases/latest)
     - [x] 主题安装工具 `NXThemesInstaller` [From Here](https://github.com/exelix11/SwitchThemeInjector/releases/latest)
     - [x] 游戏存档管理工具 `JKSV` [From Here](https://github.com/J-D-K/JKSV/releases/latest)
@@ -33,11 +33,11 @@
     - [x] Goldleaf金叶子 `Goldleaf` [From Here](https://github.com/XorTroll/Goldleaf/releases/latest)
     - [x] 重启/关机 工具 `Safe_Reboot_Shutdown` [From Here](https://github.com/dezem/Safe_Reboot_Shutdown/releases/latest)
     - [x] 固件提取 工具 `Firmware-Dumper` [From Here](https://github.com/zdm65477730/Switch-Firmware-Dumper/releases/latest)
-    - [x] 游戏提取 工具 `nxdumptool` [From Here](https://github.com/DarkMatterCore/nxdumptool/releases)
     - [x] 系统洗白 工具 `Haku33` [From Here](https://github.com/StarDustCFW/Haku33/releases/latest)
     - [x] 离线关联账号 `linkalho` [From Here](https://github.com/)
-    - [x] 相册软件管理 工具 `sphaira` [From Here](https://github.com/ITotalJustice/sphaira/releases/latest)
+    - [x] 相册软件管理 工具 `sphaira` [From Here](https://github.com/NaGaa95/sphaira/releases/latest)
     - [x] 游戏存档管理工具 `Checkpoint` [From Here](https://github.com/BernardoGiordano/Checkpoint/releases/latest)
+    - [x] 游戏存档与云同步 `XYSave` [From Here](https://github.com/gzk47/XYS/releases/latest)
 
   - 补丁
     - [x] 主题破解 `theme-patches` [From Here](https://github.com/exelix11/theme-patches)
@@ -62,7 +62,7 @@
     - [x] 有线手柄插件 `sys-con` [From Here](https://github.com/o0Zz/sys-con/releases/latest)
 
   - 心悦工具箱
-    - [x] 心悦工具箱 `XY-tools` [From Here](https://github.com/gzk47)
+    - [x] 心悦工具箱 `XY-tools` [From Here](https://github.com/gzk47/XY-tools)
 
   - 极限超频
     - [x] 极限超频插件 `Horizon-OC` [From Here](https://github.com/Horizon-OC/Horizon-OC/releases/latest)

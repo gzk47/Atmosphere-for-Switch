@@ -131,10 +131,10 @@ ENDOFFILE
 
 # ==================================================================
 APP_NAME="Lockpick_RCM"
-REPO="impeeza/Lockpick_RCMDecScots" MATCH_KEY="Lockpick_RCM" END_KEY="bin"
+REPO="impeeza/Lockpick_RCMDecScots" MATCH_KEY="Hekate" END_KEY="zip"
 # ==================================================================
 fetch_api; get_version
-# download_file; check_result; move_to_payloads_dir
+# download_file; check_result; unzip_and_clean
 
 # ==================================================================
 APP_NAME="TegraExplorer"
@@ -197,7 +197,7 @@ fetch_api; get_version
 
 # ==================================================================
 APP_NAME="NXThemesInstaller"
-REPO="exelix11/SwitchThemeInjector" MATCH_KEY="NXThemesInstaller" END_KEY="nro"
+REPO="gzk47/SwitchThemeInjector" MATCH_KEY="NXThemesInstaller" END_KEY="nro"
 # ==================================================================
 fetch_api; get_version
 # download_file; check_result; move_to_switch_dir
@@ -322,14 +322,6 @@ fetch_api; get_version
 # download_file; check_result; move_to_switch_dir
 
 # ==================================================================
-APP_NAME="nxdumptool"
-REPO="DarkMatterCore/nxdumptool" MATCH_KEY="nxdt_rw_poc" END_KEY="nro"
-# ==================================================================
-#API_URL="https://github.com/${REPO}/releases/download/rewrite-prerelease/${MATCH_KEY}.${END_KEY}"
-#curl -sL "${API_URL}" -o "${APP_NAME}.${END_KEY}"
-echo "nxdumptool-rewrite latest" >> ../description.txt
-
-# ==================================================================
 APP_NAME="daybreak"
 REPO="gzk47/Atmosphere" MATCH_KEY="daybreak" END_KEY="nro"
 # ==================================================================
@@ -341,10 +333,17 @@ fetch_api; get_version
 
 # ==================================================================
 APP_NAME="sphaira"
-REPO="gzk47/sphaira" MATCH_KEY="sphaira" END_KEY="nro"
+REPO="NaGaa95/sphaira" MATCH_KEY="sphaira" END_KEY="zip"
 # ==================================================================
 fetch_api; get_version
-# download_file; check_result; move_to_switch_dir
+# download_file; check_result; unzip_and_clean
+
+# ==================================================================
+APP_NAME="XYS"
+REPO="gzk47/XYS" MATCH_KEY="xys" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+# download_file; check_result; unzip_and_clean
 
 # ==================================================================
 APP_NAME="hbmenu"
@@ -415,7 +414,7 @@ priority=1
 custom_name=状态监视
 hide=true
 
-[Horizon-OC-Monitor.ovl]
+[Status-Monitor-Overlay.ovl]
 priority=1
 custom_name=性能监视
 

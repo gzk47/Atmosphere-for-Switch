@@ -152,10 +152,10 @@ ENDOFFILE
 
 # ==================================================================
 APP_NAME="Lockpick_RCM"
-REPO="impeeza/Lockpick_RCMDecScots" MATCH_KEY="Lockpick_RCM" END_KEY="bin"
+REPO="impeeza/Lockpick_RCMDecScots" MATCH_KEY="Hekate" END_KEY="zip"
 # ==================================================================
 fetch_api; get_version
-download_file; check_result; move_to_payloads_dir
+download_file; check_result; unzip_and_clean
 
 # ==================================================================
 APP_NAME="TegraExplorer"
@@ -225,7 +225,7 @@ download_file; check_result; move_to_switch_dir
 
 # ==================================================================
 APP_NAME="NXThemesInstaller"
-REPO="exelix11/SwitchThemeInjector" MATCH_KEY="NXThemesInstaller" END_KEY="nro"
+REPO="gzk47/SwitchThemeInjector" MATCH_KEY="NXThemesInstaller" END_KEY="nro"
 # ==================================================================
 fetch_api; get_version
 download_file; check_result; move_to_switch_dir
@@ -369,23 +369,6 @@ fetch_api; get_version
 download_file; check_result; move_to_switch_dir
 
 # ==================================================================
-APP_NAME="nxdumptool"
-REPO="DarkMatterCore/nxdumptool" MATCH_KEY="nxdt_rw_poc" END_KEY="nro"
-# ==================================================================
-API_URL="https://github.com/${REPO}/releases/download/rewrite-prerelease/${MATCH_KEY}.${END_KEY}"
-curl -sL "${API_URL}" -o "${APP_NAME}.${END_KEY}"
-echo "nxdumptool-rewrite latest" >> ../description.txt
-
-if [ $? -ne 0 ]; then
-    echo "${APP_NAME} \033[31m❌\033[0m"
-else
-    echo "${APP_NAME} \033[32m✅\033[0m"
-fi
-
-mkdir -p ./switch/${APP_NAME}
-mv "${APP_NAME}.${END_KEY}" ./switch/${APP_NAME}
-
-# ==================================================================
 APP_NAME="daybreak"
 REPO="gzk47/Atmosphere" MATCH_KEY="daybreak" END_KEY="nro"
 # ==================================================================
@@ -397,10 +380,11 @@ mv "${APP_NAME}.${END_KEY}" ./switch
 
 # ==================================================================
 APP_NAME="sphaira"
-REPO="gzk47/sphaira" MATCH_KEY="sphaira" END_KEY="nro"
+REPO="NaGaa95/sphaira" MATCH_KEY="sphaira" END_KEY="zip"
 # ==================================================================
 fetch_api; get_version
-download_file; check_result; move_to_switch_dir
+download_file; check_result; unzip_and_clean
+rm -rf nx2
 
 # ------------------------------------------------------------------
 # Writie config.ini in ./config/sphaira
@@ -412,7 +396,7 @@ last_path=/
 [config]
 theme=romfs:/themes/white_theme.ini
 language=7
-replace_hbmenu=0
+replace_hbmenu=1
 install_emummc=1
 ENDOFFILE
 
@@ -421,6 +405,13 @@ if [ $? -ne 0 ]; then
 else
     echo "Writing config.ini in ./config/sphaira \033[32m✅\033[0m"
 fi
+
+# ==================================================================
+APP_NAME="XYS"
+REPO="gzk47/XYS" MATCH_KEY="xys" END_KEY="zip"
+# ==================================================================
+fetch_api; get_version
+download_file; check_result; unzip_and_clean
 
 # ==================================================================
 APP_NAME="hbmenu"
@@ -1115,6 +1106,8 @@ ENDOFFILE
 # ------------------------------------------------------------------
 
 cp -a ../description.txt ./软件详情.txt
+cp -f ./hbmenu.nro ./switch/hbmenu.nro
+cp -f ./switch/sphaira/sphaira.nro ./hbmenu.nro
 
 echo ""
 echo "\033[32m ${WORK_DIR} ready ✅ \033[0m"

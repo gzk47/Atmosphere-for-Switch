@@ -34,13 +34,13 @@ jobs:
           # make -j$(nproc) install
 
       - name: Checkout latest code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: main
           clean: true
           fetch-depth: 0
           fetch-tags: true
-          # submodules: recursive
+          submodules: recursive
 
       - name: Initialization environment
         run: |
@@ -87,4 +87,4 @@ jobs:
         with:
           keep_latest: 1
           delete_tags: true
-          tag_whitelist: '01'
+          tag_whitelist: '01,s'
